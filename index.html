@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<title>Chromosome Quiz</title>
+
+<link rel="stylesheet"
+type="text/css"
+href="css/style.css">
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        🧬
+    </div>
+
+    <h1>
+        Chromosome Quiz
+    </h1>
+
+    <p class="subtitle">
+        เกมตอบคำถามความรู้เรื่องโครโมโซม
+    </p>
+
+
+    <div class="card">
+
+        <h2>
+            🎮 เริ่มเกม
+        </h2>
+
+        <p>
+            กรอกชื่อของคุณเพื่อเริ่มเล่น
+        </p>
+
+        <input
+        type="text"
+        id="name"
+        placeholder="กรอกชื่อของคุณ"
+        maxlength="30">
+
+        <button onclick="startGame()">
+            เริ่มเกม 🚀
+        </button>
+
+        <a href="ranking.html"
+        class="ranking-button">
+
+            🏆 ดูอันดับคะแนน
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function startGame(){
+
+    var name =
+        document.getElementById("name").value;
+
+    name = name.trim();
+
+
+    if(name == ""){
+
+        alert("กรุณากรอกชื่อก่อนเริ่มเกม");
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "playerName",
+        name
+    );
+
+
+    window.location.href =
+        "quiz.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
