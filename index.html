@@ -82,10 +82,14 @@ function startGame(){
     }
 
 
-    localStorage.setItem(
-        "playerName",
-        name
-    );
+    localStorage.removeItem(
+    "savedScore"
+);
+
+localStorage.setItem(
+    "playerName",
+    name
+);
 
 
     window.location.href =
