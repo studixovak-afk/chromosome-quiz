@@ -1,127 +1,233 @@
-/* =====================================
-   DNA PARTICLES BACKGROUND
-===================================== */
+# `css/style.css`
 
-body{
-    position:relative;
-    overflow-x:hidden;
+```css
+@charset "utf-8";
+
+/* =========================================================
+   CHROMOSOME QUIZ
+   DARK SCI-FI / DNA GAMING UI
+   Mobile + iPad + Desktop
+   ========================================================= */
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*{
+    box-sizing:border-box;
 }
 
-/* อนุภาคลอย */
+html{
+    scroll-behavior:smooth;
+}
+
+html,
+body{
+    min-height:100%;
+}
+
+body{
+    margin:0;
+
+    font-family:
+        Arial,
+        "Tahoma",
+        sans-serif;
+
+    color:#e8f7ff;
+
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(0,180,255,.055),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 85%,
+            rgba(90,60,220,.05),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #01040a 0%,
+            #020b16 45%,
+            #03111d 100%
+        );
+
+    overflow-x:hidden;
+
+    position:relative;
+}
+
+
+/* =========================================================
+   ANIMATED BACKGROUND
+   ========================================================= */
+
+/* จุดเล็ก ๆ เคลื่อนที่ช้า ๆ */
 
 body::before{
     content:"";
 
     position:fixed;
+
     inset:0;
-
-    background-image:
-
-    radial-gradient(
-        circle,
-        rgba(0,255,255,.08) 1px,
-        transparent 1px
-    ),
-
-    radial-gradient(
-        circle,
-        rgba(120,150,255,.05) 2px,
-        transparent 2px
-    );
-
-    background-size:
-        120px 120px,
-        220px 220px;
-
-    animation:
-        particlesMove 60s linear infinite;
 
     pointer-events:none;
 
     z-index:-2;
+
+    opacity:.55;
+
+    background-image:
+        radial-gradient(
+            circle,
+            rgba(34,211,238,.22) 1px,
+            transparent 1.5px
+        ),
+        radial-gradient(
+            circle,
+            rgba(129,140,248,.16) 1px,
+            transparent 1.5px
+        );
+
+    background-size:
+        110px 110px,
+        180px 180px;
+
+    background-position:
+        0 0,
+        40px 70px;
+
+    animation:
+        particleMove 45s linear infinite;
 }
 
-@keyframes particlesMove{
+@keyframes particleMove{
 
-    from{
-        transform:
-            translateY(0px);
+    0%{
+        background-position:
+            0 0,
+            40px 70px;
     }
 
-    to{
-        transform:
-            translateY(-300px);
+    50%{
+        background-position:
+            70px -120px,
+            -60px -80px;
     }
 
+    100%{
+        background-position:
+            140px -240px,
+            -160px -160px;
+    }
 }
 
 
-/* แสงเบาๆด้านบน */
+/* แสงกลางพื้นหลัง */
 
 body::after{
-
     content:"";
 
     position:fixed;
 
-    top:-250px;
+    width:600px;
+    height:600px;
+
     left:50%;
+    top:-300px;
 
-    transform:
-        translateX(-50%);
-
-    width:700px;
-    height:700px;
+    transform:translateX(-50%);
 
     border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(0,180,255,.08),
-            transparent 70%
-        );
-
-    filter:blur(80px);
-
-    animation:
-        glowMove 12s ease-in-out infinite alternate;
 
     pointer-events:none;
 
     z-index:-3;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,170,220,.07),
+            rgba(0,170,220,.025) 35%,
+            transparent 72%
+        );
+
+    filter:blur(45px);
+
+    animation:
+        backgroundGlow 12s ease-in-out infinite alternate;
 }
 
-@keyframes glowMove{
+@keyframes backgroundGlow{
 
     from{
-
         transform:
-        translateX(-50%)
-        translateY(0px);
-
+            translateX(-50%)
+            translateY(0);
     }
 
     to{
-
         transform:
-        translateX(-50%)
-        translateY(40px);
-
+            translateX(-50%)
+            translateY(80px);
     }
-
 }
+
+
+/* =========================================================
+   GENERAL CONTAINER
+   ========================================================= */
+
+.container{
+
+    width:92%;
+    max-width:950px;
+
+    margin:auto;
+
+    padding-top:55px;
+    padding-bottom:50px;
+
+    text-align:center;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
 .logo{
+
+    font-size:82px;
+
+    display:inline-block;
 
     position:relative;
 
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(0,220,255,.35)
+        );
+
+    animation:
+        dnaFloat 3.5s ease-in-out infinite;
 }
+
+
+/* แสงรอบ DNA */
 
 .logo::after{
 
-    content:"🧬";
+    content:"";
 
     position:absolute;
+
+    width:130px;
+    height:130px;
 
     left:50%;
     top:50%;
@@ -129,29 +235,1098 @@ body::after{
     transform:
         translate(-50%,-50%);
 
-    font-size:180px;
+    border-radius:50%;
 
-    opacity:.04;
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,220,255,.08),
+            transparent 68%
+        );
 
     z-index:-1;
 
     animation:
-        dnaRotate 18s linear infinite;
-
+        logoGlow 4s ease-in-out infinite alternate;
 }
 
-@keyframes dnaRotate{
+@keyframes logoGlow{
 
     from{
+        opacity:.45;
         transform:
-        translate(-50%,-50%)
-        rotate(0deg);
+            translate(-50%,-50%)
+            scale(.85);
     }
 
     to{
+        opacity:.8;
         transform:
-        translate(-50%,-50%)
-        rotate(360deg);
+            translate(-50%,-50%)
+            scale(1.1);
+    }
+}
+
+@keyframes dnaFloat{
+
+    0%{
+        transform:
+            translateY(0)
+            rotate(-2deg);
     }
 
+    50%{
+        transform:
+            translateY(-9px)
+            rotate(2deg);
+    }
+
+    100%{
+        transform:
+            translateY(0)
+            rotate(-2deg);
+    }
 }
+
+
+/* =========================================================
+   HEADINGS
+   ========================================================= */
+
+h1{
+
+    font-size:44px;
+
+    margin:12px 0;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+
+    color:#eafaff;
+
+    text-shadow:
+        0 0 18px
+        rgba(34,211,238,.12);
+}
+
+h2{
+
+    font-weight:700;
+
+    color:#e8f8ff;
+}
+
+.subtitle{
+
+    font-size:20px;
+
+    color:#8fb8ca;
+
+    line-height:1.6;
+}
+
+
+/* =========================================================
+   GLASS CARD
+   ========================================================= */
+
+.card{
+
+    width:100%;
+
+    max-width:560px;
+
+    margin:35px auto;
+
+    padding:35px;
+
+    border-radius:25px;
+
+    color:#e8f7ff;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7,22,34,.94),
+            rgba(3,13,23,.94)
+        );
+
+    border:
+        1px solid
+        rgba(55,190,220,.14);
+
+    box-shadow:
+
+        0 25px 70px
+        rgba(0,0,0,.55),
+
+        inset 0 1px 0
+        rgba(255,255,255,.035);
+
+    backdrop-filter:
+        blur(15px);
+
+    -webkit-backdrop-filter:
+        blur(15px);
+
+    animation:
+        cardAppear .6s ease;
+}
+
+@keyframes cardAppear{
+
+    from{
+        opacity:0;
+
+        transform:
+            translateY(20px)
+            scale(.98);
+    }
+
+    to{
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+input{
+
+    width:100%;
+
+    padding:17px 18px;
+
+    margin:15px 0;
+
+    border-radius:13px;
+
+    border:
+        1px solid
+        rgba(120,180,200,.16);
+
+    outline:none;
+
+    background:
+        #020911;
+
+    color:#f1fbff;
+
+    font-size:18px;
+
+    transition:
+        border .25s ease,
+        box-shadow .25s ease;
+}
+
+input::placeholder{
+
+    color:#587585;
+}
+
+input:focus{
+
+    border-color:
+        rgba(34,211,238,.65);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(34,211,238,.07),
+
+        0 0 20px
+        rgba(34,211,238,.08);
+}
+
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+button{
+
+    width:100%;
+
+    border:0;
+
+    border-radius:13px;
+
+    padding:16px 22px;
+
+    margin-top:8px;
+
+    color:#f4fdff;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #075d78,
+            #164ca3
+        );
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,80,130,.22);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+button:hover{
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 28px
+        rgba(0,170,220,.18);
+
+    filter:
+        brightness(1.1);
+}
+
+button:active{
+
+    transform:
+        translateY(1px)
+        scale(.98);
+}
+
+button:disabled{
+
+    cursor:not-allowed;
+
+    opacity:.35;
+
+    filter:grayscale(.5);
+
+    transform:none;
+
+    box-shadow:none;
+}
+
+
+/* =========================================================
+   RANKING BUTTON
+   ========================================================= */
+
+.ranking-button{
+
+    display:block;
+
+    width:100%;
+
+    margin-top:14px;
+
+    padding:15px;
+
+    border-radius:13px;
+
+    text-decoration:none;
+
+    text-align:center;
+
+    color:#b9dbe7;
+
+    background:
+        rgba(255,255,255,.025);
+
+    border:
+        1px solid
+        rgba(120,180,200,.12);
+
+    transition:
+        background .25s ease,
+        border .25s ease,
+        transform .25s ease;
+}
+
+.ranking-button:hover{
+
+    background:
+        rgba(34,211,238,.055);
+
+    border-color:
+        rgba(34,211,238,.22);
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+#status{
+
+    padding:12px;
+
+    border-radius:11px;
+
+    color:#79d7e8;
+
+    background:
+        rgba(0,180,220,.035);
+
+    border:
+        1px solid
+        rgba(0,180,220,.10);
+}
+
+
+/* =========================================================
+   QUIZ PAGE
+   ========================================================= */
+
+.quiz-container{
+
+    width:92%;
+
+    max-width:900px;
+
+    margin:auto;
+
+    padding-top:35px;
+
+    padding-bottom:50px;
+}
+
+
+.quiz-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+    font-size:18px;
+}
+
+.quiz-top strong{
+
+    color:#55d8ee;
+
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+.timer{
+
+    padding:10px 18px;
+
+    border-radius:18px;
+
+    color:#bceaf3;
+
+    background:
+        rgba(4,18,29,.9);
+
+    border:
+        1px solid
+        rgba(60,190,220,.14);
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.3);
+}
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.progress{
+
+    width:100%;
+
+    height:12px;
+
+    overflow:hidden;
+
+    border-radius:30px;
+
+    background:
+        #06131d;
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+}
+
+#progressBar{
+
+    width:0%;
+
+    height:100%;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #087f9d,
+            #16a7c5,
+            #5267c9
+        );
+
+    box-shadow:
+        0 0 14px
+        rgba(22,167,197,.3);
+
+    transition:
+        width .4s ease;
+}
+
+
+/* =========================================================
+   QUESTION NUMBER
+   ========================================================= */
+
+.question-number{
+
+    text-align:center;
+
+    margin:22px 0 15px;
+
+    font-size:18px;
+
+    color:#7fb4c6;
+}
+
+
+/* =========================================================
+   QUESTION BOX
+   ========================================================= */
+
+.question-box{
+
+    padding:35px;
+
+    border-radius:25px;
+
+    color:#eaf8ff;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7,22,34,.96),
+            rgba(3,13,23,.96)
+        );
+
+    border:
+        1px solid
+        rgba(55,190,220,.13);
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.5);
+
+    backdrop-filter:
+        blur(15px);
+
+    -webkit-backdrop-filter:
+        blur(15px);
+}
+
+.question-box h2{
+
+    line-height:1.6;
+
+    font-size:27px;
+
+    margin-top:0;
+
+    color:#e8f8ff;
+}
+
+
+/* =========================================================
+   ANSWERS
+   ========================================================= */
+
+.answer{
+
+    width:100%;
+
+    min-height:62px;
+
+    margin:10px 0;
+
+    padding:16px 20px;
+
+    text-align:left;
+
+    font-size:18px;
+
+    line-height:1.5;
+
+    color:#cfeaf3;
+
+    background:
+        #07151f;
+
+    border:
+        1px solid
+        rgba(100,170,190,.13);
+
+    border-radius:13px;
+
+    box-shadow:none;
+}
+
+.answer:hover{
+
+    background:
+        #0a202c;
+
+    border-color:
+        rgba(34,211,238,.32);
+
+    transform:
+        translateY(-1px);
+}
+
+.answer.correct{
+
+    background:
+        linear-gradient(
+            135deg,
+            #075c45,
+            #087354
+        );
+
+    border-color:
+        rgba(52,211,153,.55);
+
+    color:#dffff4;
+
+    box-shadow:
+        0 0 18px
+        rgba(16,185,129,.12);
+}
+
+.answer.wrong{
+
+    background:
+        linear-gradient(
+            135deg,
+            #6e1b24,
+            #861f2a
+        );
+
+    border-color:
+        rgba(248,113,113,.5);
+
+    color:#ffe7e7;
+
+    box-shadow:
+        0 0 18px
+        rgba(239,68,68,.1);
+}
+
+.answer:disabled{
+
+    cursor:not-allowed;
+}
+
+
+/* =========================================================
+   RESULT PAGE
+   ========================================================= */
+
+.result-card{
+
+    max-width:600px;
+}
+
+.big-icon{
+
+    font-size:75px;
+
+    animation:
+        resultFloat 2.5s ease-in-out infinite;
+
+    filter:
+        drop-shadow(
+            0 0 14px
+            rgba(255,215,0,.18)
+        );
+}
+
+@keyframes resultFloat{
+
+    0%{
+        transform:
+            translateY(0)
+            rotate(-2deg);
+    }
+
+    50%{
+        transform:
+            translateY(-9px)
+            rotate(2deg);
+    }
+
+    100%{
+        transform:
+            translateY(0)
+            rotate(-2deg);
+    }
+}
+
+
+.score{
+
+    margin:20px;
+
+    font-size:72px;
+
+    font-weight:900;
+
+    color:#4ed5e8;
+
+    text-shadow:
+        0 0 20px
+        rgba(34,211,238,.12);
+}
+
+.score small{
+
+    font-size:20px;
+
+    color:#7598a6;
+}
+
+
+/* =========================================================
+   RANKING
+   ========================================================= */
+
+.ranking-card{
+
+    max-width:850px;
+
+    overflow:hidden;
+}
+
+.ranking-card h1{
+
+    margin-bottom:5px;
+}
+
+
+#online{
+
+    margin:15px;
+
+    padding:10px;
+
+    border-radius:11px;
+
+    color:#65d7ad;
+
+    background:
+        rgba(16,185,129,.035);
+
+    border:
+        1px solid
+        rgba(16,185,129,.10);
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+table{
+
+    width:100%;
+
+    border-collapse:
+        separate;
+
+    border-spacing:0;
+
+    margin-top:25px;
+
+    overflow:hidden;
+
+    border-radius:13px;
+}
+
+th{
+
+    padding:15px;
+
+    color:#dffaff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #075d78,
+            #163d83
+        );
+
+    font-size:16px;
+}
+
+td{
+
+    padding:15px;
+
+    color:#b9d7e1;
+
+    background:
+        #06131c;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.055);
+}
+
+tr:hover td{
+
+    background:
+        #091e29;
+}
+
+td strong{
+
+    color:#5ed7e9;
+
+    font-size:18px;
+}
+
+
+/* =========================================================
+   MEDALS
+   ========================================================= */
+
+tbody tr:nth-child(1) td:first-child{
+
+    font-size:25px;
+}
+
+tbody tr:nth-child(2) td:first-child{
+
+    font-size:22px;
+}
+
+tbody tr:nth-child(3) td:first-child{
+
+    font-size:21px;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar{
+
+    width:7px;
+    height:7px;
+}
+
+::-webkit-scrollbar-track{
+
+    background:#01040a;
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#16465a;
+
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#1c627c;
+}
+
+
+/* =========================================================
+   TABLET / IPAD
+   ========================================================= */
+
+@media screen
+and (min-width:769px)
+and (max-width:1024px){
+
+    .container{
+
+        width:90%;
+
+        padding-top:45px;
+    }
+
+    .quiz-container{
+
+        width:92%;
+
+        max-width:900px;
+    }
+
+    .question-box{
+
+        padding:35px;
+    }
+
+    .question-box h2{
+
+        font-size:29px;
+    }
+
+    .answer{
+
+        min-height:68px;
+
+        font-size:20px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media screen
+and (max-width:768px){
+
+    body{
+
+        min-height:100dvh;
+    }
+
+    .container{
+
+        width:94%;
+
+        padding-top:25px;
+
+        padding-bottom:35px;
+    }
+
+    .logo{
+
+        font-size:62px;
+    }
+
+    h1{
+
+        font-size:30px;
+
+        letter-spacing:1px;
+    }
+
+    .subtitle{
+
+        font-size:16px;
+    }
+
+    .card{
+
+        margin:20px auto;
+
+        padding:22px 18px;
+
+        border-radius:21px;
+    }
+
+    input{
+
+        font-size:16px;
+
+        padding:16px;
+    }
+
+    button{
+
+        min-height:56px;
+
+        font-size:18px;
+    }
+
+    .quiz-container{
+
+        width:94%;
+
+        padding-top:20px;
+    }
+
+    .quiz-top{
+
+        font-size:15px;
+
+        flex-direction:column;
+
+        align-items:stretch;
+    }
+
+    .timer{
+
+        text-align:center;
+    }
+
+    .progress{
+
+        height:11px;
+    }
+
+    .question-number{
+
+        margin:18px 0 12px;
+
+        font-size:16px;
+    }
+
+    .question-box{
+
+        padding:20px 16px;
+
+        border-radius:21px;
+    }
+
+    .question-box h2{
+
+        font-size:21px;
+
+        line-height:1.6;
+    }
+
+    .answer{
+
+        min-height:60px;
+
+        padding:15px;
+
+        font-size:17px;
+
+        border-radius:13px;
+    }
+
+    .score{
+
+        font-size:52px;
+    }
+
+    .big-icon{
+
+        font-size:62px;
+    }
+
+    table{
+
+        font-size:13px;
+    }
+
+    th,
+    td{
+
+        padding:10px 6px;
+    }
+
+    th{
+
+        font-size:13px;
+    }
+
+    td strong{
+
+        font-size:15px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONE
+   ========================================================= */
+
+@media screen
+and (max-width:400px){
+
+    .container{
+
+        width:95%;
+    }
+
+    h1{
+
+        font-size:26px;
+    }
+
+    .logo{
+
+        font-size:55px;
+    }
+
+    .question-box h2{
+
+        font-size:19px;
+    }
+
+    .answer{
+
+        font-size:16px;
+
+        padding:14px;
+    }
+
+    .ranking-button{
+
+        font-size:16px;
+    }
+
+    th,
+    td{
+
+        padding:8px 4px;
+
+        font-size:12px;
+    }
+}
+
+
+/* =========================================================
+   REDUCE MOTION
+   ========================================================= */
+
+@media
+(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+
+        animation:none !important;
+
+        transition:none !important;
+
+        scroll-behavior:auto !important;
+    }
+}
+```
