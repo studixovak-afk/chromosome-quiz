@@ -2,18 +2,43 @@ var playerName =
     localStorage.getItem("playerName");
 
 var score =
-    parseInt(localStorage.getItem("score")) || 0;
+    parseInt(
+        localStorage.getItem("score")
+    ) || 0;
 
 var time =
-    parseInt(localStorage.getItem("time")) || 0;
+    parseInt(
+        localStorage.getItem("time")
+    ) || 0;
 
 
-document.getElementById("resultName").innerHTML =
-    "ผู้เล่น : " + playerName;
+/* ตรวจสอบข้อมูล */
 
-document.getElementById("score").innerHTML =
-    score;
+if(!playerName){
 
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* แสดงชื่อ */
+
+document.getElementById(
+    "resultName"
+).innerHTML =
+
+    "👤 " + playerName;
+
+
+/* แสดงคะแนน */
+
+document.getElementById(
+    "score"
+).innerHTML = score;
+
+
+/* แสดงเวลา */
 
 var min =
     Math.floor(time / 60);
@@ -21,21 +46,78 @@ var min =
 var sec =
     time % 60;
 
+
 if(min < 10){
+
     min = "0" + min;
+
 }
 
 if(sec < 10){
+
     sec = "0" + sec;
+
 }
 
-document.getElementById("resultTime").innerHTML =
+
+document.getElementById(
+    "resultTime"
+).innerHTML =
+
     min + ":" + sec;
 
 
-/* บันทึกคะแนน */
+/* ข้อความสรุป */
 
-function saveScore(){
+var message = "";
+
+
+if(score >= 18){
+
+    message =
+        "🏆 ยอดเยี่ยมมาก";
+
+}
+else if(score >= 15){
+
+    message =
+        "🎉 ดีมาก";
+
+}
+else if(score >= 10){
+
+    message =
+        "👍 ผ่านเกณฑ์";
+
+}
+else{
+
+    message =
+        "📚 ลองทบทวนอีกครั้ง";
+
+}
+
+
+document.getElementById(
+    "message"
+).innerHTML =
+    message;
+
+
+/* =====================
+   บันทึก Firebase อัตโนมัติ
+===================== */
+
+
+/*
+ป้องกันกด F5 แล้วบันทึกซ้ำ
+*/
+
+if(
+    localStorage.getItem(
+        "savedScore"
+    ) != "true"
+){
 
     db.collection("players")
 
@@ -48,21 +130,28 @@ function saveScore(){
         time: time,
 
         createdAt:
-            firebase.firestore.FieldValue.serverTimestamp()
+        firebase.firestore
+        .FieldValue
+        .serverTimestamp()
 
     })
 
     .then(function(){
 
-        alert("บันทึกคะแนนแล้ว");
+        console.log(
+            "บันทึกคะแนนแล้ว"
+        );
+
+        localStorage.setItem(
+            "savedScore",
+            "true"
+        );
 
     })
 
     .catch(function(error){
 
         console.log(error);
-
-        alert("เกิดข้อผิดพลาด");
 
     });
 
