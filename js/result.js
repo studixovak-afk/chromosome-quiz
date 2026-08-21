@@ -1,96 +1,69 @@
-<!DOCTYPE html>
-<html>
+var playerName =
+    localStorage.getItem("playerName");
 
-<head>
+var score =
+    parseInt(localStorage.getItem("score")) || 0;
 
-<meta charset="utf-8">
-
-<title>ผลคะแนน</title>
-
-<link rel="stylesheet"
-type="text/css"
-href="css/style.css">
+var time =
+    parseInt(localStorage.getItem("time")) || 0;
 
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+document.getElementById("resultName").innerHTML =
+    "ผู้เล่น : " + playerName;
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<script src="js/firebase.js"></script>
-
-</head>
+document.getElementById("score").innerHTML =
+    score;
 
 
-<body>
+var min =
+    Math.floor(time / 60);
 
-<div class="container">
+var sec =
+    time % 60;
 
-    <div class="card result-card">
+if(min < 10){
+    min = "0" + min;
+}
 
-        <div class="big-icon">
-            🎉
-        </div>
+if(sec < 10){
+    sec = "0" + sec;
+}
 
-
-        <h1>
-            จบเกม!
-        </h1>
-
-
-        <p id="resultName"></p>
-
-
-        <div class="score">
-
-            <span id="score"></span>
-
-            <small>
-                / 20 คะแนน
-            </small>
-
-        </div>
+document.getElementById("resultTime").innerHTML =
+    min + ":" + sec;
 
 
-        <p>
+/* บันทึกคะแนน */
 
-            ⏱️ เวลา:
-            <strong id="resultTime"></strong>
+function saveScore(){
 
-        </p>
+    db.collection("players")
 
+    .add({
 
-        <p id="message"></p>
+        name: playerName,
 
+        score: score,
 
-        <button onclick="saveScore()">
+        time: time,
 
-            🏆 บันทึกคะแนน
+        createdAt:
+            firebase.firestore.FieldValue.serverTimestamp()
 
-        </button>
+    })
 
+    .then(function(){
 
-        <a href="ranking.html"
-        class="ranking-button">
+        alert("บันทึกคะแนนแล้ว");
 
-            ดูอันดับ 🥇
+    })
 
-        </a>
+    .catch(function(error){
 
+        console.log(error);
 
-        <a href="index.html"
-        class="ranking-button">
+        alert("เกิดข้อผิดพลาด");
 
-            เล่นอีกครั้ง 🔄
+    });
 
-        </a>
-
-    </div>
-
-</div>
-
-
-<script src="js/result.js"></script>
-
-</body>
-
-</html>
+}
