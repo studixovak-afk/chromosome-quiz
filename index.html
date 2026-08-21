@@ -94,14 +94,12 @@ function startGame(){
     }
 
 
-    localStorage.removeItem(
-    "savedScore"
-);
+    localStorage.removeItem("savedScore");
 
-localStorage.setItem(
-    "playerName",
-    name
-);
+    localStorage.setItem(
+        "playerName",
+        name
+    );
 
 
     window.location.href =
@@ -109,29 +107,62 @@ localStorage.setItem(
 
 }
 
-    db.collection("settings")
+
+/* ตรวจสอบสถานะการแข่งขันแบบ Real-time */
+
+db.collection("settings")
 .doc("game")
 .onSnapshot(function(doc){
 
-    var started =
-        doc.data().started;
+    if(!doc.exists){
 
-    if(started){
+        console.log(
+            "ไม่พบ settings/game"
+        );
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+        "❌ ไม่พบการตั้งค่าการแข่งขัน";
+
+        return;
+
+    }
+
+
+    var data =
+        doc.data();
+
+
+    var started =
+        data.started;
+
+
+    console.log(
+        "สถานะการแข่งขัน:",
+        started
+    );
+
+
+    if(started === true){
 
         document.getElementById(
             "startBtn"
         ).disabled = false;
+
 
         document.getElementById(
             "status"
         ).innerHTML =
         "🚀 เริ่มการแข่งขันแล้ว";
 
+
     }else{
 
         document.getElementById(
             "startBtn"
         ).disabled = true;
+
 
         document.getElementById(
             "status"
@@ -140,7 +171,22 @@ localStorage.setItem(
 
     }
 
+
+}, function(error){
+
+    console.log(
+        "Firebase Error:",
+        error
+    );
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+    "❌ ไม่สามารถเชื่อมต่อ Firebase ได้";
+
 });
+
 </script>
 
 </body>
