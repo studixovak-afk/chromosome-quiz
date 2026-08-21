@@ -36,10 +36,10 @@ db.collection("players")
 
 
     for(
-        var i = 0;
-        i < players.length;
-        i++
-    ){
+    var i = 0;
+    i < players.length;
+    i++
+){
 
         var player =
             players[i];
