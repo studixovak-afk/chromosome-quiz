@@ -1,288 +1,157 @@
-/* =========================================================
-   ANIMATED BACKGROUND
-   ========================================================= */
+/* =====================================
+   DNA PARTICLES BACKGROUND
+===================================== */
+
+body{
+    position:relative;
+    overflow-x:hidden;
+}
+
+/* อนุภาคลอย */
 
 body::before{
     content:"";
 
     position:fixed;
-
-    width:420px;
-    height:420px;
-
-    top:-150px;
-    left:-150px;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(0,229,255,.18),
-            rgba(0,229,255,.04) 45%,
-            transparent 70%
-        );
-
-    filter:blur(15px);
-
-    pointer-events:none;
-
-    z-index:-1;
-
-    animation:
-        lightMove1 10s ease-in-out infinite alternate;
-}
-
-
-body::after{
-    content:"";
-
-    position:fixed;
-
-    width:380px;
-    height:380px;
-
-    right:-130px;
-    bottom:-130px;
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(139,92,246,.20),
-            rgba(99,102,241,.05) 45%,
-            transparent 70%
-        );
-
-    filter:blur(18px);
-
-    pointer-events:none;
-
-    z-index:-1;
-
-    animation:
-        lightMove2 12s ease-in-out infinite alternate;
-}
-
-
-/* แสงด้านซ้าย */
-
-@keyframes lightMove1{
-
-    0%{
-        transform:
-            translate(
-                0px,
-                0px
-            )
-            scale(1);
-    }
-
-    50%{
-        transform:
-            translate(
-                80px,
-                60px
-            )
-            scale(1.15);
-    }
-
-    100%{
-        transform:
-            translate(
-                150px,
-                20px
-            )
-            scale(.95);
-    }
-
-}
-
-
-/* แสงด้านขวา */
-
-@keyframes lightMove2{
-
-    0%{
-        transform:
-            translate(
-                0px,
-                0px
-            )
-            scale(1);
-    }
-
-    50%{
-        transform:
-            translate(
-                -70px,
-                -60px
-            )
-            scale(1.15);
-    }
-
-    100%{
-        transform:
-            translate(
-                -20px,
-                -120px
-            )
-            scale(.95);
-    }
-
-}
-
-
-/* =========================================================
-   FLOATING PARTICLES
-   ========================================================= */
-
-body{
-    position:relative;
-}
-
-
-/* จุดแสงเล็ก ๆ */
-
-.container::before,
-.quiz-container::before{
-
-    content:"";
-
-    position:fixed;
-
-    width:7px;
-    height:7px;
-
-    top:20%;
-    left:12%;
-
-    border-radius:50%;
-
-    background:#67e8f9;
-
-    box-shadow:
-
-        0 0 12px #67e8f9,
-
-        120px 180px 0 1px
-        rgba(103,232,249,.7),
-
-        300px 80px 0 0
-        rgba(129,140,248,.7),
-
-        500px 250px 0 1px
-        rgba(192,132,252,.6),
-
-        700px 100px 0 0
-        rgba(34,211,238,.6),
-
-        200px 500px 0 1px
-        rgba(103,232,249,.5),
-
-        600px 550px 0 0
-        rgba(129,140,248,.5);
-
-    opacity:.55;
-
-    pointer-events:none;
-
-    animation:
-        particlesFloat 9s ease-in-out infinite alternate;
-
-    z-index:-1;
-
-}
-
-
-@keyframes particlesFloat{
-
-    0%{
-
-        transform:
-            translate(
-                0px,
-                20px
-            );
-
-        opacity:.35;
-
-    }
-
-    50%{
-
-        transform:
-            translate(
-                25px,
-                -30px
-            );
-
-        opacity:.75;
-
-    }
-
-    100%{
-
-        transform:
-            translate(
-                -20px,
-                -70px
-            );
-
-        opacity:.4;
-
-    }
-
-}
-
-
-/* =========================================================
-   SUBTLE GRID
-   ========================================================= */
-
-body{
-
-    background-color:#020617;
+    inset:0;
 
     background-image:
 
-        linear-gradient(
-            rgba(34,211,238,.025)
-            1px,
-            transparent 1px
-        ),
+    radial-gradient(
+        circle,
+        rgba(0,255,255,.08) 1px,
+        transparent 1px
+    ),
 
-        linear-gradient(
-            90deg,
-            rgba(34,211,238,.025)
-            1px,
-            transparent 1px
-        );
+    radial-gradient(
+        circle,
+        rgba(120,150,255,.05) 2px,
+        transparent 2px
+    );
 
     background-size:
-        50px 50px;
+        120px 120px,
+        220px 220px;
 
     animation:
-        gridMove 20s linear infinite;
+        particlesMove 60s linear infinite;
+
+    pointer-events:none;
+
+    z-index:-2;
+}
+
+@keyframes particlesMove{
+
+    from{
+        transform:
+            translateY(0px);
+    }
+
+    to{
+        transform:
+            translateY(-300px);
+    }
 
 }
 
 
-@keyframes gridMove{
+/* แสงเบาๆด้านบน */
+
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    top:-250px;
+    left:50%;
+
+    transform:
+        translateX(-50%);
+
+    width:700px;
+    height:700px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,180,255,.08),
+            transparent 70%
+        );
+
+    filter:blur(80px);
+
+    animation:
+        glowMove 12s ease-in-out infinite alternate;
+
+    pointer-events:none;
+
+    z-index:-3;
+}
+
+@keyframes glowMove{
 
     from{
 
-        background-position:
-            0 0;
+        transform:
+        translateX(-50%)
+        translateY(0px);
 
     }
 
     to{
 
-        background-position:
-            50px 50px;
+        transform:
+        translateX(-50%)
+        translateY(40px);
 
+    }
+
+}
+.logo{
+
+    position:relative;
+
+}
+
+.logo::after{
+
+    content:"🧬";
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    font-size:180px;
+
+    opacity:.04;
+
+    z-index:-1;
+
+    animation:
+        dnaRotate 18s linear infinite;
+
+}
+
+@keyframes dnaRotate{
+
+    from{
+        transform:
+        translate(-50%,-50%)
+        rotate(0deg);
+    }
+
+    to{
+        transform:
+        translate(-50%,-50%)
+        rotate(360deg);
     }
 
 }
