@@ -34,7 +34,9 @@ href="css/style.css">
 
 
     <div class="card">
-
+<p id="status">
+⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...
+</p>
         <h2>
             🎮 เริ่มเกม
         </h2>
@@ -49,9 +51,14 @@ href="css/style.css">
         placeholder="กรอกชื่อของคุณ"
         maxlength="30">
 
-        <button onclick="startGame()">
-            เริ่มเกม 🚀
-        </button>
+        <button
+id="startBtn"
+onclick="startGame()"
+disabled>
+
+เริ่มเกม 🚀
+
+</button>
 
         <a href="ranking.html"
         class="ranking-button">
@@ -99,6 +106,38 @@ localStorage.setItem(
 
 }
 
+    db.collection("settings")
+.doc("game")
+.onSnapshot(function(doc){
+
+    var started =
+        doc.data().started;
+
+    if(started){
+
+        document.getElementById(
+            "startBtn"
+        ).disabled = false;
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+        "🚀 เริ่มการแข่งขันแล้ว";
+
+    }else{
+
+        document.getElementById(
+            "startBtn"
+        ).disabled = true;
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+        "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
+
+    }
+
+});
 </script>
 
 </body>
