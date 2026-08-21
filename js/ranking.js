@@ -80,19 +80,19 @@ db.collection("players")
 
         if(rank == 1){
 
-            medal = "??";
+           medal = "🥇";
 
         }
 
         else if(rank == 2){
 
-            medal = "??";
+           medal = "🥈";
 
         }
 
         else if(rank == 3){
 
-            medal = "??";
+            medal = "🥉";
 
         }
 
