@@ -11,44 +11,15 @@ var time =
         localStorage.getItem("time")
     ) || 0;
 
-
-/* =================================
-   รับคำตอบของผู้เล่น
-================================= */
-
-var playerAnswers = [];
-
-var savedAnswers =
-    localStorage.getItem(
-        "playerAnswers"
-    );
+var answersLog =
+    JSON.parse(
+        localStorage.getItem(
+            "answersLog"
+        )
+    ) || [];
 
 
-if(savedAnswers){
-
-    try{
-
-        playerAnswers =
-            JSON.parse(savedAnswers);
-
-    }
-    catch(error){
-
-        console.log(
-            "ไม่สามารถอ่านคำตอบได้",
-            error
-        );
-
-        playerAnswers = [];
-
-    }
-
-}
-
-
-/* =================================
-   ตรวจสอบข้อมูลผู้เล่น
-================================= */
+/* ตรวจสอบข้อมูล */
 
 if(!playerName){
 
@@ -58,29 +29,23 @@ if(!playerName){
 }
 
 
-/* =================================
-   แสดงชื่อ
-================================= */
+/* แสดงชื่อ */
 
 document.getElementById(
     "resultName"
 ).innerHTML =
-
     "👤 " + playerName;
 
 
-/* =================================
-   แสดงคะแนน
-================================= */
+/* แสดงคะแนน */
 
 document.getElementById(
     "score"
-).innerHTML = score;
+).innerHTML =
+    score;
 
 
-/* =================================
-   แสดงเวลา
-================================= */
+/* แสดงเวลา */
 
 var min =
     Math.floor(time / 60);
@@ -88,36 +53,23 @@ var min =
 var sec =
     time % 60;
 
-
 if(min < 10){
-
-    min =
-        "0" + min;
-
+    min = "0" + min;
 }
-
 
 if(sec < 10){
-
-    sec =
-        "0" + sec;
-
+    sec = "0" + sec;
 }
-
 
 document.getElementById(
     "resultTime"
 ).innerHTML =
-
     min + ":" + sec;
 
 
-/* =================================
-   ข้อความสรุป
-================================= */
+/* ข้อความสรุป */
 
 var message = "";
-
 
 if(score >= 18){
 
@@ -125,21 +77,18 @@ if(score >= 18){
         "🏆 ยอดเยี่ยมมาก";
 
 }
-
 else if(score >= 15){
 
     message =
         "🎉 ดีมาก";
 
 }
-
 else if(score >= 10){
 
     message =
         "👍 ผ่านเกณฑ์";
 
 }
-
 else{
 
     message =
@@ -147,21 +96,15 @@ else{
 
 }
 
-
 document.getElementById(
     "message"
 ).innerHTML =
     message;
 
 
-/* =================================
+/* =====================
    บันทึก Firebase
-================================= */
-
-
-/*
-   ป้องกันการบันทึกซ้ำ
-*/
+===================== */
 
 if(
     localStorage.getItem(
@@ -169,12 +112,9 @@ if(
     ) != "true"
 ){
 
+    db.collection("players")
 
-    /*
-       สร้างข้อมูลผู้เล่น
-    */
-
-    var playerData = {
+    .add({
 
         name: playerName,
 
@@ -182,54 +122,27 @@ if(
 
         time: time,
 
-        answers: playerAnswers,
-
         finished: true,
 
+        answers: answersLog,
+
         createdAt:
-            firebase.firestore
-            .FieldValue
-            .serverTimestamp()
+        firebase.firestore
+        .FieldValue
+        .serverTimestamp()
 
-    };
+    })
 
-
-    /*
-       บันทึกลง Firebase
-    */
-
-    db.collection("players")
-
-    .add(playerData)
-
-    .then(function(docRef){
+    .then(function(){
 
         console.log(
-            "บันทึกคะแนนแล้ว:",
-            docRef.id
+            "บันทึกคะแนนแล้ว"
         );
-
-
-        /*
-           จำ ID ของผู้เล่น
-           เอาไว้ใช้เปิดหน้ารายละเอียด
-        */
-
-        localStorage.setItem(
-            "playerId",
-            docRef.id
-        );
-
-
-        /*
-           ป้องกันบันทึกซ้ำ
-        */
 
         localStorage.setItem(
             "savedScore",
             "true"
         );
-
 
     })
 
