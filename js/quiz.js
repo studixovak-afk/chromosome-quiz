@@ -227,6 +227,8 @@ var currentQuestion = 0;
 
 var score = 0;
 
+var answersLog = [];
+
 var seconds = 0;
 
 var timer;
