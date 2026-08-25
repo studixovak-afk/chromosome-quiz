@@ -12,7 +12,43 @@ var time =
     ) || 0;
 
 
-/* ตรวจสอบข้อมูล */
+/* =================================
+   รับคำตอบของผู้เล่น
+================================= */
+
+var playerAnswers = [];
+
+var savedAnswers =
+    localStorage.getItem(
+        "playerAnswers"
+    );
+
+
+if(savedAnswers){
+
+    try{
+
+        playerAnswers =
+            JSON.parse(savedAnswers);
+
+    }
+    catch(error){
+
+        console.log(
+            "ไม่สามารถอ่านคำตอบได้",
+            error
+        );
+
+        playerAnswers = [];
+
+    }
+
+}
+
+
+/* =================================
+   ตรวจสอบข้อมูลผู้เล่น
+================================= */
 
 if(!playerName){
 
@@ -22,7 +58,9 @@ if(!playerName){
 }
 
 
-/* แสดงชื่อ */
+/* =================================
+   แสดงชื่อ
+================================= */
 
 document.getElementById(
     "resultName"
@@ -31,14 +69,18 @@ document.getElementById(
     "👤 " + playerName;
 
 
-/* แสดงคะแนน */
+/* =================================
+   แสดงคะแนน
+================================= */
 
 document.getElementById(
     "score"
 ).innerHTML = score;
 
 
-/* แสดงเวลา */
+/* =================================
+   แสดงเวลา
+================================= */
 
 var min =
     Math.floor(time / 60);
@@ -49,13 +91,16 @@ var sec =
 
 if(min < 10){
 
-    min = "0" + min;
+    min =
+        "0" + min;
 
 }
 
+
 if(sec < 10){
 
-    sec = "0" + sec;
+    sec =
+        "0" + sec;
 
 }
 
@@ -67,7 +112,9 @@ document.getElementById(
     min + ":" + sec;
 
 
-/* ข้อความสรุป */
+/* =================================
+   ข้อความสรุป
+================================= */
 
 var message = "";
 
@@ -78,18 +125,21 @@ if(score >= 18){
         "🏆 ยอดเยี่ยมมาก";
 
 }
+
 else if(score >= 15){
 
     message =
         "🎉 ดีมาก";
 
 }
+
 else if(score >= 10){
 
     message =
         "👍 ผ่านเกณฑ์";
 
 }
+
 else{
 
     message =
@@ -104,13 +154,13 @@ document.getElementById(
     message;
 
 
-/* =====================
-   บันทึก Firebase อัตโนมัติ
-===================== */
+/* =================================
+   บันทึก Firebase
+================================= */
 
 
 /*
-ป้องกันกด F5 แล้วบันทึกซ้ำ
+   ป้องกันการบันทึกซ้ำ
 */
 
 if(
@@ -119,9 +169,12 @@ if(
     ) != "true"
 ){
 
-    db.collection("players")
 
-    .add({
+    /*
+       สร้างข้อมูลผู้เล่น
+    */
+
+    var playerData = {
 
         name: playerName,
 
@@ -129,29 +182,63 @@ if(
 
         time: time,
 
+        answers: playerAnswers,
+
+        finished: true,
+
         createdAt:
-        firebase.firestore
-        .FieldValue
-        .serverTimestamp()
+            firebase.firestore
+            .FieldValue
+            .serverTimestamp()
 
-    })
+    };
 
-    .then(function(){
+
+    /*
+       บันทึกลง Firebase
+    */
+
+    db.collection("players")
+
+    .add(playerData)
+
+    .then(function(docRef){
 
         console.log(
-            "บันทึกคะแนนแล้ว"
+            "บันทึกคะแนนแล้ว:",
+            docRef.id
         );
+
+
+        /*
+           จำ ID ของผู้เล่น
+           เอาไว้ใช้เปิดหน้ารายละเอียด
+        */
+
+        localStorage.setItem(
+            "playerId",
+            docRef.id
+        );
+
+
+        /*
+           ป้องกันบันทึกซ้ำ
+        */
 
         localStorage.setItem(
             "savedScore",
             "true"
         );
 
+
     })
 
     .catch(function(error){
 
-        console.log(error);
+        console.log(
+            "Firebase Error:",
+            error
+        );
 
     });
 
