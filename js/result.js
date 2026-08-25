@@ -114,24 +114,27 @@ if(
 
     db.collection("players")
 
-    .add({
+    db.collection("players")
+.add({
 
-        name: playerName,
+    name: playerName,
 
-        score: score,
+    score: score,
 
-        time: time,
+    time: time,
 
-        finished: true,
+    answersLog: JSON.parse(
+        localStorage.getItem(
+            "answersLog"
+        ) || "[]"
+    ),
 
-        answers: answersLog,
+    createdAt:
+    firebase.firestore
+    .FieldValue
+    .serverTimestamp()
 
-        createdAt:
-        firebase.firestore
-        .FieldValue
-        .serverTimestamp()
-
-    })
+})
 
     .then(function(){
 
