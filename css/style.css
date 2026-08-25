@@ -992,3 +992,118 @@ input{
     }
 
 }
+
+/* =========================
+   PLAYER NAME BUTTON
+========================= */
+
+.player-name-button{
+
+    background:none;
+
+    color:#087ea4;
+
+    padding:8px;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    border:0;
+
+    cursor:pointer;
+
+    width:auto;
+
+}
+
+
+.player-name-button:hover{
+
+    background:#e9faff;
+
+    transform:none;
+
+}
+
+
+/* =========================
+   ANSWER DETAIL
+========================= */
+
+.answer-detail-box{
+
+    background:#f4f7f8;
+
+    color:#222;
+
+    padding:18px;
+
+    margin:15px 0;
+
+    border-radius:15px;
+
+    text-align:left;
+
+    border-left:6px solid #087ea4;
+
+}
+
+
+.answer-detail-box.correct{
+
+    border-left-color:#20b26b;
+
+}
+
+
+.answer-detail-box.wrong{
+
+    border-left-color:#e74c3c;
+
+}
+
+
+.answer-detail-box h3{
+
+    margin-top:0;
+
+}
+
+
+.answer-detail-box p{
+
+    line-height:1.6;
+
+}
+
+
+/* มือถือ */
+
+@media screen and (max-width:600px){
+
+    .player-name-button{
+
+        font-size:15px;
+
+        padding:8px 4px;
+
+    }
+
+
+    .answer-detail-box{
+
+        padding:15px;
+
+        margin:12px 0;
+
+    }
+
+
+    .answer-detail-box h3{
+
+        font-size:18px;
+
+    }
+
+}
