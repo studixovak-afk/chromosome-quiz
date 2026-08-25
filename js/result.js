@@ -1,25 +1,59 @@
+```javascript
+/* =========================
+   RESULT PAGE
+========================= */
+
+
+/* =========================
+   ข้อมูลผู้เล่น
+========================= */
+
 var playerName =
     localStorage.getItem("playerName");
+
 
 var score =
     parseInt(
         localStorage.getItem("score")
     ) || 0;
 
+
 var time =
     parseInt(
         localStorage.getItem("time")
     ) || 0;
 
-var answersLog =
-    JSON.parse(
-        localStorage.getItem(
-            "answersLog"
-        )
-    ) || [];
+
+/* =========================
+   โหลด answersLog
+========================= */
+
+var answersLog = [];
 
 
-/* ตรวจสอบข้อมูล */
+try{
+
+    answersLog =
+        JSON.parse(
+            localStorage.getItem("answersLog")
+        ) || [];
+
+}
+catch(error){
+
+    console.log(
+        "ไม่สามารถอ่าน answersLog ได้",
+        error
+    );
+
+    answersLog = [];
+
+}
+
+
+/* =========================
+   ตรวจสอบข้อมูลผู้เล่น
+========================= */
 
 if(!playerName){
 
@@ -29,47 +63,67 @@ if(!playerName){
 }
 
 
-/* แสดงชื่อ */
+/* =========================
+   แสดงชื่อ
+========================= */
 
 document.getElementById(
     "resultName"
 ).innerHTML =
-    "👤 " + playerName;
+
+    "👤 " + escapeHTML(playerName);
 
 
-/* แสดงคะแนน */
+/* =========================
+   แสดงคะแนน
+========================= */
 
 document.getElementById(
     "score"
-).innerHTML =
-    score;
+).innerHTML = score;
 
 
-/* แสดงเวลา */
+/* =========================
+   แสดงเวลา
+========================= */
 
 var min =
     Math.floor(time / 60);
 
+
 var sec =
     time % 60;
 
+
 if(min < 10){
-    min = "0" + min;
+
+    min =
+        "0" + min;
+
 }
 
+
 if(sec < 10){
-    sec = "0" + sec;
+
+    sec =
+        "0" + sec;
+
 }
+
 
 document.getElementById(
     "resultTime"
 ).innerHTML =
+
     min + ":" + sec;
 
 
-/* ข้อความสรุป */
+/* =========================
+   ข้อความสรุปคะแนน
+========================= */
 
 var message = "";
+
 
 if(score >= 18){
 
@@ -77,18 +131,21 @@ if(score >= 18){
         "🏆 ยอดเยี่ยมมาก";
 
 }
+
 else if(score >= 15){
 
     message =
         "🎉 ดีมาก";
 
 }
+
 else if(score >= 10){
 
     message =
         "👍 ผ่านเกณฑ์";
 
 }
+
 else{
 
     message =
@@ -96,15 +153,22 @@ else{
 
 }
 
+
 document.getElementById(
     "message"
 ).innerHTML =
     message;
 
 
-/* =====================
+/* =========================
    บันทึก Firebase
-===================== */
+========================= */
+
+
+/*
+ป้องกันการบันทึกซ้ำ
+กรณีกด F5 หรือกลับเข้าหน้านี้
+*/
 
 if(
     localStorage.getItem(
@@ -112,35 +176,75 @@ if(
     ) != "true"
 ){
 
-    db.collection("players")
+
+    console.log(
+        "กำลังบันทึกคะแนน..."
+    );
+
+
+    console.log(
+        "answersLog:",
+        answersLog
+    );
+
 
     db.collection("players")
-.add({
 
-    name: playerName,
+    .add({
 
-    score: score,
+        /* ชื่อผู้เล่น */
 
-    time: time,
+        name:
+            playerName,
 
-    answersLog: JSON.parse(
-        localStorage.getItem(
-            "answersLog"
-        ) || "[]"
-    ),
 
-    createdAt:
-    firebase.firestore
-    .FieldValue
-    .serverTimestamp()
+        /* คะแนน */
 
-})
+        score:
+            score,
 
-    .then(function(){
+
+        /* เวลา */
+
+        time:
+            time,
+
+
+        /* =========================
+           คำตอบทั้ง 20 ข้อ
+        ========================= */
+
+        answersLog:
+            answersLog,
+
+
+        /* วันที่บันทึก */
+
+        createdAt:
+            firebase.firestore
+            .FieldValue
+            .serverTimestamp()
+
+    })
+
+
+    .then(function(docRef){
 
         console.log(
-            "บันทึกคะแนนแล้ว"
+            "บันทึกคะแนนสำเร็จ"
         );
+
+
+        console.log(
+            "Player ID:",
+            docRef.id
+        );
+
+
+        /*
+        บันทึกสถานะว่า
+        คะแนนถูกบันทึกแล้ว
+        */
 
         localStorage.setItem(
             "savedScore",
@@ -149,6 +253,7 @@ if(
 
     })
 
+
     .catch(function(error){
 
         console.log(
@@ -156,6 +261,58 @@ if(
             error
         );
 
+
+        alert(
+            "ไม่สามารถบันทึกคะแนนได้ กรุณาตรวจสอบอินเทอร์เน็ต"
+        );
+
     });
 
 }
+
+
+/* =========================
+   ป้องกัน HTML
+========================= */
+
+function escapeHTML(text){
+
+    if(
+        text === undefined ||
+        text === null
+    ){
+
+        return "";
+
+    }
+
+
+    return String(text)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+```
