@@ -350,15 +350,10 @@ function showQuestion(){
 
 function checkAnswer(answer){
 
-    var q =
-        questions[currentQuestion];
-
+    var q = questions[currentQuestion];
 
     var buttons =
-        document.getElementsByClassName(
-            "answer"
-        );
-
+        document.getElementsByClassName("answer");
 
     for(
         var i = 0;
@@ -371,30 +366,81 @@ function checkAnswer(answer){
     }
 
 
-    if(answer == q.correct){
+    var isCorrect =
+        answer == q.correct;
+
+
+    if(isCorrect){
 
         score++;
 
-
-        buttons[answer]
-        .className =
+        buttons[answer].className =
             "answer correct";
 
     }
 
     else{
 
-        buttons[answer]
-        .className =
+        buttons[answer].className =
             "answer wrong";
 
-
-        buttons[q.correct]
-        .className =
+        buttons[q.correct].className =
             "answer correct";
 
     }
 
+
+    /* บันทึกคำตอบของข้อนี้ */
+
+    answersLog.push({
+
+        questionNumber:
+            currentQuestion + 1,
+
+        question:
+            q.question,
+
+        selectedAnswer:
+            q.answers[answer],
+
+        selectedIndex:
+            answer,
+
+        correctAnswer:
+            q.answers[q.correct],
+
+        correctIndex:
+            q.correct,
+
+        isCorrect:
+            isCorrect
+
+    });
+
+
+    setTimeout(function(){
+
+        currentQuestion++;
+
+
+        if(
+            currentQuestion >=
+            questions.length
+        ){
+
+            finishGame();
+
+        }
+
+        else{
+
+            showQuestion();
+
+        }
+
+    },700);
+
+}
 
     setTimeout(function(){
 
