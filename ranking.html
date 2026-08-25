@@ -17,6 +17,7 @@ content="#087ea4">
 type="text/css"
 href="css/style.css">
 
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -36,20 +37,23 @@ href="css/style.css">
             🏆
         </div>
 
+
         <h1>
             LEADERBOARD
         </h1>
 
+
         <p>
-            ตารางคะแนน
+            ตารางคะแนนแบบ Real-time
         </p>
 
+
         <div id="online">
-            ⏳ กำลังโหลด...
+            🔴 กำลังเชื่อมต่อ...
         </div>
 
 
-        <!-- ตารางคะแนน -->
+        <!-- ตารางอันดับ -->
 
         <table>
 
@@ -85,27 +89,47 @@ href="css/style.css">
         </table>
 
 
-        <!-- รายละเอียดผู้เล่น -->
+        <!-- =========================
+             รายละเอียดผู้เล่น
+        ========================== -->
 
-        <div id="playerDetail"
+        <div
+        id="playerDetail"
         style="display:none; margin-top:30px;">
 
             <hr>
 
+
             <h2 id="detailName">
-                รายละเอียด
+                👤 รายละเอียดผู้เล่น
             </h2>
 
-            <p id="detailScore"></p>
+
+            <p id="detailScore">
+                🏆 คะแนน
+            </p>
+
 
             <div id="answersDetail">
 
             </div>
 
+
+            <button
+            onclick="closePlayerDetail()"
+            style="margin-top:20px;">
+
+                ปิดรายละเอียด
+
+            </button>
+
         </div>
 
 
-        <a href="index.html"
+        <!-- กลับ -->
+
+        <a
+        href="index.html"
         class="ranking-button">
 
             🎮 กลับหน้าแรก
@@ -118,6 +142,33 @@ href="css/style.css">
 
 
 <script src="js/ranking.js"></script>
+
+
+<script>
+
+/* ปิดรายละเอียดผู้เล่น */
+
+function closePlayerDetail(){
+
+    var detail =
+        document.getElementById(
+            "playerDetail"
+        );
+
+    detail.style.display =
+        "none";
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+</script>
 
 </body>
 
