@@ -484,11 +484,16 @@ function finishGame(){
     );
 
 
+    localStorage.setItem(
+        "answersLog",
+        JSON.stringify(answersLog)
+    );
+
+
     window.location.href =
         "result.html";
 
 }
-
 
 startTimer();
 
