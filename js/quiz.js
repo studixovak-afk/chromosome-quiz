@@ -1,3 +1,4 @@
+```javascript
 var questions = [
 
     {
@@ -223,6 +224,10 @@ var questions = [
 ];
 
 
+/* =========================
+   ตัวแปรเกม
+========================= */
+
 var currentQuestion = 0;
 
 var score = 0;
@@ -233,6 +238,10 @@ var seconds = 0;
 
 var timer;
 
+
+/* =========================
+   ชื่อผู้เล่น
+========================= */
 
 var playerName =
     localStorage.getItem("playerName");
@@ -246,9 +255,22 @@ if(!playerName){
 }
 
 
-document.getElementById("playerName")
-.innerHTML = playerName;
+/* แสดงชื่อ */
 
+var playerNameElement =
+    document.getElementById("playerName");
+
+if(playerNameElement){
+
+    playerNameElement.innerHTML =
+        playerName;
+
+}
+
+
+/* =========================
+   ตัวจับเวลา
+========================= */
 
 function startTimer(){
 
@@ -278,15 +300,25 @@ function startTimer(){
         }
 
 
-        document.getElementById("time")
-        .innerHTML =
-            min + ":" + sec;
+        var timeElement =
+            document.getElementById("time");
 
+
+        if(timeElement){
+
+            timeElement.innerHTML =
+                min + ":" + sec;
+
+        }
 
     },1000);
 
 }
 
+
+/* =========================
+   แสดงคำถาม
+========================= */
 
 function showQuestion(){
 
@@ -294,16 +326,20 @@ function showQuestion(){
         questions[currentQuestion];
 
 
-    document.getElementById("questionNumber")
-    .innerHTML =
+    document.getElementById(
+        "questionNumber"
+    ).innerHTML =
+
         "ข้อ " +
         (currentQuestion + 1) +
         " / " +
         questions.length;
 
 
-    document.getElementById("question")
-    .innerHTML =
+    document.getElementById(
+        "question"
+    ).innerHTML =
+
         q.question;
 
 
@@ -318,22 +354,25 @@ function showQuestion(){
 
         html +=
 
-        '<button class="answer" ' +
+            '<button class="answer" ' +
 
-        'onclick="checkAnswer(' +
-        i +
-        ')">' +
+            'onclick="checkAnswer(' +
+            i +
+            ')">' +
 
-        q.answers[i] +
+            q.answers[i] +
 
-        '</button>';
+            '</button>';
 
     }
 
 
-    document.getElementById("answers")
-    .innerHTML = html;
+    document.getElementById(
+        "answers"
+    ).innerHTML = html;
 
+
+    /* แถบความคืบหน้า */
 
     var progress =
 
@@ -341,19 +380,32 @@ function showQuestion(){
         questions.length) * 100;
 
 
-    document.getElementById("progressBar")
-    .style.width =
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+
         progress + "%";
 
 }
 
 
+/* =========================
+   ตรวจคำตอบ
+========================= */
+
 function checkAnswer(answer){
 
-    var q = questions[currentQuestion];
+    var q =
+        questions[currentQuestion];
+
 
     var buttons =
-        document.getElementsByClassName("answer");
+        document.getElementsByClassName(
+            "answer"
+        );
+
+
+    /* ป้องกันกดซ้ำ */
 
     for(
         var i = 0;
@@ -366,6 +418,8 @@ function checkAnswer(answer){
     }
 
 
+    /* ตรวจว่าถูกหรือผิด */
+
     var isCorrect =
         answer == q.correct;
 
@@ -373,6 +427,7 @@ function checkAnswer(answer){
     if(isCorrect){
 
         score++;
+
 
         buttons[answer].className =
             "answer correct";
@@ -384,13 +439,16 @@ function checkAnswer(answer){
         buttons[answer].className =
             "answer wrong";
 
+
         buttons[q.correct].className =
             "answer correct";
 
     }
 
 
-    /* บันทึกคำตอบของข้อนี้ */
+    /* =========================
+       เก็บข้อมูลคำตอบ
+    ========================= */
 
     answersLog.push({
 
@@ -418,29 +476,7 @@ function checkAnswer(answer){
     });
 
 
-    setTimeout(function(){
-
-        currentQuestion++;
-
-
-        if(
-            currentQuestion >=
-            questions.length
-        ){
-
-            finishGame();
-
-        }
-
-        else{
-
-            showQuestion();
-
-        }
-
-    },700);
-
-}
+    /* ไปข้อถัดไป */
 
     setTimeout(function(){
 
@@ -466,11 +502,17 @@ function checkAnswer(answer){
 
 }
 
+
+/* =========================
+   จบเกม
+========================= */
 
 function finishGame(){
 
     clearInterval(timer);
 
+
+    /* บันทึกคะแนน */
 
     localStorage.setItem(
         "score",
@@ -478,23 +520,37 @@ function finishGame(){
     );
 
 
+    /* บันทึกเวลา */
+
     localStorage.setItem(
         "time",
         seconds
     );
 
 
+    /* บันทึกคำตอบทั้งหมด */
+
     localStorage.setItem(
         "answersLog",
-        JSON.stringify(answersLog)
+        JSON.stringify(
+            answersLog
+        )
     );
 
+
+    /* ไปหน้าสรุป */
 
     window.location.href =
         "result.html";
 
 }
 
+
+/* =========================
+   เริ่มเกม
+========================= */
+
 startTimer();
 
 showQuestion();
+```
