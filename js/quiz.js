@@ -427,17 +427,10 @@ function showQuestion(){
 
 function checkAnswer(answer){
 
-    var q =
-        questions[currentQuestion];
-
+    var q = questions[currentQuestion];
 
     var buttons =
-        document.getElementsByClassName(
-            "answer"
-        );
-
-
-    /* ป้องกันกดซ้ำ */
+        document.getElementsByClassName("answer");
 
     for(
         var i = 0;
@@ -445,8 +438,7 @@ function checkAnswer(answer){
         i++
     ){
 
-        buttons[i].disabled =
-            true;
+        buttons[i].disabled = true;
 
     }
 
@@ -455,14 +447,9 @@ function checkAnswer(answer){
         answer == q.correct;
 
 
-    /* =========================
-       คะแนน
-    ========================= */
-
     if(isCorrect){
 
         score++;
-
 
         buttons[answer].className =
             "answer correct";
@@ -474,17 +461,11 @@ function checkAnswer(answer){
         buttons[answer].className =
             "answer wrong";
 
-
         buttons[q.correct].className =
             "answer correct";
 
     }
 
-
-
-    /* =========================
-       เก็บรายละเอียดคำตอบ
-    ========================= */
 
     answersLog.push({
 
@@ -512,11 +493,6 @@ function checkAnswer(answer){
     });
 
 
-
-    /* =========================
-       ไปข้อถัดไป
-    ========================= */
-
     setTimeout(function(){
 
         currentQuestion++;
@@ -542,17 +518,10 @@ function checkAnswer(answer){
 }
 
 
-
-/* =========================
-   จบเกม
-========================= */
-
 function finishGame(){
 
     clearInterval(timer);
 
-
-    /* คะแนน */
 
     localStorage.setItem(
         "score",
@@ -560,36 +529,23 @@ function finishGame(){
     );
 
 
-    /* เวลา */
-
     localStorage.setItem(
         "time",
         seconds
     );
 
 
-    /* รายละเอียดคำตอบ */
-
     localStorage.setItem(
         "answersLog",
-        JSON.stringify(
-            answersLog
-        )
+        JSON.stringify(answersLog)
     );
 
-
-    /* ไปหน้าผลคะแนน */
 
     window.location.href =
         "result.html";
 
 }
 
-
-
-/* =========================
-   เริ่มเกม
-========================= */
 
 startTimer();
 
