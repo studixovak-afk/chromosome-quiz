@@ -4,15 +4,18 @@
 <head>
 
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#087ea4">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color"
+content="#087ea4">
 
 <title>Leaderboard</title>
 
 <link rel="stylesheet"
 type="text/css"
 href="css/style.css">
-
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 
@@ -33,23 +36,20 @@ href="css/style.css">
             🏆
         </div>
 
-
         <h1>
             LEADERBOARD
         </h1>
 
-
         <p>
-            ตารางคะแนนแบบ Real-time
+            ตารางคะแนน
         </p>
 
-
         <div id="online">
-
-            🔴 กำลังเชื่อมต่อ...
-
+            ⏳ กำลังโหลด...
         </div>
 
+
+        <!-- ตารางคะแนน -->
 
         <table>
 
@@ -83,18 +83,34 @@ href="css/style.css">
             </tbody>
 
         </table>
-<div
-id="playerDetail"
-class="card"
-style="display:none;margin-top:20px;">
-</div>
 
-       <a href="result.html"
-class="ranking-button">
 
-    ↩️ กลับหน้าคะแนน
+        <!-- รายละเอียดผู้เล่น -->
 
-</a>
+        <div id="playerDetail"
+        style="display:none; margin-top:30px;">
+
+            <hr>
+
+            <h2 id="detailName">
+                รายละเอียด
+            </h2>
+
+            <p id="detailScore"></p>
+
+            <div id="answersDetail">
+
+            </div>
+
+        </div>
+
+
+        <a href="index.html"
+        class="ranking-button">
+
+            🎮 กลับหน้าแรก
+
+        </a>
 
     </div>
 
