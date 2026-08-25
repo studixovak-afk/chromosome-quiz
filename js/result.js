@@ -183,44 +183,22 @@ if(
     );
 
 
-    db.collection("players")
+    db.collection("players").add({
 
-    .add({
+    name: playerName,
 
-        /* ชื่อผู้เล่น */
+    score: score,
 
-        name:
-            playerName,
+    time: time,
 
+    answersLog: JSON.parse(
+        localStorage.getItem("answersLog")
+    ) || [],
 
-        /* คะแนน */
+    createdAt:
+        firebase.firestore.FieldValue.serverTimestamp()
 
-        score:
-            score,
-
-
-        /* เวลา */
-
-        time:
-            time,
-
-
-        /* =========================
-           คำตอบทั้ง 20 ข้อ
-        ========================= */
-
-        answersLog:
-            answersLog,
-
-
-        /* วันที่บันทึก */
-
-        createdAt:
-            firebase.firestore
-            .FieldValue
-            .serverTimestamp()
-
-    })
+})
 
 
     .then(function(docRef){
