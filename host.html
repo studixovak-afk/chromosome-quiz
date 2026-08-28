@@ -11,7 +11,7 @@ content="width=device-width, initial-scale=1.0">
 <meta name="theme-color"
 content="#087ea4">
 
-<title>เจ้าของห้อง</title>
+<title>เจ้าของห้อง - Chromosome Quiz</title>
 
 <link rel="stylesheet"
 type="text/css"
@@ -25,27 +25,44 @@ href="css/style.css">
 
 </head>
 
+
 <body>
+
 
 <div class="container">
 
+
     <div class="card">
+
 
         <div class="big-icon">
             👨‍🏫
         </div>
 
-        <h1>เจ้าของห้อง</h1>
+
+        <h1>
+            เจ้าของห้อง
+        </h1>
+
 
         <p>
-            จัดการการแข่งขัน
+            🎓 Chromosome Quiz
         </p>
+
 
         <hr>
 
+
+        <!-- สถานะเกม -->
+
         <p id="status">
-            กำลังตรวจสอบสถานะ...
+
+            ⏳ กำลังตรวจสอบสถานะ...
+
         </p>
+
+
+        <!-- ปุ่มเริ่ม -->
 
         <button
         id="startBtn"
@@ -54,6 +71,9 @@ href="css/style.css">
             🚀 เริ่มการแข่งขัน
 
         </button>
+
+
+        <!-- ปุ่มหยุด -->
 
         <button
         id="stopBtn"
@@ -64,131 +84,240 @@ href="css/style.css">
 
         </button>
 
+
+        <br>
+
+
+        <!-- ดูคะแนน -->
+
         <a href="ranking.html"
         class="ranking-button">
 
             🏆 ดูคะแนนผู้เล่น
 
         </a>
-<a href="answers.html"
-class="ranking-button">
 
-📖 ดูเฉลย
 
-</a>
+        <!-- ดูเฉลย -->
+
+        <a href="answers.html"
+        class="ranking-button">
+
+            📖 ดูเฉลย
+
+        </a>
+
+
     </div>
+
 
 </div>
 
 
+
 <script>
 
+
+/* =================================
+   Firebase Game Setting
+================================= */
+
+
 var gameRef =
+
     db.collection("settings")
-    .doc("game");
+      .doc("game");
 
 
-/* =========================
-   ดูสถานะเกมแบบ Real-time
-========================= */
+
+/* =================================
+   ตรวจสอบสถานะเกมแบบ Real-time
+================================= */
+
 
 gameRef.onSnapshot(function(doc){
 
+
     if(!doc.exists){
 
-        document.getElementById("status")
-        .innerHTML =
+        document.getElementById(
+            "status"
+        ).innerHTML =
+
         "⚠️ ยังไม่มีข้อมูลเกม";
 
         return;
 
     }
 
+
     var data = doc.data();
+
 
     if(data.started === true){
 
-        document.getElementById("status")
-        .innerHTML =
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+
         "🟢 การแข่งขันกำลังดำเนินอยู่";
 
-    }else{
-
-        document.getElementById("status")
-        .innerHTML =
-        "🔴 ยังไม่เริ่มการแข่งขัน";
 
     }
+
+    else{
+
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+
+        "🔴 ยังไม่เริ่มการแข่งขัน";
+
+
+    }
+
+
+}, function(error){
+
+
+    console.log(
+        "Firebase Error:",
+        error
+    );
+
+
+    document.getElementById(
+        "status"
+    ).innerHTML =
+
+    "❌ ไม่สามารถเชื่อมต่อ Firebase";
+
 
 });
 
 
-/* =========================
-   เริ่มเกม
-========================= */
+
+/* =================================
+   เริ่มการแข่งขัน
+================================= */
+
 
 function startGame(){
+
 
     gameRef.set({
 
         started: true
 
-    }, {merge:true})
+    }, {
+
+        merge: true
+
+    })
+
 
     .then(function(){
+
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+
+        "🟢 การแข่งขันกำลังดำเนินอยู่";
+
 
         alert(
             "🚀 เริ่มการแข่งขันแล้ว!"
         );
 
+
     })
+
 
     .catch(function(error){
 
-        console.log(error);
 
-        alert(
-            "ไม่สามารถเริ่มการแข่งขันได้"
+        console.log(
+            "Firebase Error:",
+            error
         );
 
+
+        alert(
+            "❌ ไม่สามารถเริ่มการแข่งขันได้\n\n" +
+            error.message
+        );
+
+
     });
+
 
 }
 
 
-/* =========================
-   หยุดเกม
-========================= */
+
+/* =================================
+   หยุดการแข่งขัน
+================================= */
+
 
 function stopGame(){
+
 
     gameRef.set({
 
         started: false
 
-    }, {merge:true})
+    }, {
+
+        merge: true
+
+    })
+
 
     .then(function(){
+
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+
+        "🔴 หยุดการแข่งขันแล้ว";
+
 
         alert(
             "🛑 หยุดการแข่งขันแล้ว"
         );
 
+
     })
+
 
     .catch(function(error){
 
-        console.log(error);
+
+        console.log(
+            "Firebase Error:",
+            error
+        );
+
 
         alert(
-            "ไม่สามารถหยุดการแข่งขันได้"
+            "❌ ไม่สามารถหยุดการแข่งขันได้\n\n" +
+            error.message
         );
+
 
     });
 
+
 }
 
+
 </script>
+
 
 </body>
 
