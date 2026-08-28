@@ -1,227 +1,116 @@
 var questions = [
 
-    {
-        question: "มนุษย์ปกติมีโครโมโซมทั้งหมดกี่แท่ง?",
-        answers: [
-            "23 แท่ง",
-            "44 แท่ง",
-            "46 แท่ง",
-            "48 แท่ง"
-        ],
-        correct: 2
-    },
+{
+    question: "มนุษย์ปกติมีโครโมโซมทั้งหมดกี่แท่ง?",
+    answers: [
+        "23 แท่ง",
+        "44 แท่ง",
+        "46 แท่ง",
+        "48 แท่ง"
+    ],
+    correct: 2
+},
 
-    {
-        question: "มนุษย์มีโครโมโซมกี่คู่?",
-        answers: [
-            "22 คู่",
-            "23 คู่",
-            "24 คู่",
-            "46 คู่"
-        ],
-        correct: 1
-    },
+{
+    question: "มนุษย์มีโครโมโซมกี่คู่?",
+    answers: [
+        "22 คู่",
+        "23 คู่",
+        "24 คู่",
+        "46 คู่"
+    ],
+    correct: 1
+},
 
-    {
-        question: "โครโมโซมเพศของเพศหญิงโดยทั่วไปคืออะไร?",
-        answers: [
-            "XY",
-            "XX",
-            "YY",
-            "XO"
-        ],
-        correct: 1
-    },
+{
+    question: "โครโมโซมเพศของเพศหญิงโดยทั่วไปคืออะไร?",
+    answers: [
+        "XY",
+        "XX",
+        "YY",
+        "XO"
+    ],
+    correct: 1
+},
 
-    {
-        question: "โครโมโซมเพศของเพศชายโดยทั่วไปคืออะไร?",
-        answers: [
-            "XX",
-            "XY",
-            "YY",
-            "XO"
-        ],
-        correct: 1
-    },
+{
+    question: "โครโมโซมเพศของเพศชายโดยทั่วไปคืออะไร?",
+    answers: [
+        "XX",
+        "XY",
+        "YY",
+        "XO"
+    ],
+    correct: 1
+},
 
-    {
-        question: "สารพันธุกรรมหลักที่อยู่บนโครโมโซมคืออะไร?",
-        answers: [
-            "DNA",
-            "RNA",
-            "โปรตีน",
-            "ไขมัน"
-        ],
-        correct: 0
-    },
+{
+    question: "สารพันธุกรรมหลักที่อยู่บนโครโมโซมคืออะไร?",
+    answers: [
+        "DNA",
+        "RNA",
+        "โปรตีน",
+        "ไขมัน"
+    ],
+    correct: 0
+},
 
-    {
-        question: "โครโมโซมอยู่บริเวณใดของเซลล์?",
-        answers: [
-            "เยื่อหุ้มเซลล์",
-            "ไซโทพลาซึม",
-            "นิวเคลียส",
-            "ไมโทคอนเดรียเท่านั้น"
-        ],
-        correct: 2
-    },
+{
+    question: "โครโมโซมอยู่บริเวณใดของเซลล์?",
+    answers: [
+        "เยื่อหุ้มเซลล์",
+        "ไซโทพลาซึม",
+        "นิวเคลียส",
+        "ไมโทคอนเดรียเท่านั้น"
+    ],
+    correct: 2
+},
 
-    {
-        question: "Down syndrome เกี่ยวข้องกับโครโมโซมคู่ใด?",
-        answers: [
-            "คู่ที่ 13",
-            "คู่ที่ 18",
-            "คู่ที่ 21",
-            "คู่ที่ 23"
-        ],
-        correct: 2
-    },
+{
+    question: "Down syndrome เกี่ยวข้องกับโครโมโซมคู่ใด?",
+    answers: [
+        "คู่ที่ 13",
+        "คู่ที่ 18",
+        "คู่ที่ 21",
+        "คู่ที่ 23"
+    ],
+    correct: 2
+},
 
-    {
-        question: "Edwards syndrome เกี่ยวข้องกับความผิดปกติของโครโมโซมคู่ใด?",
-        answers: [
-            "คู่ที่ 13",
-            "คู่ที่ 18",
-            "คู่ที่ 21",
-            "คู่ที่ 23"
-        ],
-        correct: 1
-    },
+{
+    question: "Edwards syndrome เกี่ยวข้องกับความผิดปกติของโครโมโซมคู่ใด?",
+    answers: [
+        "คู่ที่ 13",
+        "คู่ที่ 18",
+        "คู่ที่ 21",
+        "คู่ที่ 23"
+    ],
+    correct: 1
+},
 
-    {
-        question: "Patau syndrome เกี่ยวข้องกับโครโมโซมคู่ใด?",
-        answers: [
-            "คู่ที่ 13",
-            "คู่ที่ 18",
-            "คู่ที่ 21",
-            "คู่ที่ 22"
-        ],
-        correct: 0
-    },
+{
+    question: "Patau syndrome เกี่ยวข้องกับโครโมโซมคู่ใด?",
+    answers: [
+        "คู่ที่ 13",
+        "คู่ที่ 18",
+        "คู่ที่ 21",
+        "คู่ที่ 22"
+    ],
+    correct: 0
+},
 
-    {
-        question: "เซลล์สืบพันธุ์ของมนุษย์มีโครโมโซมกี่แท่ง?",
-        answers: [
-            "23",
-            "46",
-            "44",
-            "92"
-        ],
-        correct: 0
-    },
-
-    {
-        question: "คำว่า Trisomy หมายถึงอะไร?",
-        answers: [
-            "มีโครโมโซมหายไปหนึ่งแท่ง",
-            "มีโครโมโซมเกินมาอีกหนึ่งแท่ง",
-            "ไม่มีโครโมโซมเลย",
-            "มีโครโมโซมลดลงครึ่งหนึ่ง"
-        ],
-        correct: 1
-    },
-
-    {
-        question: "คำว่า Monosomy หมายถึงอะไร?",
-        answers: [
-            "มีโครโมโซมเกินหนึ่งแท่ง",
-            "มีโครโมโซมหายไปหนึ่งแท่ง",
-            "มีโครโมโซมเพิ่มเป็นสองเท่า",
-            "มีโครโมโซม 46 คู่"
-        ],
-        correct: 1
-    },
-
-    {
-        question: "โครโมโซมประกอบขึ้นจาก DNA และสิ่งใดเป็นหลัก?",
-        answers: [
-            "โปรตีน",
-            "น้ำ",
-            "กลูโคส",
-            "ไขมัน"
-        ],
-        correct: 0
-    },
-
-    {
-        question: "มนุษย์ได้รับโครโมโซมจากพ่อและแม่อย่างไร?",
-        answers: [
-            "ทั้งหมดจากพ่อ",
-            "ทั้งหมดจากแม่",
-            "ประมาณครึ่งหนึ่งจากพ่อและครึ่งหนึ่งจากแม่",
-            "ได้รับจากพี่น้อง"
-        ],
-        correct: 2
-    },
-
-    {
-        question: "ยีนมีความสัมพันธ์กับโครโมโซมอย่างไร?",
-        answers: [
-            "ยีนเป็นส่วนหนึ่งของ DNA บนโครโมโซม",
-            "ยีนอยู่เฉพาะนอกเซลล์",
-            "ยีนคือเซลล์ชนิดหนึ่ง",
-            "ยีนไม่มี DNA"
-        ],
-        correct: 0
-    },
-
-    {
-        question: "โครโมโซมคู่ที่ 23 เรียกว่าอะไร?",
-        answers: [
-            "ออโตโซม",
-            "โครโมโซมเพศ",
-            "โครโมโซมร่างกายทั้งหมด",
-            "โครโมโซมไมโทคอนเดรีย"
-        ],
-        correct: 1
-    },
-
-    {
-        question: "โครโมโซมคู่ที่ 1 ถึง 22 เรียกว่าอะไร?",
-        answers: [
-            "โครโมโซมเพศ",
-            "ออโตโซม",
-            "โครโมโซม X เท่านั้น",
-            "โครโมโซม Y เท่านั้น"
-        ],
-        correct: 1
-    },
-
-    {
-        question: "กระบวนการแบ่งเซลล์ที่ใช้ในการสร้างเซลล์สืบพันธุ์คืออะไร?",
-        answers: [
-            "ไมโทซิส",
-            "ไมโอซิส",
-            "การสังเคราะห์แสง",
-            "การหายใจ"
-        ],
-        correct: 1
-    },
-
-    {
-        question: "หากเซลล์ร่างกายมนุษย์ปกติมีโครโมโซม 46 แท่ง เซลล์สืบพันธุ์จะมีเท่าใด?",
-        answers: [
-            "12",
-            "23",
-            "46",
-            "92"
-        ],
-        correct: 1
-    },
-
-    {
-        question: "ข้อใดอธิบายโครโมโซมได้ถูกต้องที่สุด?",
-        answers: [
-            "โครงสร้างที่บรรจุสารพันธุกรรม",
-            "อวัยวะของร่างกาย",
-            "เซลล์ชนิดหนึ่ง",
-            "สารอาหารชนิดหนึ่ง"
-        ],
-        correct: 0
-    }
+{
+    question: "เซลล์สืบพันธุ์ของมนุษย์มีโครโมโซมกี่แท่ง?",
+    answers: [
+        "23",
+        "46",
+        "44",
+        "92"
+    ],
+    correct: 0
+}
 
 ];
-
 
 
 /* =========================
@@ -229,15 +118,10 @@ var questions = [
 ========================= */
 
 var currentQuestion = 0;
-
 var score = 0;
-
 var answersLog = [];
-
 var seconds = 0;
-
 var timer;
-
 
 
 /* =========================
@@ -247,14 +131,12 @@ var timer;
 var playerName =
     localStorage.getItem("playerName");
 
-
 if(!playerName){
 
     window.location.href =
         "index.html";
 
 }
-
 
 
 /* =========================
@@ -264,14 +146,12 @@ if(!playerName){
 var nameElement =
     document.getElementById("playerName");
 
-
 if(nameElement){
 
     nameElement.innerHTML =
         playerName;
 
 }
-
 
 
 /* =========================
@@ -284,13 +164,11 @@ function startTimer(){
 
         seconds++;
 
-
         var min =
             Math.floor(seconds / 60);
 
         var sec =
             seconds % 60;
-
 
         if(min < 10){
 
@@ -298,17 +176,14 @@ function startTimer(){
 
         }
 
-
         if(sec < 10){
 
             sec = "0" + sec;
 
         }
 
-
         var timeElement =
             document.getElementById("time");
-
 
         if(timeElement){
 
@@ -322,7 +197,6 @@ function startTimer(){
 }
 
 
-
 /* =========================
    แสดงคำถาม
 ========================= */
@@ -332,40 +206,20 @@ function showQuestion(){
     var q =
         questions[currentQuestion];
 
+    document.getElementById(
+        "questionNumber"
+    ).innerHTML =
+        "ข้อ " +
+        (currentQuestion + 1) +
+        " / " +
+        questions.length;
 
-    var numberElement =
-        document.getElementById(
-            "questionNumber"
-        );
-
-
-    if(numberElement){
-
-        numberElement.innerHTML =
-            "ข้อ " +
-            (currentQuestion + 1) +
-            " / " +
-            questions.length;
-
-    }
-
-
-    var questionElement =
-        document.getElementById(
-            "question"
-        );
-
-
-    if(questionElement){
-
-        questionElement.innerHTML =
-            q.question;
-
-    }
-
+    document.getElementById(
+        "question"
+    ).innerHTML =
+        q.question;
 
     var html = "";
-
 
     for(
         var i = 0;
@@ -374,51 +228,28 @@ function showQuestion(){
     ){
 
         html +=
-            '<button ' +
-            'class="answer" ' +
-            'onclick="checkAnswer(' +
-            i +
-            ')">' +
-            q.answers[i] +
-            '</button>';
+        '<button class="answer" onclick="checkAnswer(' +
+        i +
+        ')">' +
+        q.answers[i] +
+        '</button>';
 
     }
 
-
-    var answersElement =
-        document.getElementById(
-            "answers"
-        );
-
-
-    if(answersElement){
-
-        answersElement.innerHTML =
-            html;
-
-    }
-
+    document.getElementById(
+        "answers"
+    ).innerHTML = html;
 
     var progress =
         ((currentQuestion + 1) /
         questions.length) * 100;
 
-
-    var progressBar =
-        document.getElementById(
-            "progressBar"
-        );
-
-
-    if(progressBar){
-
-        progressBar.style.width =
-            progress + "%";
-
-    }
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+        progress + "%";
 
 }
-
 
 
 /* =========================
@@ -427,10 +258,13 @@ function showQuestion(){
 
 function checkAnswer(answer){
 
-    var q = questions[currentQuestion];
+    var q =
+        questions[currentQuestion];
 
     var buttons =
-        document.getElementsByClassName("answer");
+        document.getElementsByClassName(
+            "answer"
+        );
 
     for(
         var i = 0;
@@ -442,10 +276,8 @@ function checkAnswer(answer){
 
     }
 
-
     var isCorrect =
         answer == q.correct;
-
 
     if(isCorrect){
 
@@ -455,7 +287,6 @@ function checkAnswer(answer){
             "answer correct";
 
     }
-
     else{
 
         buttons[answer].className =
@@ -465,7 +296,6 @@ function checkAnswer(answer){
             "answer correct";
 
     }
-
 
     answersLog.push({
 
@@ -478,25 +308,17 @@ function checkAnswer(answer){
         selectedAnswer:
             q.answers[answer],
 
-        selectedIndex:
-            answer,
-
         correctAnswer:
             q.answers[q.correct],
-
-        correctIndex:
-            q.correct,
 
         isCorrect:
             isCorrect
 
     });
 
-
     setTimeout(function(){
 
         currentQuestion++;
-
 
         if(
             currentQuestion >=
@@ -506,7 +328,6 @@ function checkAnswer(answer){
             finishGame();
 
         }
-
         else{
 
             showQuestion();
@@ -518,28 +339,30 @@ function checkAnswer(answer){
 }
 
 
+/* =========================
+   จบเกม
+========================= */
+
 function finishGame(){
 
     clearInterval(timer);
-
 
     localStorage.setItem(
         "score",
         score
     );
 
-
     localStorage.setItem(
         "time",
         seconds
     );
 
-
     localStorage.setItem(
         "answersLog",
-        JSON.stringify(answersLog)
+        JSON.stringify(
+            answersLog
+        )
     );
-
 
     window.location.href =
         "result.html";
@@ -548,5 +371,4 @@ function finishGame(){
 
 
 startTimer();
-
 showQuestion();
