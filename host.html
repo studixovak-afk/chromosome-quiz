@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color"
+content="#087ea4">
+
+<title>เจ้าของห้อง</title>
+
+<link rel="stylesheet"
+type="text/css"
+href="css/style.css">
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="big-icon">
+            👨‍🏫
+        </div>
+
+        <h1>เจ้าของห้อง</h1>
+
+        <p>
+            จัดการการแข่งขัน
+        </p>
+
+        <hr>
+
+        <p id="status">
+            กำลังตรวจสอบสถานะ...
+        </p>
+
+        <button
+        id="startBtn"
+        onclick="startGame()">
+
+            🚀 เริ่มการแข่งขัน
+
+        </button>
+
+        <button
+        id="stopBtn"
+        onclick="stopGame()"
+        style="margin-top:10px;">
+
+            🛑 หยุดการแข่งขัน
+
+        </button>
+
+        <a href="ranking.html"
+        class="ranking-button">
+
+            🏆 ดูคะแนนผู้เล่น
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+var gameRef =
+    db.collection("settings")
+    .doc("game");
+
+
+/* =========================
+   ดูสถานะเกมแบบ Real-time
+========================= */
+
+gameRef.onSnapshot(function(doc){
+
+    if(!doc.exists){
+
+        document.getElementById("status")
+        .innerHTML =
+        "⚠️ ยังไม่มีข้อมูลเกม";
+
+        return;
+
+    }
+
+    var data = doc.data();
+
+    if(data.started === true){
+
+        document.getElementById("status")
+        .innerHTML =
+        "🟢 การแข่งขันกำลังดำเนินอยู่";
+
+    }else{
+
+        document.getElementById("status")
+        .innerHTML =
+        "🔴 ยังไม่เริ่มการแข่งขัน";
+
+    }
+
+});
+
+
+/* =========================
+   เริ่มเกม
+========================= */
+
+function startGame(){
+
+    gameRef.set({
+
+        started: true
+
+    }, {merge:true})
+
+    .then(function(){
+
+        alert(
+            "🚀 เริ่มการแข่งขันแล้ว!"
+        );
+
+    })
+
+    .catch(function(error){
+
+        console.log(error);
+
+        alert(
+            "ไม่สามารถเริ่มการแข่งขันได้"
+        );
+
+    });
+
+}
+
+
+/* =========================
+   หยุดเกม
+========================= */
+
+function stopGame(){
+
+    gameRef.set({
+
+        started: false
+
+    }, {merge:true})
+
+    .then(function(){
+
+        alert(
+            "🛑 หยุดการแข่งขันแล้ว"
+        );
+
+    })
+
+    .catch(function(error){
+
+        console.log(error);
+
+        alert(
+            "ไม่สามารถหยุดการแข่งขันได้"
+        );
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>
