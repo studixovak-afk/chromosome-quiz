@@ -11,12 +11,15 @@ content="width=device-width, initial-scale=1.0">
 <meta name="theme-color"
 content="#087ea4">
 
-<title>Leaderboard</title>
+<title>Leaderboard - Chromosome Quiz</title>
+
 
 <link rel="stylesheet"
 type="text/css"
 href="css/style.css">
 
+
+<!-- Firebase -->
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 
@@ -29,31 +32,40 @@ href="css/style.css">
 
 <body>
 
+
 <div class="container">
+
 
     <div class="card ranking-card">
 
+
         <div class="big-icon">
+
             🏆
+
         </div>
 
 
         <h1>
+
             LEADERBOARD
+
         </h1>
 
 
         <p>
+
             ตารางคะแนนแบบ Real-time
+
         </p>
 
 
         <div id="online">
+
             🔴 กำลังเชื่อมต่อ...
+
         </div>
 
-
-        <!-- ตารางอันดับ -->
 
         <table>
 
@@ -89,86 +101,24 @@ href="css/style.css">
         </table>
 
 
-        <!-- =========================
-             รายละเอียดผู้เล่น
-        ========================== -->
+        <!-- กลับหน้าสรุปคะแนน -->
 
-        <div
-        id="playerDetail"
-        style="display:none; margin-top:30px;">
-
-            <hr>
-
-
-            <h2 id="detailName">
-                👤 รายละเอียดผู้เล่น
-            </h2>
-
-
-            <p id="detailScore">
-                🏆 คะแนน
-            </p>
-
-
-            <div id="answersDetail">
-
-            </div>
-
-
-            <button
-            onclick="closePlayerDetail()"
-            style="margin-top:20px;">
-
-                ปิดรายละเอียด
-
-            </button>
-
-        </div>
-
-
-        <!-- กลับ -->
-
-        <a
-        href="index.html"
+        <a href="result.html"
         class="ranking-button">
 
-            🎮 กลับหน้าแรก
+            📊 กลับหน้าสรุปคะแนน
 
         </a>
 
+
     </div>
+
 
 </div>
 
 
 <script src="js/ranking.js"></script>
 
-
-<script>
-
-/* ปิดรายละเอียดผู้เล่น */
-
-function closePlayerDetail(){
-
-    var detail =
-        document.getElementById(
-            "playerDetail"
-        );
-
-    detail.style.display =
-        "none";
-
-    window.scrollTo({
-
-        top:0,
-
-        behavior:"smooth"
-
-    });
-
-}
-
-</script>
 
 </body>
 
