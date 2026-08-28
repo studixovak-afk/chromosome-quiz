@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color"
+content="#087ea4">
+
+<title>Teacher Dashboard - Chromosome Quiz</title>
+
+
+<link rel="stylesheet"
+type="text/css"
+href="css/style.css">
+
+
+<!-- Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase.js"></script>
+
+
+<style>
+
+/* =========================
+   Teacher Dashboard
+========================= */
+
+.teacher-card{
+
+    max-width:1000px;
+
+}
+
+
+.teacher-title{
+
+    margin-bottom:5px;
+
+}
+
+
+.teacher-subtitle{
+
+    color:#666;
+
+    margin-top:5px;
+
+}
+
+
+.teacher-status{
+
+    background:#eef8f4;
+
+    color:#168b55;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    margin:20px 0;
+
+    font-weight:bold;
+
+}
+
+
+/* =========================
+   Summary
+========================= */
+
+.summary{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:15px;
+
+    margin:20px 0;
+
+}
+
+
+.summary-box{
+
+    background:#f4f7f8;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    text-align:center;
+
+}
+
+
+.summary-number{
+
+    font-size:35px;
+
+    font-weight:bold;
+
+    color:#087ea4;
+
+}
+
+
+.summary-label{
+
+    color:#555;
+
+}
+
+
+/* =========================
+   Table
+========================= */
+
+.teacher-table{
+
+    overflow-x:auto;
+
+}
+
+
+.teacher-table table{
+
+    min-width:650px;
+
+}
+
+
+.teacher-table th{
+
+    white-space:nowrap;
+
+}
+
+
+.teacher-table td{
+
+    vertical-align:middle;
+
+}
+
+
+/* =========================
+   Buttons
+========================= */
+
+.detail-button{
+
+    background:#087ea4;
+
+    color:white;
+
+    border:0;
+
+    padding:8px 12px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+}
+
+
+.detail-button:hover{
+
+    background:#05617e;
+
+}
+
+
+/* =========================
+   Question Summary
+========================= */
+
+.question-summary{
+
+    margin-top:30px;
+
+}
+
+
+.question-item{
+
+    background:#f4f7f8;
+
+    padding:18px;
+
+    margin:10px 0;
+
+    border-radius:15px;
+
+    text-align:left;
+
+}
+
+
+.question-item strong{
+
+    color:#222;
+
+}
+
+
+.correct-count{
+
+    color:#168b55;
+
+    font-weight:bold;
+
+}
+
+
+.wrong-count{
+
+    color:#e74c3c;
+
+    font-weight:bold;
+
+}
+
+
+/* =========================
+   Detail Box
+========================= */
+
+#playerDetails{
+
+    margin-top:30px;
+
+}
+
+
+.detail-card{
+
+    background:#f8fafb;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    margin-top:15px;
+
+    text-align:left;
+
+}
+
+
+.detail-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+}
+
+
+.detail-score{
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:#087ea4;
+
+}
+
+
+.answer-detail{
+
+    border-left:5px solid #ddd;
+
+    padding:15px;
+
+    margin:10px 0;
+
+    background:#fff;
+
+    border-radius:10px;
+
+}
+
+
+.answer-detail.correct-answer{
+
+    border-left-color:#20b26b;
+
+}
+
+
+.answer-detail.wrong-answer{
+
+    border-left-color:#e74c3c;
+
+}
+
+
+.answer-status{
+
+    font-weight:bold;
+
+}
+
+
+.wrong-text{
+
+    color:#e74c3c;
+
+}
+
+
+.correct-text{
+
+    color:#20b26b;
+
+}
+
+
+/* =========================
+   Mobile
+========================= */
+
+@media screen and (max-width:700px){
+
+    .summary{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .teacher-card{
+
+        padding:20px 12px;
+
+    }
+
+
+    .teacher-title{
+
+        font-size:28px;
+
+    }
+
+
+    .summary-box{
+
+        padding:15px;
+
+    }
+
+
+    .summary-number{
+
+        font-size:30px;
+
+    }
+
+
+    .detail-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <div class="card teacher-card">
+
+
+        <div class="big-icon">
+
+            👨‍🏫
+
+        </div>
+
+
+        <h1 class="teacher-title">
+
+            Teacher Dashboard
+
+        </h1>
+
+
+        <p class="teacher-subtitle">
+
+            📊 สรุปผลการแข่งขัน Chromosome Quiz
+
+        </p>
+
+
+        <div id="connectionStatus"
+        class="teacher-status">
+
+            🔴 กำลังเชื่อมต่อ Firebase...
+
+        </div>
+
+
+        <!-- =========================
+             Summary
+        ========================= -->
+
+        <div class="summary">
+
+
+            <div class="summary-box">
+
+                <div
+                id="totalPlayers"
+                class="summary-number">
+
+                    0
+
+                </div>
+
+                <div class="summary-label">
+
+                    👥 ผู้เล่น
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <div
+                id="highestScore"
+                class="summary-number">
+
+                    0/10
+
+                </div>
+
+                <div class="summary-label">
+
+                    🏆 คะแนนสูงสุด
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <div
+                id="averageScore"
+                class="summary-number">
+
+                    0
+
+                </div>
+
+                <div class="summary-label">
+
+                    📊 คะแนนเฉลี่ย
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =========================
+             Player Table
+        ========================= -->
+
+        <h2>
+
+            👥 รายชื่อผู้เล่น
+
+        </h2>
+
+
+        <div class="teacher-table">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            อันดับ
+                        </th>
+
+                        <th>
+                            ชื่อ
+                        </th>
+
+                        <th>
+                            คะแนน
+                        </th>
+
+                        <th>
+                            เวลา
+                        </th>
+
+                        <th>
+                            รายละเอียด
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="playerList">
+
+                    <tr>
+
+                        <td
+                        colspan="5">
+
+                            กำลังโหลด...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =========================
+             Question Summary
+        ========================= -->
+
+        <div class="question-summary">
+
+
+            <h2>
+
+                📊 วิเคราะห์ข้อสอบ
+
+            </h2>
+
+
+            <p>
+
+                ดูว่าข้อไหนมีคนตอบผิดมากที่สุด
+
+            </p>
+
+
+            <div id="questionSummary">
+
+                กำลังโหลดข้อมูล...
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =========================
+             Player Details
+        ========================= -->
+
+        <div id="playerDetails">
+
+        </div>
+
+
+        <br>
+
+
+        <a href="ranking.html"
+        class="ranking-button">
+
+            🏆 กลับไป Leaderboard
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+<script src="js/teacher.js"></script>
+
+
+</body>
+
+</html>
