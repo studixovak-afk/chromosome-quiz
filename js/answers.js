@@ -1,75 +1,98 @@
 var questions = [
 
-{
-question:"มนุษย์ปกติมีโครโมโซมทั้งหมดกี่แท่ง?",
-correct:"46 แท่ง"
-},
+    {
+        question: "มนุษย์ปกติมีโครโมโซมทั้งหมดกี่แท่ง?",
+        correct: "46 แท่ง"
+    },
 
-{
-question:"มนุษย์มีโครโมโซมกี่คู่?",
-correct:"23 คู่"
-},
+    {
+        question: "มนุษย์มีโครโมโซมกี่คู่?",
+        correct: "23 คู่"
+    },
 
-{
-question:"โครโมโซมเพศของเพศหญิงโดยทั่วไปคืออะไร?",
-correct:"XX"
-},
+    {
+        question: "โครโมโซมเพศของเพศหญิงโดยทั่วไปคืออะไร?",
+        correct: "XX"
+    },
 
-{
-question:"โครโมโซมเพศของเพศชายโดยทั่วไปคืออะไร?",
-correct:"XY"
-},
+    {
+        question: "โครโมโซมเพศของเพศชายโดยทั่วไปคืออะไร?",
+        correct: "XY"
+    },
 
-{
-question:"สารพันธุกรรมหลักที่อยู่บนโครโมโซมคืออะไร?",
-correct:"DNA"
-},
+    {
+        question: "สารพันธุกรรมหลักที่อยู่บนโครโมโซมคืออะไร?",
+        correct: "DNA"
+    },
 
-{
-question:"โครโมโซมอยู่บริเวณใดของเซลล์?",
-correct:"นิวเคลียส"
-},
+    {
+        question: "โครโมโซมอยู่บริเวณใดของเซลล์?",
+        correct: "นิวเคลียส"
+    },
 
-{
-question:"Down syndrome เกี่ยวข้องกับโครโมโซมคู่ใด?",
-correct:"คู่ที่ 21"
-},
+    {
+        question: "Down syndrome เกี่ยวข้องกับโครโมโซมคู่ใด?",
+        correct: "คู่ที่ 21"
+    },
 
-{
-question:"Edwards syndrome เกี่ยวข้องกับความผิดปกติของโครโมโซมคู่ใด?",
-correct:"คู่ที่ 18"
-},
+    {
+        question: "Edwards syndrome เกี่ยวข้องกับความผิดปกติของโครโมโซมคู่ใด?",
+        correct: "คู่ที่ 18"
+    },
 
-{
-question:"Patau syndrome เกี่ยวข้องกับโครโมโซมคู่ใด?",
-correct:"คู่ที่ 13"
-},
+    {
+        question: "Patau syndrome เกี่ยวข้องกับโครโมโซมคู่ใด?",
+        correct: "คู่ที่ 13"
+    },
 
-{
-question:"เซลล์สืบพันธุ์ของมนุษย์มีโครโมโซมกี่แท่ง?",
-correct:"23"
-}
+    {
+        question: "เซลล์สืบพันธุ์ของมนุษย์มีโครโมโซมกี่แท่ง?",
+        correct: "23"
+    }
 
 ];
 
+
+/* =====================================
+   แสดงเฉลย
+===================================== */
+
 var html = "";
 
-for(var i=0;i<questions.length;i++){
 
-html +=
+for (var i = 0; i < questions.length; i++) {
 
-'<div style="text-align:left;margin-bottom:25px;">'+
+    html +=
 
-'<h3>ข้อ '+(i+1)+'</h3>'+
+        '<div class="answer-item">' +
 
-'<p>'+questions[i].question+'</p>'+
+            '<h3>ข้อ ' +
+                (i + 1) +
+            '</h3>' +
 
-'<p><strong style="color:green;">✅ เฉลย: '
-+questions[i].correct+
-'</strong></p>'+
+            '<p>' +
+                questions[i].question +
+            '</p>' +
 
-'</div>';
+            '<p class="correct-answer">' +
+
+                '✅ เฉลย: ' +
+
+                questions[i].correct +
+
+            '</p>' +
+
+        '</div>';
 
 }
 
-document.getElementById("answersBox").innerHTML = html;
+
+var answersBox =
+    document.getElementById("answersBox");
+
+
+if (answersBox) {
+
+    answersBox.innerHTML = html;
+
+}
