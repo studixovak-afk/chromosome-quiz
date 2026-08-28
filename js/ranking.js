@@ -1,49 +1,66 @@
 /* =========================
-   LEADERBOARD
-========================= */
-
-
-var players = [];
-
-
-/* =========================
    โหลดคะแนนจาก Firebase
 ========================= */
 
 db.collection("players")
 
-.orderBy("score", "desc")
-
-.limit(50)
-
 .onSnapshot(function(snapshot){
 
-    players = [];
+    var players = [];
 
+
+    /* =========================
+       อ่านข้อมูลผู้เล่น
+    ========================= */
 
     snapshot.forEach(function(doc){
 
         var data = doc.data();
 
+
         /*
-        เก็บ ID ของ Firebase
-        เอาไว้ใช้เปิดรายละเอียด
+           ตรวจสอบว่ามีข้อมูล
+           ที่จำเป็นหรือไม่
         */
 
-        data.id = doc.id;
+        if(
+            data.name !== undefined &&
+            data.score !== undefined
+        ){
 
-        players.push(data);
+            players.push({
+
+                id: doc.id,
+
+                name: data.name,
+
+                score:
+                    Number(data.score) || 0,
+
+                time:
+                    Number(data.time) || 0
+
+            });
+
+        }
 
     });
 
 
     /* =========================
-       เรียงคะแนน + เวลา
+       เรียงคะแนน
+       
+       คะแนนมากอยู่บน
+       ถ้าคะแนนเท่ากัน
+       คนที่ใช้เวลาน้อยกว่าอยู่บน
     ========================= */
 
     players.sort(function(a,b){
 
-        if(b.score != a.score){
+        if(
+            b.score !==
+            a.score
+        ){
 
             return b.score - a.score;
 
@@ -55,39 +72,20 @@ db.collection("players")
     });
 
 
-    showRanking();
+    /* =========================
+       แสดงเฉพาะ 50 อันดับแรก
+    ========================= */
 
+    players =
+        players.slice(0,50);
 
-    document.getElementById(
-        "online"
-    ).innerHTML =
-        "🟢 เชื่อมต่อ Firebase แล้ว";
-
-
-}, function(error){
-
-    console.log(
-        "Firebase Error:",
-        error
-    );
-
-
-    document.getElementById(
-        "online"
-    ).innerHTML =
-        "🔴 ไม่สามารถโหลดคะแนนได้";
-
-});
-
-
-/* =========================
-   แสดง Ranking
-========================= */
-
-function showRanking(){
 
     var html = "";
 
+
+    /* =========================
+       สร้างตาราง
+    ========================= */
 
     for(
         var i = 0;
@@ -99,11 +97,46 @@ function showRanking(){
             players[i];
 
 
+        /* =========================
+           แปลงเวลา
+        ========================= */
+
+        var min =
+            Math.floor(
+                player.time / 60
+            );
+
+
+        var sec =
+            player.time % 60;
+
+
+        if(min < 10){
+
+            min =
+                "0" + min;
+
+        }
+
+
+        if(sec < 10){
+
+            sec =
+                "0" + sec;
+
+        }
+
+
+        /* =========================
+           อันดับ
+        ========================= */
+
         var rank =
             i + 1;
 
 
-        var medal = rank;
+        var medal =
+            "";
 
 
         if(rank == 1){
@@ -124,352 +157,148 @@ function showRanking(){
 
         }
 
+        else{
 
-        /* เวลา */
-
-        var time =
-            parseInt(player.time) || 0;
-
-
-        var min =
-            Math.floor(time / 60);
-
-
-        var sec =
-            time % 60;
-
-
-        if(min < 10){
-
-            min = "0" + min;
+            medal =
+                rank;
 
         }
 
 
-        if(sec < 10){
-
-            sec = "0" + sec;
-
-        }
-
-
-        /*
-        ใช้ชื่อเป็นปุ่ม
-        กดแล้วดูรายละเอียด
-        */
+        /* =========================
+           เพิ่มแถว
+        ========================= */
 
         html +=
 
-        "<tr>" +
+            "<tr>" +
 
-        "<td>" +
-        medal +
-        "</td>" +
+                "<td>" +
+                    medal +
+                "</td>" +
 
+                "<td>" +
+                    escapeHTML(
+                        player.name
+                    ) +
+                "</td>" +
 
-        "<td>" +
+                "<td>" +
 
-        '<button ' +
+                    "<strong>" +
 
-        'class="player-name-button" ' +
+                        player.score +
 
-        'onclick="showPlayerDetail(' +
-        i +
-        ')">' +
+                    "</strong>" +
 
-        escapeHTML(player.name) +
+                "</td>" +
 
-        "</button>" +
+                "<td>" +
 
-        "</td>" +
+                    min +
+                    ":" +
+                    sec +
 
+                "</td>" +
 
-        "<td>" +
-
-        "<strong>" +
-
-        player.score +
-
-        "</strong>" +
-
-        "</td>" +
-
-
-        "<td>" +
-
-        min +
-        ":" +
-        sec +
-
-        "</td>" +
-
-        "</tr>";
+            "</tr>";
 
     }
 
 
-    document.getElementById(
-        "ranking"
-    ).innerHTML = html;
+    /* =========================
+       แสดงข้อมูล
+    ========================= */
 
-}
-
-
-/* =========================
-   แสดงรายละเอียดผู้เล่น
-========================= */
-
-function showPlayerDetail(index){
-
-    var player =
-        players[index];
-
-
-    if(!player){
-
-        return;
-
-    }
-
-
-    /*
-    แสดงกล่องรายละเอียด
-    */
-
-    var detail =
+    var rankingElement =
         document.getElementById(
-            "playerDetail"
+            "ranking"
         );
 
 
-    detail.style.display =
-        "block";
+    if(rankingElement){
+
+        if(players.length > 0){
+
+            rankingElement.innerHTML =
+                html;
+
+        }
+
+        else{
+
+            rankingElement.innerHTML =
+
+                '<tr>' +
+
+                    '<td colspan="4">' +
+
+                        'ยังไม่มีผู้เล่น' +
+
+                    '</td>' +
+
+                '</tr>';
+
+        }
+
+    }
 
 
-    /*
-    ชื่อ
-    */
+    /* =========================
+       สถานะ Firebase
+    ========================= */
 
-    document.getElementById(
-        "detailName"
-    ).innerHTML =
-
-        "👤 " +
-        escapeHTML(player.name);
-
-
-    /*
-    คะแนน
-    */
-
-    document.getElementById(
-        "detailScore"
-    ).innerHTML =
-
-        "🏆 คะแนน: <strong>" +
-
-        player.score +
-
-        " / 20</strong>";
-
-
-    /*
-    answersLog
-    */
-
-    var logs =
-        player.answersLog;
-
-
-    var html = "";
-
-
-    /*
-    ถ้าไม่มี answersLog
-    */
-
-    if(
-        !logs ||
-        !Array.isArray(logs) ||
-        logs.length == 0
-    ){
-
-        html =
-
-        '<div class="answer-detail-box">' +
-
-        "<p>" +
-
-        "❌ ไม่พบข้อมูลคำตอบของผู้เล่นคนนี้" +
-
-        "</p>" +
-
-        "<p>" +
-
-        "อาจเป็นคะแนนที่บันทึกก่อนเพิ่มระบบเก็บคำตอบ" +
-
-        "</p>" +
-
-        "</div>";
-
+    var onlineElement =
         document.getElementById(
-            "answersDetail"
-        ).innerHTML = html;
+            "online"
+        );
 
 
-        return;
+    if(onlineElement){
 
-    }
-
-
-    /*
-    วนทุกข้อ
-    */
-
-    for(
-        var i = 0;
-        i < logs.length;
-        i++
-    ){
-
-        var item =
-            logs[i];
-
-
-        var status = "";
-
-
-        if(item.isCorrect){
-
-            status =
-                "correct";
-
-        }
-
-        else{
-
-            status =
-                "wrong";
-
-        }
-
-
-        var statusText = "";
-
-
-        if(item.isCorrect){
-
-            statusText =
-                "✅ ตอบถูก";
-
-        }
-
-        else{
-
-            statusText =
-                "❌ ตอบผิด";
-
-        }
-
-
-        html +=
-
-        '<div class="answer-detail-box ' +
-        status +
-        '">' +
-
-
-        "<h3>" +
-
-        "ข้อ " +
-
-        item.questionNumber +
-
-        " " +
-
-        statusText +
-
-        "</h3>" +
-
-
-        "<p>" +
-
-        "<strong>คำถาม:</strong><br>" +
-
-        escapeHTML(item.question) +
-
-        "</p>" +
-
-
-        "<p>" +
-
-        "<strong>คำตอบที่เลือก:</strong><br>" +
-
-        escapeHTML(item.selectedAnswer) +
-
-        "</p>";
-
-
-        /*
-        ถ้าตอบผิด
-        แสดงคำตอบที่ถูก
-        */
-
-        if(!item.isCorrect){
-
-            html +=
-
-            "<p>" +
-
-            "<strong>✅ คำตอบที่ถูก:</strong><br>" +
-
-            escapeHTML(item.correctAnswer) +
-
-            "</p>";
-
-        }
-
-
-        html +=
-
-        "</div>";
+        onlineElement.innerHTML =
+            "🟢 เชื่อมต่อแล้ว • Real-time";
 
     }
 
 
-    document.getElementById(
-        "answersDetail"
-    ).innerHTML = html;
+})
 
 
-    /*
-    เลื่อนหน้าจอลงมาที่รายละเอียด
-    เหมาะกับมือถือ
-    */
+.catch(function(error){
 
-    setTimeout(function(){
+    console.error(
+        "Firebase Error:",
+        error
+    );
 
-        detail.scrollIntoView({
 
-            behavior:"smooth",
+    var onlineElement =
+        document.getElementById(
+            "online"
+        );
 
-            block:"start"
 
-        });
+    if(onlineElement){
 
-    },100);
+        onlineElement.innerHTML =
+            "🔴 ไม่สามารถเชื่อมต่อ Firebase";
 
-}
+    }
+
+});
 
 
 /* =========================
-   ป้องกัน HTML แปลก ๆ
+   ป้องกัน HTML
 ========================= */
 
 function escapeHTML(text){
 
-    if(text === undefined ||
-       text === null){
+    if(
+        text === undefined ||
+        text === null
+    ){
 
         return "";
 
@@ -478,14 +307,29 @@ function escapeHTML(text){
 
     return String(text)
 
-    .replace(/&/g, "&amp;")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
 
-    .replace(/</g, "&lt;")
+        .replace(
+            /</g,
+            "&lt;"
+        )
 
-    .replace(/>/g, "&gt;")
+        .replace(
+            />/g,
+            "&gt;"
+        )
 
-    .replace(/"/g, "&quot;")
+        .replace(
+            /"/g,
+            "&quot;"
+        )
 
-    .replace(/'/g, "&#039;");
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
