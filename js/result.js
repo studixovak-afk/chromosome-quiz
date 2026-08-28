@@ -1,4 +1,3 @@
-
 /* =========================
    ข้อมูลผู้เล่น
 ========================= */
@@ -26,7 +25,7 @@ var time =
 var answersLog = [];
 
 
-try{
+try {
 
     answersLog =
         JSON.parse(
@@ -34,7 +33,7 @@ try{
         ) || [];
 
 }
-catch(error){
+catch(error) {
 
     console.log(
         "ไม่สามารถอ่าน answersLog ได้",
@@ -47,7 +46,7 @@ catch(error){
 
 
 /* =========================
-   ตรวจสอบข้อมูลผู้เล่น
+   ตรวจสอบชื่อผู้เล่น
 ========================= */
 
 if(!playerName){
@@ -62,20 +61,37 @@ if(!playerName){
    แสดงชื่อ
 ========================= */
 
-document.getElementById(
-    "resultName"
-).innerHTML =
+var resultName =
+    document.getElementById(
+        "resultName"
+    );
 
-    "👤 " + escapeHTML(playerName);
+
+if(resultName){
+
+    resultName.innerHTML =
+        "👤 " +
+        escapeHTML(playerName);
+
+}
 
 
 /* =========================
    แสดงคะแนน
 ========================= */
 
-document.getElementById(
-    "score"
-).innerHTML = score;
+var scoreElement =
+    document.getElementById(
+        "score"
+    );
+
+
+if(scoreElement){
+
+    scoreElement.innerHTML =
+        score;
+
+}
 
 
 /* =========================
@@ -106,35 +122,43 @@ if(sec < 10){
 }
 
 
-document.getElementById(
-    "resultTime"
-).innerHTML =
+var resultTime =
+    document.getElementById(
+        "resultTime"
+    );
 
-    min + ":" + sec;
+
+if(resultTime){
+
+    resultTime.innerHTML =
+        min + ":" + sec;
+
+}
 
 
 /* =========================
    ข้อความสรุปคะแนน
+   สำหรับ 10 ข้อ
 ========================= */
 
 var message = "";
 
 
-if(score >= 18){
+if(score >= 9){
 
     message =
-        "🏆 ยอดเยี่ยมมาก";
+        "🏆 ยอดเยี่ยมมาก!";
 
 }
 
-else if(score >= 15){
+else if(score >= 7){
 
     message =
-        "🎉 ดีมาก";
+        "🎉 ดีมาก!";
 
 }
 
-else if(score >= 10){
+else if(score >= 5){
 
     message =
         "👍 ผ่านเกณฑ์";
@@ -149,26 +173,34 @@ else{
 }
 
 
-document.getElementById(
-    "message"
-).innerHTML =
-    message;
+var messageElement =
+    document.getElementById(
+        "message"
+    );
+
+
+if(messageElement){
+
+    messageElement.innerHTML =
+        message;
+
+}
 
 
 /* =========================
-   บันทึก Firebase
+   บันทึกคะแนน Firebase
 ========================= */
 
 
 /*
-ป้องกันการบันทึกซ้ำ
-กรณีกด F5 หรือกลับเข้าหน้านี้
+   ป้องกันการบันทึกซ้ำ
+   ถ้ารีเฟรชหน้า Result
 */
 
 if(
     localStorage.getItem(
         "savedScore"
-    ) != "true"
+    ) !== "true"
 ){
 
 
@@ -178,68 +210,115 @@ if(
 
 
     console.log(
+        "ชื่อ:",
+        playerName
+    );
+
+
+    console.log(
+        "คะแนน:",
+        score
+    );
+
+
+    console.log(
+        "เวลา:",
+        time
+    );
+
+
+    console.log(
         "answersLog:",
         answersLog
     );
 
 
-    db.collection("players").add({
+    /*
+       ตรวจสอบ Firebase
+    */
 
-    name: playerName,
+    if(
+        typeof db === "undefined"
+    ){
 
-    score: score,
-
-    time: time,
-
-    answersLog: JSON.parse(
-        localStorage.getItem("answersLog")
-    ) || [],
-
-    createdAt:
-        firebase.firestore.FieldValue.serverTimestamp()
-
-})
-
-
-    .then(function(docRef){
-
-        console.log(
-            "บันทึกคะแนนสำเร็จ"
+        console.error(
+            "ไม่พบ Firebase Database"
         );
-
-
-        console.log(
-            "Player ID:",
-            docRef.id
-        );
-
-
-        /*
-        บันทึกสถานะว่า
-        คะแนนถูกบันทึกแล้ว
-        */
-
-        localStorage.setItem(
-            "savedScore",
-            "true"
-        );
-
-    })
-
-
-    .catch(function(error){
-
-        console.log(
-            "Firebase Error:",
-            error
-        );
-
 
         alert(
-            "ไม่สามารถบันทึกคะแนนได้ กรุณาตรวจสอบอินเทอร์เน็ต"
+            "ไม่สามารถเชื่อมต่อ Firebase ได้"
         );
 
-    });
+    }
+
+    else{
+
+
+        db.collection(
+            "players"
+        ).add({
+
+            name:
+                playerName,
+
+            score:
+                score,
+
+            time:
+                time,
+
+            answersLog:
+                answersLog,
+
+            createdAt:
+                firebase.firestore
+                .FieldValue
+                .serverTimestamp()
+
+        })
+
+
+        .then(function(docRef){
+
+            console.log(
+                "บันทึกคะแนนสำเร็จ"
+            );
+
+
+            console.log(
+                "Player ID:",
+                docRef.id
+            );
+
+
+            /*
+               จำไว้ว่าบันทึกแล้ว
+               ป้องกันการบันทึกซ้ำ
+            */
+
+            localStorage.setItem(
+                "savedScore",
+                "true"
+            );
+
+        })
+
+
+        .catch(function(error){
+
+            console.error(
+                "Firebase Error:",
+                error
+            );
+
+
+            alert(
+                "ไม่สามารถบันทึกคะแนนได้ กรุณาตรวจสอบอินเทอร์เน็ต"
+            );
+
+        });
+
+    }
 
 }
 
@@ -288,4 +367,3 @@ function escapeHTML(text){
         );
 
 }
-```
