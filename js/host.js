@@ -1,6 +1,6 @@
 /* =========================================
    HOST - CHROMOSOME QUIZ
-   ระบบเจ้าของห้อง + รายชื่อผู้เล่น Real-time
+   เจ้าของห้อง + ควบคุมเกม + รายชื่อ Real-time
 ========================================= */
 
 
@@ -8,9 +8,9 @@
    Firebase Game Setting
 ========================================= */
 
-var gameRef =
-    db.collection("settings")
-      .doc("game");
+var gameRef = db
+    .collection("settings")
+    .doc("game");
 
 
 /* =========================================
@@ -42,61 +42,51 @@ var connectionElement =
 
 gameRef.onSnapshot(
 
-    function(doc){
+    function(doc) {
 
-        if(!doc.exists){
+        if (!doc.exists) {
 
             statusElement.innerHTML =
                 "⚠️ ยังไม่มีข้อมูลเกม";
 
-            return;
+            startButton.disabled = false;
+            stopButton.disabled = true;
 
+            return;
         }
 
 
-        var data =
-            doc.data();
+        var data = doc.data();
 
 
-        if(data.started === true){
+        if (data.started === true) {
 
             statusElement.innerHTML =
                 "🟢 การแข่งขันกำลังดำเนินอยู่";
 
-
-            startButton.disabled =
-                true;
-
-
-            stopButton.disabled =
-                false;
+            startButton.disabled = true;
+            stopButton.disabled = false;
 
         }
 
-        else{
+        else {
 
             statusElement.innerHTML =
                 "🔴 ยังไม่เริ่มการแข่งขัน";
 
-
-            startButton.disabled =
-                false;
-
-
-            stopButton.disabled =
-                true;
+            startButton.disabled = false;
+            stopButton.disabled = true;
 
         }
 
     },
 
-    function(error){
+    function(error) {
 
-        console.log(
-            "Firebase Game Error:",
+        console.error(
+            "Game Status Firebase Error:",
             error
         );
-
 
         statusElement.innerHTML =
             "❌ ไม่สามารถเชื่อมต่อ Firebase";
@@ -110,22 +100,38 @@ gameRef.onSnapshot(
    เริ่มการแข่งขัน
 ========================================= */
 
-function startGame(){
+function startGame() {
+
+    console.log("กำลังกดเริ่มการแข่งขัน...");
+
 
     gameRef.set({
 
-        started: true
+        started: true,
 
-    },{
+        startedAt:
+            firebase.firestore.FieldValue
+            .serverTimestamp()
+
+    }, {
 
         merge: true
 
     })
 
-    .then(function(){
+    .then(function() {
+
+        console.log(
+            "เริ่มการแข่งขันสำเร็จ"
+        );
+
 
         statusElement.innerHTML =
             "🟢 การแข่งขันกำลังดำเนินอยู่";
+
+
+        startButton.disabled = true;
+        stopButton.disabled = false;
 
 
         alert(
@@ -134,10 +140,10 @@ function startGame(){
 
     })
 
-    .catch(function(error){
+    .catch(function(error) {
 
-        console.log(
-            "Firebase Error:",
+        console.error(
+            "Start Game Error:",
             error
         );
 
@@ -156,22 +162,34 @@ function startGame(){
    หยุดการแข่งขัน
 ========================================= */
 
-function stopGame(){
+function stopGame() {
+
+    console.log("กำลังหยุดการแข่งขัน...");
+
 
     gameRef.set({
 
         started: false
 
-    },{
+    }, {
 
         merge: true
 
     })
 
-    .then(function(){
+    .then(function() {
+
+        console.log(
+            "หยุดการแข่งขันสำเร็จ"
+        );
+
 
         statusElement.innerHTML =
             "🔴 หยุดการแข่งขันแล้ว";
+
+
+        startButton.disabled = false;
+        stopButton.disabled = true;
 
 
         alert(
@@ -180,10 +198,10 @@ function stopGame(){
 
     })
 
-    .catch(function(error){
+    .catch(function(error) {
 
-        console.log(
-            "Firebase Error:",
+        console.error(
+            "Stop Game Error:",
             error
         );
 
@@ -199,7 +217,7 @@ function stopGame(){
 
 
 /* =========================================
-   แสดงรายชื่อผู้เล่น Real-time
+   โหลดรายชื่อผู้เล่น Real-time
 ========================================= */
 
 db.collection("participants")
@@ -208,36 +226,40 @@ db.collection("participants")
 
     .onSnapshot(
 
-        function(snapshot){
+        function(snapshot) {
 
             var players = [];
 
 
-            snapshot.forEach(function(doc){
+            snapshot.forEach(
+                function(doc) {
 
-                var data =
-                    doc.data();
+                    var data =
+                        doc.data();
 
 
-                players.push({
+                    players.push({
 
-                    id: doc.id,
+                        id: doc.id,
 
-                    name:
-                        data.name || "ไม่ระบุชื่อ",
+                        name:
+                            data.name ||
+                            "ไม่ระบุชื่อ",
 
-                    status:
-                        data.status || "waiting",
+                        status:
+                            data.status ||
+                            "waiting",
 
-                    score:
-                        data.score,
+                        score:
+                            data.score,
 
-                    time:
-                        data.time
+                        time:
+                            data.time
 
-                });
+                    });
 
-            });
+                }
+            );
 
 
             /* =============================
@@ -255,25 +277,24 @@ db.collection("participants")
 
 
             /* =============================
-               ถ้าไม่มีผู้เล่น
+               ไม่มีผู้เล่น
             ============================= */
 
-            if(players.length === 0){
+            if (players.length === 0) {
 
                 participantsElement.innerHTML =
 
-                    '<tr>' +
+                    "<tr>" +
 
-                    '<td colspan="5">' +
+                    "<td colspan='5'>" +
 
-                    'ยังไม่มีผู้เล่นเข้าห้อง' +
+                    "ยังไม่มีผู้เล่นเข้าห้อง" +
 
-                    '</td>' +
+                    "</td>" +
 
-                    '</tr>';
+                    "</tr>";
 
                 return;
-
             }
 
 
@@ -284,18 +305,18 @@ db.collection("participants")
             var html = "";
 
 
-            for(
+            for (
                 var i = 0;
                 i < players.length;
                 i++
-            ){
+            ) {
 
                 var player =
                     players[i];
 
 
                 /* =========================
-                   สถานะผู้เล่น
+                   สถานะ
                 ========================= */
 
                 var statusText =
@@ -308,17 +329,17 @@ db.collection("participants")
                    คะแนน
                 ========================= */
 
-                var scoreText =
-                    "-";
+                var scoreText = "-";
 
 
-                if(
+                if (
                     player.score !== undefined &&
                     player.score !== null
-                ){
+                ) {
 
                     scoreText =
-                        player.score + " / 10";
+                        player.score +
+                        " / 10";
 
                 }
 
@@ -327,14 +348,13 @@ db.collection("participants")
                    เวลา
                 ========================= */
 
-                var timeText =
-                    "-";
+                var timeText = "-";
 
 
-                if(
+                if (
                     player.time !== undefined &&
                     player.time !== null
-                ){
+                ) {
 
                     timeText =
                         formatTime(
@@ -353,43 +373,29 @@ db.collection("participants")
                     "<tr>" +
 
                     "<td>" +
-
                     (i + 1) +
-
                     "</td>" +
 
-
                     "<td>" +
-
                     escapeHTML(
                         player.name
                     ) +
-
                     "</td>" +
-
 
                     "<td>" +
-
                     statusText +
-
                     "</td>" +
-
 
                     "<td>" +
 
                     "<strong>" +
-
                     scoreText +
-
                     "</strong>" +
 
                     "</td>" +
 
-
                     "<td>" +
-
                     timeText +
-
                     "</td>" +
 
                     "</tr>";
@@ -403,9 +409,9 @@ db.collection("participants")
         },
 
 
-        function(error){
+        function(error) {
 
-            console.log(
+            console.error(
                 "Participants Firebase Error:",
                 error
             );
@@ -417,15 +423,21 @@ db.collection("participants")
 
             participantsElement.innerHTML =
 
-                '<tr>' +
+                "<tr>" +
 
-                '<td colspan="5">' +
+                "<td colspan='5'>" +
 
-                '❌ เกิดข้อผิดพลาดในการโหลดข้อมูล' +
+                "❌ ไม่สามารถโหลดรายชื่อผู้เล่น" +
 
-                '</td>' +
+                "<br><br>" +
 
-                '</tr>';
+                escapeHTML(
+                    error.message
+                ) +
+
+                "</td>" +
+
+                "</tr>";
 
         }
 
@@ -436,23 +448,23 @@ db.collection("participants")
    แปลงสถานะผู้เล่น
 ========================================= */
 
-function getStatusText(status){
+function getStatusText(status) {
 
-    if(status === "waiting"){
+    if (status === "waiting") {
 
         return "🟡 รอเริ่ม";
 
     }
 
 
-    if(status === "playing"){
+    if (status === "playing") {
 
         return "🟢 กำลังเล่น";
 
     }
 
 
-    if(status === "finished"){
+    if (status === "finished") {
 
         return "✅ ทำเสร็จแล้ว";
 
@@ -468,21 +480,23 @@ function getStatusText(status){
    แปลงเวลา
 ========================================= */
 
-function formatTime(seconds){
+function formatTime(seconds) {
 
     seconds =
         parseInt(seconds) || 0;
 
 
     var min =
-        Math.floor(seconds / 60);
+        Math.floor(
+            seconds / 60
+        );
 
 
     var sec =
         seconds % 60;
 
 
-    if(min < 10){
+    if (min < 10) {
 
         min =
             "0" + min;
@@ -490,7 +504,7 @@ function formatTime(seconds){
     }
 
 
-    if(sec < 10){
+    if (sec < 10) {
 
         sec =
             "0" + sec;
@@ -507,12 +521,12 @@ function formatTime(seconds){
    ป้องกัน HTML Injection
 ========================================= */
 
-function escapeHTML(text){
+function escapeHTML(text) {
 
-    if(
+    if (
         text === undefined ||
         text === null
-    ){
+    ) {
 
         return "";
 
