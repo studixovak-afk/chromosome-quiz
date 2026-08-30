@@ -4,235 +4,141 @@
 <head>
 
 <meta charset="utf-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color"
-content="#087ea4">
-
-
-<!-- Firebase -->
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<script src="js/firebase.js"></script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087ea4">
 
 <title>Chromosome Quiz</title>
-
 
 <link rel="stylesheet"
 type="text/css"
 href="css/style.css">
 
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase.js"></script>
 
 </head>
 
-
 <body>
-
 
 <div class="container">
 
-
-    <!-- LOGO -->
-
     <div class="logo">
-
         🧬
-
     </div>
 
-
-    <!-- TITLE -->
-
     <h1>
-
         Chromosome Quiz
-
     </h1>
 
-
     <p class="subtitle">
-
         เกมตอบคำถามความรู้เรื่องโครโมโซม
-
     </p>
-
-
-
-    <!-- MAIN CARD -->
 
     <div class="card">
 
-
-        <!-- สถานะการแข่งขัน -->
-
         <p id="status">
-
             ⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...
-
         </p>
-
-
 
         <h2>
-
             🎮 เริ่มเกม
-
         </h2>
 
-
         <p>
-
-            กรอกชื่อของคุณเพื่อเริ่มเล่น
-
+            กรอกชื่อของคุณ
         </p>
 
-
-
-        <!-- NAME -->
-
         <input
-
         type="text"
-
         id="name"
-
         placeholder="กรอกชื่อของคุณ"
-
         maxlength="30">
 
-
-
-        <!-- START BUTTON -->
-
         <button
-
         id="startBtn"
-
         onclick="startGame()"
-
         disabled>
 
             เริ่มเกม 🚀
 
         </button>
 
-
-
-        <!-- VISITOR COUNT -->
-
-        <p style="margin-top:25px;">
-
-            👥 ผู้เข้าชมทั้งหมด:
-
-            <strong id="visitorCount">
-
-                กำลังโหลด...
-
-            </strong>
-
-        </p>
-
-
-
-        <!-- RANKING -->
-
-        <a
-
-        href="ranking.html"
-
+        <a href="ranking.html"
         class="ranking-button">
 
             🏆 ดูอันดับคะแนน
 
         </a>
 
-
     </div>
-
 
 </div>
 
-
-
 <script>
 
+var participantId = null;
 
-/* =========================================
+
+/* ======================
+   บันทึกคนเข้าเว็บ
+====================== */
+
+db.collection("participants").add({
+
+    name: "ผู้เข้าชม",
+
+    status: "waiting",
+
+    joinedAt:
+    firebase.firestore.FieldValue.serverTimestamp()
+
+})
+
+.then(function(doc){
+
+    participantId = doc.id;
+
+});
+
+
+/* ======================
    เริ่มเกม
-========================================= */
+====================== */
 
 function startGame(){
 
-
     var name =
-
-        document.getElementById(
-            "name"
-        ).value;
-
-
-    name = name.trim();
-
-
-
-    /* ตรวจสอบชื่อ */
+        document.getElementById("name").value.trim();
 
     if(name == ""){
 
-
-        alert(
-            "กรุณากรอกชื่อก่อนเริ่มเกม"
-        );
-
+        alert("กรุณากรอกชื่อ");
 
         return;
 
     }
 
-
-
-    /* ล้างข้อมูลเกมเก่า */
-
-    localStorage.removeItem(
-        "savedScore"
-    );
-
-
-    localStorage.removeItem(
-        "score"
-    );
-
-
-    localStorage.removeItem(
-        "time"
-    );
-
-
-    localStorage.removeItem(
-        "playerAnswers"
-    );
-
-
-
-    /* บันทึกชื่อผู้เล่น */
-
     localStorage.setItem(
-
         "playerName",
-
         name
-
     );
 
 
+    if(participantId){
 
-    /* ไปหน้าเกม */
+        db.collection("participants")
+        .doc(participantId)
+        .update({
+
+            name:name,
+
+            status:"playing"
+
+        });
+
+    }
 
     window.location.href =
         "quiz.html";
@@ -240,292 +146,52 @@ function startGame(){
 }
 
 
-
-/* =========================================
-   ตรวจสอบสถานะการแข่งขัน
-   Real-time Firebase
-========================================= */
+/* ======================
+   รอหัวหน้าห้อง
+====================== */
 
 db.collection("settings")
-
 .doc("game")
+.onSnapshot(function(doc){
 
-.onSnapshot(
+    if(!doc.exists){
 
-    function(doc){
+        return;
 
+    }
 
+    var started =
+        doc.data().started;
 
-        /* ถ้าไม่มี settings/game */
+    if(started){
 
-        if(!doc.exists){
-
-
-            console.log(
-                "ไม่พบ settings/game"
-            );
-
-
-            document.getElementById(
-                "status"
-            ).innerHTML =
-
-                "❌ ไม่พบการตั้งค่าการแข่งขัน";
-
-
-            document.getElementById(
-                "startBtn"
-            ).disabled = true;
-
-
-            return;
-
-        }
-
-
-
-        /* ดึงข้อมูล */
-
-        var data =
-            doc.data();
-
-
-
-        var started =
-            data.started;
-
-
-
-        console.log(
-
-            "สถานะการแข่งขัน:",
-
-            started
-
-        );
-
-
-
-        /* =================================
-           เปิดการแข่งขัน
-        ================================= */
-
-        if(started === true){
-
-
-            document.getElementById(
-                "startBtn"
-            ).disabled = false;
-
-
-
-            document.getElementById(
-                "status"
-            ).innerHTML =
-
-                "🚀 เริ่มการแข่งขันแล้ว";
-
-
-        }
-
-
-        /* =================================
-           ยังไม่เปิดการแข่งขัน
-        ================================= */
-
-        else{
-
-
-            document.getElementById(
-                "startBtn"
-            ).disabled = true;
-
-
-
-            document.getElementById(
-                "status"
-            ).innerHTML =
-
-                "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
-
-
-        }
-
-
-    },
-
-
-    /* =====================================
-       Firebase Error
-    ===================================== */
-
-    function(error){
-
-
-        console.log(
-
-            "Firebase Error:",
-
-            error
-
-        );
-
+        document.getElementById(
+            "startBtn"
+        ).disabled = false;
 
         document.getElementById(
             "status"
         ).innerHTML =
+        "🚀 เริ่มการแข่งขันแล้ว";
 
-            "❌ ไม่สามารถเชื่อมต่อ Firebase ได้";
+    }
 
+    else{
 
         document.getElementById(
             "startBtn"
         ).disabled = true;
 
+        document.getElementById(
+            "status"
+        ).innerHTML =
+        "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
 
     }
-
-);
-
-
-
-/* =========================================
-   ระบบนับผู้เข้าชม
-========================================= */
-
-
-/*
-   สร้างรหัสสำหรับ Browser นี้
-
-   ถ้าเคยเข้ามาแล้ว
-   จะใช้รหัสเดิม
-*/
-
-var visitorKey =
-
-    localStorage.getItem(
-        "visitorKey"
-    );
-
-
-
-/*
-   ถ้ายังไม่มีรหัส
-*/
-
-if(!visitorKey){
-
-
-    visitorKey =
-
-        "visitor_" +
-
-        Date.now() +
-
-        "_" +
-
-        Math.floor(
-            Math.random() * 1000000
-        );
-
-
-
-    localStorage.setItem(
-
-        "visitorKey",
-
-        visitorKey
-
-    );
-
-
-}
-
-
-
-/*
-   บันทึกผู้เข้าชมลง Firebase
-
-   ใช้ set + merge เพื่อไม่สร้าง
-   ข้อมูลใหม่ทุกครั้งที่ refresh
-*/
-
-db.collection("visitors")
-
-.doc(visitorKey)
-
-.set({
-
-    lastVisit:
-
-        firebase.firestore.FieldValue
-        .serverTimestamp()
-
-}, {
-
-    merge:true
-
-})
-
-.catch(function(error){
-
-    console.log(
-        "Visitor Error:",
-        error
-    );
 
 });
 
-
-
-/* =========================================
-   แสดงจำนวนผู้เข้าชม
-========================================= */
-
-db.collection("visitors")
-
-.onSnapshot(
-
-    function(snapshot){
-
-
-        document.getElementById(
-            "visitorCount"
-        ).innerHTML =
-
-            snapshot.size;
-
-
-    },
-
-
-    function(error){
-
-
-        console.log(
-
-            "Visitor Count Error:",
-
-            error
-
-        );
-
-
-        document.getElementById(
-            "visitorCount"
-        ).innerHTML =
-
-            "-";
-
-
-    }
-
-);
-
-
 </script>
 
-
 </body>
-
 </html>
