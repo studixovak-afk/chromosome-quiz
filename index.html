@@ -4,8 +4,12 @@
 <head>
 
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#087ea4">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color"
+content="#087ea4">
 
 <title>Chromosome Quiz</title>
 
@@ -13,57 +17,85 @@
 type="text/css"
 href="css/style.css">
 
+
+<!-- Firebase -->
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script src="js/firebase.js"></script>
 
 </head>
 
+
 <body>
 
+
 <div class="container">
+
 
     <div class="logo">
         🧬
     </div>
 
+
     <h1>
         Chromosome Quiz
     </h1>
+
 
     <p class="subtitle">
         เกมตอบคำถามความรู้เรื่องโครโมโซม
     </p>
 
+
+
     <div class="card">
 
+
+        <!-- สถานะ -->
+
         <p id="status">
-            ⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...
+
+            👋 กรุณากรอกชื่อเพื่อเข้าร่วมห้อง
+
         </p>
 
+
         <h2>
-            🎮 เริ่มเกม
+            🎮 เข้าร่วมห้อง
         </h2>
+
 
         <p>
             กรอกชื่อของคุณ
         </p>
 
+
         <input
         type="text"
         id="name"
         placeholder="กรอกชื่อของคุณ"
-        maxlength="30">
+        maxlength="30"
+        autocomplete="off">
+
+
+        <!-- ปุ่ม -->
 
         <button
-        id="startBtn"
-        onclick="startGame()"
-        disabled>
+        id="joinBtn"
+        onclick="joinRoom()">
 
-            เริ่มเกม 🚀
+            👤 เข้าร่วมห้อง
 
         </button>
+
+
+        <br>
+
+
+        <!-- ดูอันดับ -->
 
         <a href="ranking.html"
         class="ranking-button">
@@ -72,61 +104,222 @@ href="css/style.css">
 
         </a>
 
+
     </div>
+
 
 </div>
 
+
+
 <script>
 
-var participantId = null;
+
+/* =====================================
+   ตัวแปร
+===================================== */
+
+var participantId =
+    localStorage.getItem("participantId");
 
 
-/* ======================
-   บันทึกคนเข้าเว็บ
-====================== */
-
-db.collection("participants").add({
-
-    name: "ผู้เข้าชม",
-
-    status: "waiting",
-
-    joinedAt:
-    firebase.firestore.FieldValue.serverTimestamp()
-
-})
-
-.then(function(doc){
-
-    participantId = doc.id;
-
-});
+var playerName =
+    localStorage.getItem("playerName");
 
 
-/* ======================
-   เริ่มเกม
-====================== */
+var gameStarted = false;
 
-function startGame(){
 
-    var name =
-        document.getElementById("name").value.trim();
 
-    if(name == ""){
+/* =====================================
+   ถ้ามีข้อมูลผู้เล่นเดิม
+===================================== */
 
-        alert("กรุณากรอกชื่อ");
+if(playerName){
+
+    document.getElementById(
+        "name"
+    ).value = playerName;
+
+}
+
+
+
+/* =====================================
+   ตรวจสอบสถานะเกม Real-time
+===================================== */
+
+db.collection("settings")
+.doc("game")
+.onSnapshot(function(doc){
+
+    if(!doc.exists){
+
+        gameStarted = false;
+
+        updateButton();
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+
+        "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
 
         return;
 
     }
 
-    localStorage.setItem(
-        "playerName",
-        name
+
+    var data =
+        doc.data();
+
+
+    gameStarted =
+        data.started === true;
+
+
+    updateButton();
+
+
+    if(gameStarted){
+
+        document.getElementById(
+            "status"
+        ).innerHTML =
+
+        "🚀 หัวหน้าห้องเริ่มการแข่งขันแล้ว";
+
+
+    }
+    else{
+
+
+        if(participantId){
+
+            document.getElementById(
+                "status"
+            ).innerHTML =
+
+            "🟡 เข้าร่วมห้องแล้ว — รอหัวหน้าห้องเริ่ม";
+
+        }
+
+        else{
+
+            document.getElementById(
+                "status"
+            ).innerHTML =
+
+            "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
+
+        }
+
+    }
+
+
+}, function(error){
+
+    console.log(
+        "Firebase Error:",
+        error
     );
 
 
-    if(participantId){
+    document.getElementById(
+        "status"
+    ).innerHTML =
+
+    "❌ ไม่สามารถเชื่อมต่อ Firebase";
+
+});
+
+
+
+/* =====================================
+   เปลี่ยนข้อความปุ่ม
+===================================== */
+
+function updateButton(){
+
+    var button =
+        document.getElementById("joinBtn");
+
+
+    if(participantId && gameStarted){
+
+        button.innerHTML =
+            "🚀 เริ่มเกม";
+
+        button.disabled = false;
+
+    }
+
+    else if(participantId && !gameStarted){
+
+        button.innerHTML =
+            "🟡 รอเริ่มการแข่งขัน";
+
+        button.disabled = true;
+
+    }
+
+    else{
+
+        button.innerHTML =
+            "👤 เข้าร่วมห้อง";
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+
+/* =====================================
+   เข้าร่วมห้อง / เริ่มเกม
+===================================== */
+
+function joinRoom(){
+
+
+    var name =
+        document.getElementById(
+            "name"
+        ).value.trim();
+
+
+    /* -----------------------------
+       ตรวจชื่อ
+    ----------------------------- */
+
+    if(name == ""){
+
+        alert(
+            "กรุณากรอกชื่อก่อนเข้าร่วม"
+        );
+
+        return;
+
+    }
+
+
+    /* -----------------------------
+       ถ้าเข้าห้องแล้ว
+       และเกมเริ่มแล้ว
+       ให้เข้าเกม
+    ----------------------------- */
+
+    if(
+        participantId &&
+        gameStarted
+    ){
+
+        localStorage.setItem(
+            "playerName",
+            name
+        );
+
 
         db.collection("participants")
         .doc(participantId)
@@ -136,62 +329,197 @@ function startGame(){
 
             status:"playing"
 
+        })
+        .then(function(){
+
+            window.location.href =
+                "quiz.html";
+
+        })
+        .catch(function(error){
+
+            console.log(
+                "Update Error:",
+                error
+            );
+
+            alert(
+                "ไม่สามารถเริ่มเกมได้"
+            );
+
         });
 
-    }
-
-    window.location.href =
-        "quiz.html";
-
-}
-
-
-/* ======================
-   รอหัวหน้าห้อง
-====================== */
-
-db.collection("settings")
-.doc("game")
-.onSnapshot(function(doc){
-
-    if(!doc.exists){
 
         return;
 
     }
 
-    var started =
-        doc.data().started;
 
-    if(started){
 
-        document.getElementById(
-            "startBtn"
-        ).disabled = false;
+    /* -----------------------------
+       สร้างผู้เล่นใหม่
+    ----------------------------- */
+
+    db.collection("participants")
+    .add({
+
+        name:name,
+
+        status:"waiting",
+
+        joinedAt:
+        firebase.firestore.FieldValue
+        .serverTimestamp()
+
+    })
+    .then(function(docRef){
+
+
+        participantId =
+            docRef.id;
+
+
+        /* เก็บ ID */
+
+        localStorage.setItem(
+            "participantId",
+            participantId
+        );
+
+
+        /* เก็บชื่อ */
+
+        localStorage.setItem(
+            "playerName",
+            name
+        );
+
+
+        /* เปลี่ยนหน้าจอ */
 
         document.getElementById(
             "status"
         ).innerHTML =
-        "🚀 เริ่มการแข่งขันแล้ว";
 
-    }
+        "🟡 เข้าร่วมห้องเรียบร้อยแล้ว";
 
-    else{
 
         document.getElementById(
-            "startBtn"
+            "joinBtn"
+        ).innerHTML =
+
+        "🟡 รอเริ่มการแข่งขัน";
+
+
+        document.getElementById(
+            "joinBtn"
         ).disabled = true;
 
-        document.getElementById(
-            "status"
-        ).innerHTML =
-        "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
 
-    }
+    })
+    .catch(function(error){
 
-});
+
+        console.log(
+            "Firebase Error:",
+            error
+        );
+
+
+        alert(
+            "❌ ไม่สามารถเข้าร่วมห้องได้\n\n" +
+            error.message
+        );
+
+    });
+
+}
+
+
+
+/* =====================================
+   ถ้ามี participant เดิม
+   ตรวจข้อมูลจาก Firebase
+===================================== */
+
+if(participantId){
+
+    db.collection("participants")
+    .doc(participantId)
+    .get()
+    .then(function(doc){
+
+        if(!doc.exists){
+
+            /* ถ้าเอกสารหาย
+               ให้เริ่มใหม่ */
+
+            localStorage.removeItem(
+                "participantId"
+            );
+
+            participantId = null;
+
+            updateButton();
+
+            return;
+
+        }
+
+
+        var data =
+            doc.data();
+
+
+        if(data.name){
+
+            document.getElementById(
+                "name"
+            ).value =
+                data.name;
+
+        }
+
+
+        if(data.status == "finished"){
+
+            document.getElementById(
+                "status"
+            ).innerHTML =
+
+            "✅ คุณทำแบบทดสอบเสร็จแล้ว";
+
+
+            document.getElementById(
+                "joinBtn"
+            ).innerHTML =
+
+            "✅ ทำแบบทดสอบแล้ว";
+
+
+            document.getElementById(
+                "joinBtn"
+            ).disabled = true;
+
+        }
+
+
+    })
+    .catch(function(error){
+
+        console.log(
+            "Participant Error:",
+            error
+        );
+
+    });
+
+}
+
 
 </script>
 
+
 </body>
+
 </html>
