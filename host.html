@@ -17,9 +17,6 @@ content="#087ea4">
 type="text/css"
 href="css/style.css">
 
-
-<!-- Firebase -->
-
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -34,10 +31,6 @@ href="css/style.css">
 
 <div class="container">
 
-
-    <!-- =========================
-         ห้องเจ้าของ
-    ========================== -->
 
     <div class="card">
 
@@ -60,7 +53,7 @@ href="css/style.css">
         <hr>
 
 
-        <!-- สถานะเกม -->
+        <!-- สถานะการแข่งขัน -->
 
         <p id="status">
 
@@ -69,7 +62,7 @@ href="css/style.css">
         </p>
 
 
-        <!-- ปุ่มเริ่ม -->
+        <!-- ปุ่มควบคุมเกม -->
 
         <button
         id="startBtn"
@@ -79,8 +72,6 @@ href="css/style.css">
 
         </button>
 
-
-        <!-- ปุ่มหยุด -->
 
         <button
         id="stopBtn"
@@ -92,10 +83,91 @@ href="css/style.css">
         </button>
 
 
-        <br>
+    </div>
 
 
-        <!-- คะแนน -->
+    <!-- =========================
+         รายชื่อผู้เล่น
+    ========================== -->
+
+    <div class="card"
+    style="max-width:800px;">
+
+        <div class="big-icon">
+            👥
+        </div>
+
+
+        <h2>
+            ผู้เล่นในห้อง
+        </h2>
+
+
+        <p id="playerCount">
+            👥 ผู้เล่นทั้งหมด: 0 คน
+        </p>
+
+
+        <div id="connectionStatus">
+
+            ⏳ กำลังโหลดรายชื่อ...
+
+        </div>
+
+
+        <div style="overflow-x:auto;">
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            #
+                        </th>
+
+                        <th>
+                            ชื่อ
+                        </th>
+
+                        <th>
+                            สถานะ
+                        </th>
+
+                        <th>
+                            คะแนน
+                        </th>
+
+                        <th>
+                            เวลา
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="participants">
+
+                </tbody>
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         ปุ่มต่าง ๆ
+    ========================== -->
+
+    <div class="card">
+
 
         <a href="ranking.html"
         class="ranking-button">
@@ -104,8 +176,6 @@ href="css/style.css">
 
         </a>
 
-
-        <!-- เฉลย -->
 
         <a href="answers.html"
         class="ranking-button">
@@ -118,453 +188,11 @@ href="css/style.css">
     </div>
 
 
-
-    <!-- =========================
-         ผู้เข้าร่วม
-    ========================== -->
-
-    <div class="card">
-
-
-        <h2>
-            👥 ผู้เข้าร่วม
-        </h2>
-
-
-        <p id="playerCount">
-
-            กำลังโหลด...
-
-        </p>
-
-
-        <div id="participants">
-
-        </div>
-
-
-    </div>
-
-
 </div>
 
 
 
-<script>
-
-
-/* =====================================
-   Firebase
-===================================== */
-
-
-var gameRef =
-    db.collection("settings")
-      .doc("game");
-
-
-
-/* =====================================
-   ตรวจสอบสถานะเกม
-===================================== */
-
-
-gameRef.onSnapshot(function(doc){
-
-
-    if(!doc.exists){
-
-        document.getElementById(
-            "status"
-        ).innerHTML =
-
-        "⚠️ ยังไม่มีข้อมูลเกม";
-
-        return;
-
-    }
-
-
-    var data =
-        doc.data();
-
-
-    if(data.started === true){
-
-        document.getElementById(
-            "status"
-        ).innerHTML =
-
-        "🟢 การแข่งขันกำลังดำเนินอยู่";
-
-
-        document.getElementById(
-            "startBtn"
-        ).disabled = true;
-
-
-        document.getElementById(
-            "stopBtn"
-        ).disabled = false;
-
-    }
-
-    else{
-
-        document.getElementById(
-            "status"
-        ).innerHTML =
-
-        "🔴 ยังไม่เริ่มการแข่งขัน";
-
-
-        document.getElementById(
-            "startBtn"
-        ).disabled = false;
-
-
-        document.getElementById(
-            "stopBtn"
-        ).disabled = true;
-
-    }
-
-
-}, function(error){
-
-
-    console.log(
-        "Firebase Error:",
-        error
-    );
-
-
-    document.getElementById(
-        "status"
-    ).innerHTML =
-
-    "❌ ไม่สามารถเชื่อมต่อ Firebase";
-
-
-});
-
-
-
-/* =====================================
-   เริ่มการแข่งขัน
-===================================== */
-
-
-function startGame(){
-
-
-    gameRef.set({
-
-        started:true
-
-    },{
-
-        merge:true
-
-    })
-
-
-    .then(function(){
-
-
-        document.getElementById(
-            "status"
-        ).innerHTML =
-
-        "🟢 การแข่งขันกำลังดำเนินอยู่";
-
-
-        alert(
-            "🚀 เริ่มการแข่งขันแล้ว!"
-        );
-
-
-    })
-
-
-    .catch(function(error){
-
-
-        console.log(
-            "Firebase Error:",
-            error
-        );
-
-
-        alert(
-            "❌ ไม่สามารถเริ่มการแข่งขันได้\n\n" +
-            error.message
-        );
-
-
-    });
-
-}
-
-
-
-/* =====================================
-   หยุดการแข่งขัน
-===================================== */
-
-
-function stopGame(){
-
-
-    gameRef.set({
-
-        started:false
-
-    },{
-
-        merge:true
-
-    })
-
-
-    .then(function(){
-
-
-        document.getElementById(
-            "status"
-        ).innerHTML =
-
-        "🔴 หยุดการแข่งขันแล้ว";
-
-
-        alert(
-            "🛑 หยุดการแข่งขันแล้ว"
-        );
-
-
-    })
-
-
-    .catch(function(error){
-
-
-        console.log(
-            "Firebase Error:",
-            error
-        );
-
-
-        alert(
-            "❌ ไม่สามารถหยุดการแข่งขันได้\n\n" +
-            error.message
-        );
-
-
-    });
-
-}
-
-
-
-/* =====================================
-   แสดงผู้เข้าร่วมแบบ Real-time
-===================================== */
-
-
-db.collection("participants")
-
-.orderBy(
-    "joinedAt",
-    "asc"
-)
-
-.onSnapshot(function(snapshot){
-
-
-    var html = "";
-
-    var total = 0;
-
-    var waiting = 0;
-
-    var playing = 0;
-
-    var finished = 0;
-
-
-    snapshot.forEach(function(doc){
-
-
-        var player =
-            doc.data();
-
-
-        total++;
-
-
-        var name =
-            player.name ||
-            "ผู้เข้าชม";
-
-
-        var status =
-            player.status ||
-            "waiting";
-
-
-        var statusText = "";
-
-        var statusIcon = "";
-
-
-        if(status == "waiting"){
-
-            waiting++;
-
-            statusIcon = "🟡";
-
-            statusText =
-                "รอเริ่ม";
-
-        }
-
-        else if(status == "playing"){
-
-            playing++;
-
-            statusIcon = "🟢";
-
-            statusText =
-                "กำลังเล่น";
-
-        }
-
-        else if(status == "finished"){
-
-            finished++;
-
-            statusIcon = "✅";
-
-            statusText =
-                "ทำเสร็จแล้ว";
-
-        }
-
-        else{
-
-            statusIcon = "⚪";
-
-            statusText =
-                status;
-
-        }
-
-
-        html +=
-
-
-        '<div style="' +
-
-        'background:#f4f7f8;' +
-
-        'padding:15px;' +
-
-        'border-radius:12px;' +
-
-        'margin:8px 0;' +
-
-        'text-align:left;' +
-
-        'color:#222;' +
-
-        '">' +
-
-
-        '<strong>' +
-
-        name +
-
-        '</strong>' +
-
-
-        '<br>' +
-
-
-        '<span>' +
-
-        statusIcon +
-
-        ' ' +
-
-        statusText +
-
-        '</span>' +
-
-
-        '</div>';
-
-    });
-
-
-    document.getElementById(
-        "participants"
-    ).innerHTML = html;
-
-
-    document.getElementById(
-        "playerCount"
-    ).innerHTML =
-
-
-        "👥 ทั้งหมด " +
-        total +
-        " คน" +
-
-
-        "<br>" +
-
-
-        "🟡 รอเริ่ม: " +
-        waiting +
-        " คน" +
-
-
-        "<br>" +
-
-
-        "🟢 กำลังเล่น: " +
-        playing +
-        " คน" +
-
-
-        "<br>" +
-
-
-        "✅ ทำเสร็จแล้ว: " +
-        finished +
-        " คน";
-
-
-}, function(error){
-
-
-    console.log(
-        "Participants Error:",
-        error
-    );
-
-
-    document.getElementById(
-        "participants"
-    ).innerHTML =
-
-    "❌ ไม่สามารถโหลดรายชื่อผู้เล่นได้";
-
-
-});
-
-
-</script>
+<script src="js/host.js"></script>
 
 
 </body>
