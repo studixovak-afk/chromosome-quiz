@@ -1,6 +1,6 @@
 /* =========================================
    RESULT - CHROMOSOME QUIZ
-   แสดงผลคะแนน + บันทึก Firebase
+   หน้าสรุปผลคะแนน
 ========================================= */
 
 
@@ -16,14 +16,12 @@ var participantId =
 
 var score =
     parseInt(
-        localStorage.getItem("score"),
-        10
+        localStorage.getItem("score")
     ) || 0;
 
 var time =
     parseInt(
-        localStorage.getItem("time"),
-        10
+        localStorage.getItem("time")
     ) || 0;
 
 
@@ -66,7 +64,7 @@ if(!playerName){
 
 
 /* =========================================
-   แสดงชื่อ
+   แสดงชื่อผู้เล่น
 ========================================= */
 
 var resultName =
@@ -104,24 +102,26 @@ if(scoreElement){
    แสดงเวลา
 ========================================= */
 
-var minutes =
-    Math.floor(time / 60);
+var min =
+    Math.floor(
+        time / 60
+    );
 
-var seconds =
+var sec =
     time % 60;
 
 
-if(minutes < 10){
+if(min < 10){
 
-    minutes =
-        "0" + minutes;
+    min =
+        "0" + min;
 
 }
 
-if(seconds < 10){
+if(sec < 10){
 
-    seconds =
-        "0" + seconds;
+    sec =
+        "0" + sec;
 
 }
 
@@ -134,38 +134,40 @@ var resultTime =
 if(resultTime){
 
     resultTime.innerHTML =
-        minutes +
-        ":" +
-        seconds;
+        min + ":" + sec;
 
 }
 
 
 /* =========================================
    ข้อความสรุปคะแนน
+   สำหรับ 10 ข้อ
 ========================================= */
 
 var message = "";
 
 
-if(score >= 9){
+if(score === 10){
 
     message =
-        "🏆 ยอดเยี่ยมมาก!";
+        "🏆 เต็ม 10! ยอดเยี่ยมมาก!";
 
 }
-else if(score >= 7){
+
+else if(score >= 8){
 
     message =
         "🎉 ดีมาก!";
 
 }
+
 else if(score >= 5){
 
     message =
         "👍 ผ่านเกณฑ์";
 
 }
+
 else{
 
     message =
@@ -197,27 +199,193 @@ if(typeof db === "undefined"){
         "ไม่พบ Firebase Database"
     );
 
-    alert(
-        "❌ ไม่สามารถเชื่อมต่อ Firebase ได้"
-    );
-
 }
 else{
 
+    saveResult();
 
-    /* =====================================
-       1. อัปเดต participants
-       
-       สำคัญมาก:
-       ใช้ participantId เดิม
-       ไม่สร้างคนใหม่
-    ===================================== */
+}
 
-    if(participantId){
 
-        db.collection("participants")
+/* =========================================
+   บันทึกผลคะแนน
+========================================= */
+
+function saveResult(){
+
+    /*
+       ใช้ savedScore ป้องกัน
+       การบันทึกคะแนนซ้ำเมื่อกด F5
+    */
+
+    var savedScore =
+        localStorage.getItem(
+            "savedScore"
+        );
+
+
+    if(savedScore === "true"){
+
+        console.log(
+            "คะแนนนี้ถูกบันทึกไว้แล้ว"
+        );
+
+        /*
+           ถึงบันทึก players ไปแล้ว
+           ให้ลองอัปเดต participant
+           เผื่อสถานะยังไม่เป็น finished
+        */
+
+        updateParticipant();
+
+        return;
+
+    }
+
+
+    console.log(
+        "กำลังบันทึกคะแนน..."
+    );
+
+    console.log(
+        "ชื่อ:",
+        playerName
+    );
+
+    console.log(
+        "คะแนน:",
+        score
+    );
+
+    console.log(
+        "เวลา:",
+        time
+    );
+
+    console.log(
+        "Participant ID:",
+        participantId
+    );
+
+
+    /*
+       ข้อมูลที่จะบันทึกใน players
+    */
+
+    var playerData = {
+
+        name:
+            playerName,
+
+        score:
+            score,
+
+        time:
+            time,
+
+        answersLog:
+            answersLog,
+
+        createdAt:
+            firebase.firestore
+            .FieldValue
+            .serverTimestamp()
+
+    };
+
+
+    /*
+       บันทึกลง collection players
+    */
+
+    db.collection("players")
+        .add(playerData)
+
+        .then(function(docRef){
+
+            console.log(
+                "✅ บันทึกคะแนนสำเร็จ"
+            );
+
+            console.log(
+                "Player ID:",
+                docRef.id
+            );
+
+
+            /*
+               จำไว้ว่าบันทึกแล้ว
+            */
+
+            localStorage.setItem(
+                "savedScore",
+                "true"
+            );
+
+
+            /*
+               อัปเดตสถานะใน participants
+            */
+
+            updateParticipant();
+
+        })
+
+        .catch(function(error){
+
+            console.error(
+                "❌ Firebase Error:",
+                error
+            );
+
+
+            /*
+               ไม่ตั้ง savedScore
+               เพื่อให้ลองบันทึกใหม่ได้
+            */
+
+            alert(
+                "❌ ไม่สามารถบันทึกคะแนนได้\n\n" +
+                error.message
+            );
+
+        });
+
+}
+
+
+/* =========================================
+   อัปเดต participants
+   เป็น finished
+========================================= */
+
+function updateParticipant(){
+
+    /*
+       ถ้าไม่มี participantId
+       ก็ไม่สามารถอัปเดตได้
+    */
+
+    if(!participantId){
+
+        console.log(
+            "ไม่มี participantId " +
+            "จึงไม่สามารถอัปเดต participants"
+        );
+
+        return;
+
+    }
+
+
+    console.log(
+        "กำลังอัปเดตสถานะผู้เล่น..."
+    );
+
+
+    db.collection("participants")
         .doc(participantId)
-        .update({
+        .set({
 
             name:
                 playerName,
@@ -236,12 +404,16 @@ else{
                 .FieldValue
                 .serverTimestamp()
 
+        }, {
+
+            merge: true
+
         })
 
         .then(function(){
 
             console.log(
-                "อัปเดต participants สำเร็จ"
+                "✅ อัปเดต participants เป็น finished สำเร็จ"
             );
 
         })
@@ -249,111 +421,17 @@ else{
         .catch(function(error){
 
             console.error(
-                "Participants Error:",
+                "❌ ไม่สามารถอัปเดต participants:",
                 error
             );
 
         });
-
-    }
-
-
-    /* =====================================
-       2. บันทึกคะแนนลง players
-       
-       ป้องกันบันทึกซ้ำด้วย savedScore
-    ===================================== */
-
-    var savedScore =
-        localStorage.getItem(
-            "savedScore"
-        );
-
-
-    if(savedScore !== "true"){
-
-        console.log(
-            "กำลังบันทึกคะแนนลง players..."
-        );
-
-
-        db.collection("players")
-        .add({
-
-            name:
-                playerName,
-
-            score:
-                score,
-
-            time:
-                time,
-
-            answersLog:
-                answersLog,
-
-            participantId:
-                participantId || null,
-
-            createdAt:
-                firebase.firestore
-                .FieldValue
-                .serverTimestamp()
-
-        })
-
-        .then(function(docRef){
-
-            console.log(
-                "บันทึกคะแนนสำเร็จ"
-            );
-
-            console.log(
-                "Player ID:",
-                docRef.id
-            );
-
-
-            /* =========================
-               จำไว้ว่าบันทึกแล้ว
-            ========================= */
-
-            localStorage.setItem(
-                "savedScore",
-                "true"
-            );
-
-        })
-
-        .catch(function(error){
-
-            console.error(
-                "Players Firebase Error:",
-                error
-            );
-
-
-            alert(
-                "❌ ไม่สามารถบันทึกคะแนนได้\n\n" +
-                error.message
-            );
-
-        });
-
-    }
-    else{
-
-        console.log(
-            "คะแนนถูกบันทึกไว้แล้ว ไม่บันทึกซ้ำ"
-        );
-
-    }
 
 }
 
 
 /* =========================================
-   ป้องกัน HTML
+   ป้องกัน HTML Injection
 ========================================= */
 
 function escapeHTML(text){
