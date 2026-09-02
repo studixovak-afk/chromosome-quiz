@@ -1,132 +1,331 @@
-/* =========================================
+/* =========================================================
    CHROMOSOME QUIZ
-   จำนวน 10 ข้อ
-========================================= */
+   เวอร์ชันคำถามฮา + ความรู้ทั่วไป
+   ผู้เล่นแต่ละคนได้ 15 ข้อ
+   - คำถามฮา 7 ข้อ
+   - ความรู้ทั่วไป 8 ข้อ
+   - สุ่มชุดคำถามให้แต่ละคน
+========================================================= */
 
 
-/* =========================================
-   คำถาม
-========================================= */
+/* =========================================================
+   คลังคำถามฮา
+========================================================= */
 
-var questions = [
-
-    {
-        question: "มนุษย์ปกติมีโครโมโซมทั้งหมดกี่แท่ง?",
-        answers: [
-            "23 แท่ง",
-            "44 แท่ง",
-            "46 แท่ง",
-            "48 แท่ง"
-        ],
-        correct: 2
-    },
+var funnyQuestions = [
 
     {
-        question: "มนุษย์มีโครโมโซมกี่คู่?",
+        question: "อะไรเอ่ย ยิ่งเช็ดยิ่งเปียก?",
         answers: [
-            "22 คู่",
-            "23 คู่",
-            "24 คู่",
-            "46 คู่"
-        ],
-        correct: 1
-    },
-
-    {
-        question: "โครโมโซมเพศของเพศหญิงโดยทั่วไปคืออะไร?",
-        answers: [
-            "XY",
-            "XX",
-            "YY",
-            "XO"
-        ],
-        correct: 1
-    },
-
-    {
-        question: "โครโมโซมเพศของเพศชายโดยทั่วไปคืออะไร?",
-        answers: [
-            "XX",
-            "XY",
-            "YY",
-            "XO"
-        ],
-        correct: 1
-    },
-
-    {
-        question: "สารพันธุกรรมหลักที่อยู่บนโครโมโซมคืออะไร?",
-        answers: [
-            "DNA",
-            "RNA",
-            "โปรตีน",
-            "ไขมัน"
+            "ผ้าเช็ดตัว",
+            "กระดาษ",
+            "สบู่",
+            "รองเท้า"
         ],
         correct: 0
     },
 
     {
-        question: "โครโมโซมอยู่บริเวณใดของเซลล์?",
+        question: "ถ้าตื่นสาย สิ่งแรกที่ควรทำคืออะไร?",
         answers: [
-            "เยื่อหุ้มเซลล์",
-            "ไซโทพลาซึม",
-            "นิวเคลียส",
-            "ไมโทคอนเดรียเท่านั้น"
-        ],
-        correct: 2
-    },
-
-    {
-        question: "Down syndrome เกี่ยวข้องกับโครโมโซมคู่ใด?",
-        answers: [
-            "คู่ที่ 13",
-            "คู่ที่ 18",
-            "คู่ที่ 21",
-            "คู่ที่ 23"
-        ],
-        correct: 2
-    },
-
-    {
-        question: "Edwards syndrome เกี่ยวข้องกับความผิดปกติของโครโมโซมคู่ใด?",
-        answers: [
-            "คู่ที่ 13",
-            "คู่ที่ 18",
-            "คู่ที่ 21",
-            "คู่ที่ 23"
+            "นอนต่อ",
+            "รีบลุก",
+            "ร้องไห้",
+            "ปิดนาฬิกาแล้วหลับต่อ"
         ],
         correct: 1
     },
 
     {
-        question: "Patau syndrome เกี่ยวข้องกับโครโมโซมคู่ใด?",
+        question: "ถ้าแบตมือถือเหลือ 1% สิ่งที่ควรทำที่สุดคืออะไร?",
         answers: [
-            "คู่ที่ 13",
-            "คู่ที่ 18",
-            "คู่ที่ 21",
-            "คู่ที่ 22"
+            "หาที่ชาร์จ",
+            "เปิดเกม",
+            "ดูคลิปต่อ",
+            "เปิดไฟฉาย"
         ],
         correct: 0
     },
 
     {
-        question: "เซลล์สืบพันธุ์ของมนุษย์มีโครโมโซมกี่แท่ง?",
+        question: "อะไรเอ่ย มีฟันมากแต่กัดไม่ได้?",
         answers: [
-            "23",
-            "46",
-            "44",
-            "92"
+            "หวี",
+            "สิงโต",
+            "ฉลาม",
+            "จระเข้"
         ],
         correct: 0
+    },
+
+    {
+        question: "ถ้าเพื่อนบอกว่า 'เดี๋ยวมา' คำว่าเดี๋ยวอาจหมายถึงอะไร?",
+        answers: [
+            "1 วินาที",
+            "5 นาที",
+            "30 นาที",
+            "แล้วแต่เพื่อน"
+        ],
+        correct: 3
+    },
+
+    {
+        question: "อะไรเอ่ย ยิ่งวิ่งยิ่งอยู่ที่เดิม?",
+        answers: [
+            "รถยนต์",
+            "ลู่วิ่ง",
+            "จักรยาน",
+            "เครื่องบิน"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "อะไรเอ่ย มีคอแต่ไม่มีหัว?",
+        answers: [
+            "เสื้อ",
+            "ไก่",
+            "คน",
+            "ยีราฟ"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "ถ้าหิวตอนเที่ยงคืน สิ่งแรกที่หลายคนมักทำคืออะไร?",
+        answers: [
+            "เปิดตู้เย็น",
+            "ออกกำลังกาย",
+            "อ่านหนังสือ",
+            "วิ่งรอบบ้าน"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "อะไรเอ่ย มีตาแต่ดูไม่เห็น?",
+        answers: [
+            "เข็ม",
+            "มันฝรั่ง",
+            "พายุ",
+            "ถูกทุกข้อ"
+        ],
+        correct: 3
+    },
+
+    {
+        question: "ถ้าเดินเข้าห้องเรียนแล้วลืมว่ามาทำอะไร สิ่งที่เป็นไปได้มากที่สุดคืออะไร?",
+        answers: [
+            "สมองกำลังโหลด",
+            "เดินผิดห้อง",
+            "ลืมการบ้าน",
+            "ถูกทุกข้อ"
+        ],
+        correct: 3
     }
 
 ];
 
 
+/* =========================================================
+   คลังคำถามความรู้ทั่วไป
+========================================================= */
 
-/* =========================================
+var knowledgeQuestions = [
+
+    {
+        question: "ลูกขนไก่สำหรับกีฬาแบดมินตันแบบดั้งเดิมทำจากอะไร?",
+        answers: [
+            "ขนไก่",
+            "ขนเป็ดหรือขนห่าน",
+            "ขนหมา",
+            "ขนแมว"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "ประเทศไทยมีกี่จังหวัด?",
+        answers: [
+            "76 จังหวัด",
+            "77 จังหวัด",
+            "78 จังหวัด",
+            "80 จังหวัด"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "ดาวเคราะห์ดวงใดอยู่ใกล้ดวงอาทิตย์ที่สุด?",
+        answers: [
+            "โลก",
+            "ดาวศุกร์",
+            "ดาวพุธ",
+            "ดาวอังคาร"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "น้ำบริสุทธิ์เดือดที่อุณหภูมิประมาณเท่าไรที่ระดับน้ำทะเล?",
+        answers: [
+            "50°C",
+            "80°C",
+            "100°C",
+            "150°C"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "สัตว์บกชนิดใดมีขนาดใหญ่ที่สุด?",
+        answers: [
+            "ยีราฟ",
+            "ช้างแอฟริกา",
+            "ฮิปโป",
+            "แรด"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "ประเทศไทยใช้สกุลเงินอะไร?",
+        answers: [
+            "ดอลลาร์",
+            "เยน",
+            "บาท",
+            "ยูโร"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "ปลาหมึกมีหัวใจกี่ดวง?",
+        answers: [
+            "1 ดวง",
+            "2 ดวง",
+            "3 ดวง",
+            "4 ดวง"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "โลกโคจรรอบดวงอาทิตย์ใช้เวลาประมาณกี่วัน?",
+        answers: [
+            "30 วัน",
+            "180 วัน",
+            "365 วัน",
+            "730 วัน"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "สีที่เกิดจากการผสมสีแดงกับสีเหลืองคือสีอะไร?",
+        answers: [
+            "สีเขียว",
+            "สีม่วง",
+            "สีส้ม",
+            "สีน้ำเงิน"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "ประเทศใดมีรูปร่างคล้ายรองเท้าบูต?",
+        answers: [
+            "ฝรั่งเศส",
+            "อิตาลี",
+            "ญี่ปุ่น",
+            "อินเดีย"
+        ],
+        correct: 1
+    }
+
+];
+
+
+/* =========================================================
+   สุ่มคำถาม
+========================================================= */
+
+function shuffleArray(array) {
+
+    var newArray =
+        array.slice();
+
+    for(
+        var i = newArray.length - 1;
+        i > 0;
+        i--
+    ){
+
+        var j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+        var temp =
+            newArray[i];
+
+        newArray[i] =
+            newArray[j];
+
+        newArray[j] =
+            temp;
+
+    }
+
+    return newArray;
+}
+
+
+/* =========================================================
+   สร้างชุดคำถามสำหรับผู้เล่นคนนี้
+========================================================= */
+
+/*
+   ฮา 7 ข้อ
+   ความรู้ 8 ข้อ
+   รวม 15 ข้อ
+*/
+
+var selectedFunny =
+    shuffleArray(
+        funnyQuestions
+    ).slice(0, 7);
+
+
+var selectedKnowledge =
+    shuffleArray(
+        knowledgeQuestions
+    ).slice(0, 8);
+
+
+/*
+   รวมคำถาม
+*/
+
+var questions =
+    selectedFunny.concat(
+        selectedKnowledge
+    );
+
+
+/*
+   สลับลำดับคำถามอีกครั้ง
+*/
+
+questions =
+    shuffleArray(
+        questions
+    );
+
+
+/* =========================================================
    ตัวแปรเกม
-========================================= */
+========================================================= */
 
 var currentQuestion = 0;
 
@@ -138,27 +337,16 @@ var seconds = 0;
 
 var timer;
 
-var gameStarted = false;
 
-var finished = false;
-
-
-
-/* =========================================
-   ข้อมูลผู้เล่น
-========================================= */
+/* =========================================================
+   ชื่อผู้เล่น
+========================================================= */
 
 var playerName =
-    localStorage.getItem("playerName");
+    localStorage.getItem(
+        "playerName"
+    );
 
-var participantId =
-    localStorage.getItem("participantId");
-
-
-
-/* =========================================
-   ตรวจสอบชื่อ
-========================================= */
 
 if(!playerName){
 
@@ -168,27 +356,19 @@ if(!playerName){
 }
 
 
+/* =========================================================
+   Participant ID
+========================================================= */
 
-/* =========================================
-   ตรวจสอบ participantId
-========================================= */
-
-if(!participantId){
-
-    alert(
-        "ไม่พบข้อมูลผู้เล่น กรุณากลับไปเข้าร่วมห้องใหม่"
+var participantId =
+    localStorage.getItem(
+        "participantId"
     );
 
-    window.location.href =
-        "index.html";
 
-}
-
-
-
-/* =========================================
-   แสดงชื่อผู้เล่น
-========================================= */
+/* =========================================================
+   แสดงชื่อ
+========================================================= */
 
 var nameElement =
     document.getElementById(
@@ -199,196 +379,48 @@ var nameElement =
 if(nameElement){
 
     nameElement.innerHTML =
-        escapeHTML(playerName);
+        escapeHTML(
+            playerName
+        );
 
 }
 
 
+/* =========================================================
+   อัปเดตสถานะผู้เล่นเป็น playing
+========================================================= */
 
-/* =========================================
-   ตรวจสอบว่าเกมเริ่มหรือยัง
-========================================= */
+if(
+    typeof db !== "undefined" &&
+    participantId
+){
 
-var gameRef =
-    db.collection("settings")
-      .doc("game");
+    db.collection(
+        "participants"
+    )
+    .doc(participantId)
+    .update({
 
+        status: "playing"
 
-gameRef.onSnapshot(function(doc){
+    })
+    .catch(function(error){
 
-    if(!doc.exists){
-
-        gameStarted = false;
-
-        showWaiting();
-
-        return;
-
-    }
-
-
-    var data =
-        doc.data();
-
-
-    gameStarted =
-        data.started === true;
-
-
-    if(gameStarted){
-
-        if(
-            !finished &&
-            currentQuestion === 0 &&
-            seconds === 0
-        ){
-
-            startQuiz();
-
-        }
-
-    }
-    else{
-
-        if(
-            !finished &&
-            currentQuestion === 0
-        ){
-
-            showWaiting();
-
-        }
-
-    }
-
-}, function(error){
-
-    console.log(
-        "Game status error:",
-        error
-    );
-
-    alert(
-        "ไม่สามารถเชื่อมต่อสถานะการแข่งขันได้"
-    );
-
-});
-
-
-
-/* =========================================
-   หน้ารอเริ่ม
-========================================= */
-
-function showWaiting(){
-
-    var questionElement =
-        document.getElementById(
-            "question"
+        console.log(
+            "ไม่สามารถอัปเดตสถานะ playing:",
+            error
         );
 
-
-    var answersElement =
-        document.getElementById(
-            "answers"
-        );
-
-
-    if(questionElement){
-
-        questionElement.innerHTML =
-            "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
-
-    }
-
-
-    if(answersElement){
-
-        answersElement.innerHTML =
-            "<p style='text-align:center;'>" +
-            "เมื่อหัวหน้าห้องกดเริ่ม " +
-            "เกมจะเริ่มโดยอัตโนมัติ" +
-            "</p>";
-
-    }
-
-
-    var numberElement =
-        document.getElementById(
-            "questionNumber"
-        );
-
-
-    if(numberElement){
-
-        numberElement.innerHTML =
-            "กำลังรอเริ่มการแข่งขัน";
-
-    }
-
-
-    var progressBar =
-        document.getElementById(
-            "progressBar"
-        );
-
-
-    if(progressBar){
-
-        progressBar.style.width =
-            "0%";
-
-    }
+    });
 
 }
 
 
-
-/* =========================================
-   เริ่มเกม
-========================================= */
-
-function startQuiz(){
-
-    if(finished){
-
-        return;
-
-    }
-
-
-    if(seconds > 0){
-
-        return;
-
-    }
-
-
-    updateParticipantStatus(
-        "playing"
-    );
-
-
-    startTimer();
-
-    showQuestion();
-
-}
-
-
-
-/* =========================================
+/* =========================================================
    TIMER
-========================================= */
+========================================================= */
 
 function startTimer(){
-
-    if(timer){
-
-        clearInterval(timer);
-
-    }
-
 
     timer =
         setInterval(function(){
@@ -435,30 +467,21 @@ function startTimer(){
 
             }
 
-
-        },1000);
+        }, 1000);
 
 }
 
 
-
-/* =========================================
+/* =========================================================
    แสดงคำถาม
-========================================= */
+========================================================= */
 
 function showQuestion(){
 
-    if(!gameStarted){
-
-        showWaiting();
-
-        return;
-
-    }
-
-
     var q =
-        questions[currentQuestion];
+        questions[
+            currentQuestion
+        ];
 
 
     if(!q){
@@ -470,9 +493,9 @@ function showQuestion(){
     }
 
 
-    /* -----------------------------
-       หมายเลขข้อ
-    ----------------------------- */
+    /* -------------------------
+       เลขข้อ
+    ------------------------- */
 
     var numberElement =
         document.getElementById(
@@ -483,18 +506,23 @@ function showQuestion(){
     if(numberElement){
 
         numberElement.innerHTML =
+
             "ข้อ " +
-            (currentQuestion + 1) +
+
+            (
+                currentQuestion + 1
+            ) +
+
             " / " +
+
             questions.length;
 
     }
 
 
-
-    /* -----------------------------
+    /* -------------------------
        คำถาม
-    ----------------------------- */
+    ------------------------- */
 
     var questionElement =
         document.getElementById(
@@ -512,10 +540,9 @@ function showQuestion(){
     }
 
 
-
-    /* -----------------------------
+    /* -------------------------
        ตัวเลือก
-    ----------------------------- */
+    ------------------------- */
 
     var html = "";
 
@@ -533,7 +560,9 @@ function showQuestion(){
             'class="answer" ' +
 
             'onclick="checkAnswer(' +
+
             i +
+
             ')">' +
 
             escapeHTML(
@@ -559,14 +588,16 @@ function showQuestion(){
     }
 
 
-
-    /* -----------------------------
+    /* -------------------------
        Progress Bar
-    ----------------------------- */
+    ------------------------- */
 
     var progress =
-        ((currentQuestion + 1) /
-        questions.length) * 100;
+        (
+            (currentQuestion + 1)
+            /
+            questions.length
+        ) * 100;
 
 
     var progressBar =
@@ -585,29 +616,16 @@ function showQuestion(){
 }
 
 
-
-/* =========================================
+/* =========================================================
    ตรวจคำตอบ
-========================================= */
+========================================================= */
 
 function checkAnswer(answer){
 
-    if(!gameStarted){
-
-        return;
-
-    }
-
-
-    if(finished){
-
-        return;
-
-    }
-
-
     var q =
-        questions[currentQuestion];
+        questions[
+            currentQuestion
+        ];
 
 
     if(!q){
@@ -623,7 +641,9 @@ function checkAnswer(answer){
         );
 
 
-    /* ป้องกันการกดซ้ำ */
+    /*
+       ป้องกันกดคำตอบซ้ำ
+    */
 
     for(
         var i = 0;
@@ -638,42 +658,50 @@ function checkAnswer(answer){
 
 
     var isCorrect =
-        answer == q.correct;
+        answer === q.correct;
 
 
-    /* -----------------------------
-       คะแนน
-    ----------------------------- */
+    /* -------------------------
+       เพิ่มคะแนน
+    ------------------------- */
 
     if(isCorrect){
 
         score++;
 
+        if(buttons[answer]){
 
-        buttons[answer]
-        .className =
-            "answer correct";
+            buttons[answer].className =
+                "answer correct";
+
+        }
 
     }
 
     else{
 
-        buttons[answer]
-        .className =
-            "answer wrong";
+        if(buttons[answer]){
+
+            buttons[answer].className =
+                "answer wrong";
+
+        }
 
 
-        buttons[q.correct]
-        .className =
-            "answer correct";
+        if(buttons[q.correct]){
+
+            buttons[q.correct].className =
+                "answer correct";
+
+        }
 
     }
 
 
-
-    /* -----------------------------
-       บันทึกคำตอบ
-    ----------------------------- */
+    /* =====================================================
+       บันทึกเฉลยของผู้เล่นคนนี้
+       สำคัญมากสำหรับหน้า Host
+    ===================================================== */
 
     answersLog.push({
 
@@ -701,10 +729,9 @@ function checkAnswer(answer){
     });
 
 
-
-    /* -----------------------------
+    /* -------------------------
        ไปข้อถัดไป
-    ----------------------------- */
+    ------------------------- */
 
     setTimeout(function(){
 
@@ -726,42 +753,23 @@ function checkAnswer(answer){
 
         }
 
-
-    },700);
+    }, 700);
 
 }
 
 
-
-/* =========================================
+/* =========================================================
    จบเกม
-========================================= */
+========================================================= */
 
 function finishGame(){
 
-    if(finished){
-
-        return;
-
-    }
+    clearInterval(timer);
 
 
-    finished = true;
-
-
-    /* หยุดเวลา */
-
-    if(timer){
-
-        clearInterval(timer);
-
-    }
-
-
-
-    /* -----------------------------
-       บันทึกคะแนน LocalStorage
-    ----------------------------- */
+    /*
+       บันทึกคะแนนในเครื่อง
+    */
 
     localStorage.setItem(
         "score",
@@ -783,42 +791,117 @@ function finishGame(){
     );
 
 
+    /*
+       บันทึกคะแนน Firebase
+       และเปลี่ยนสถานะ participant เป็น finished
+    */
 
-    /* -----------------------------
-       เปลี่ยนสถานะผู้เล่น
-       เป็น finished
-    ----------------------------- */
+    if(
+        typeof db !== "undefined" &&
+        participantId
+    ){
 
-    updateParticipantStatus(
-        "finished"
-    );
+        db.collection(
+            "participants"
+        )
+        .doc(participantId)
+        .set({
 
+            name:
+                playerName,
 
+            score:
+                score,
 
-    /* -----------------------------
-       ไปหน้าผลคะแนน
-    ----------------------------- */
+            time:
+                seconds,
 
-    setTimeout(function(){
+            status:
+                "finished",
 
-        window.location.href =
-            "result.html";
+            answersLog:
+                answersLog,
 
-    },300);
+            finishedAt:
+                firebase.firestore
+                .FieldValue
+                .serverTimestamp()
+
+        }, {
+
+            merge: true
+
+        })
+        .then(function(){
+
+            console.log(
+                "บันทึกผลผู้เล่นสำเร็จ"
+            );
+
+            savePlayerScore();
+
+        })
+        .catch(function(error){
+
+            console.log(
+                "บันทึก participant ไม่สำเร็จ:",
+                error
+            );
+
+            /*
+               ถึง participant จะบันทึกไม่ได้
+               ก็ยังพยายามบันทึก players
+            */
+
+            savePlayerScore();
+
+        });
+
+    }
+
+    else{
+
+        savePlayerScore();
+
+    }
 
 }
 
 
+/* =========================================================
+   บันทึกคะแนนลง players
+========================================================= */
 
-/* =========================================
-   อัปเดตสถานะผู้เล่น Firebase
-========================================= */
+function savePlayerScore(){
 
-function updateParticipantStatus(
-    status
-){
+    /*
+       ป้องกันการบันทึกซ้ำ
+    */
 
-    if(!participantId){
+    if(
+        localStorage.getItem(
+            "savedScore"
+        ) === "true"
+    ){
+
+        window.location.href =
+            "result.html";
+
+        return;
+
+    }
+
+
+    if(
+        typeof db === "undefined"
+    ){
+
+        console.log(
+            "ไม่พบ Firebase"
+        );
+
+        window.location.href =
+            "result.html";
 
         return;
 
@@ -826,47 +909,70 @@ function updateParticipantStatus(
 
 
     db.collection(
-        "participants"
+        "players"
     )
-    .doc(participantId)
-    .update({
+    .add({
 
-        status: status,
+        name:
+            playerName,
 
-        score: score,
+        score:
+            score,
 
-        time: seconds,
+        time:
+            seconds,
 
-        updatedAt:
+        answersLog:
+            answersLog,
+
+        createdAt:
             firebase.firestore
             .FieldValue
             .serverTimestamp()
 
     })
-    .then(function(){
+    .then(function(docRef){
 
         console.log(
-            "Participant status:",
-            status
+            "บันทึกคะแนนสำเร็จ:",
+            docRef.id
         );
+
+
+        localStorage.setItem(
+            "savedScore",
+            "true"
+        );
+
+
+        window.location.href =
+            "result.html";
 
     })
     .catch(function(error){
 
         console.log(
-            "Participant status error:",
+            "Firebase Error:",
             error
         );
+
+
+        /*
+           ยังไปหน้า Result ได้
+           แม้ Firebase มีปัญหา
+        */
+
+        window.location.href =
+            "result.html";
 
     });
 
 }
 
 
-
-/* =========================================
+/* =========================================================
    ป้องกัน HTML
-========================================= */
+========================================================= */
 
 function escapeHTML(text){
 
@@ -908,3 +1014,12 @@ function escapeHTML(text){
         );
 
 }
+
+
+/* =========================================================
+   เริ่มเกม
+========================================================= */
+
+startTimer();
+
+showQuestion();
