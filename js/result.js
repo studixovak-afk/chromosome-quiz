@@ -1,29 +1,37 @@
-/* =========================
-   ข้อมูลผู้เล่น
-========================= */
+/* =========================================
+   RESULT - CHROMOSOME QUIZ
+   แสดงผลคะแนน + บันทึก Firebase
+========================================= */
+
+
+/* =========================================
+   ข้อมูลผู้เล่นจาก LocalStorage
+========================================= */
 
 var playerName =
     localStorage.getItem("playerName");
 
+var participantId =
+    localStorage.getItem("participantId");
 
 var score =
     parseInt(
-        localStorage.getItem("score")
+        localStorage.getItem("score"),
+        10
     ) || 0;
-
 
 var time =
     parseInt(
-        localStorage.getItem("time")
+        localStorage.getItem("time"),
+        10
     ) || 0;
 
 
-/* =========================
+/* =========================================
    โหลด answersLog
-========================= */
+========================================= */
 
 var answersLog = [];
-
 
 try {
 
@@ -35,8 +43,8 @@ try {
 }
 catch(error) {
 
-    console.log(
-        "ไม่สามารถอ่าน answersLog ได้",
+    console.error(
+        "ไม่สามารถอ่าน answersLog ได้:",
         error
     );
 
@@ -45,9 +53,9 @@ catch(error) {
 }
 
 
-/* =========================
-   ตรวจสอบชื่อผู้เล่น
-========================= */
+/* =========================================
+   ตรวจสอบชื่อ
+========================================= */
 
 if(!playerName){
 
@@ -57,15 +65,14 @@ if(!playerName){
 }
 
 
-/* =========================
+/* =========================================
    แสดงชื่อ
-========================= */
+========================================= */
 
 var resultName =
     document.getElementById(
         "resultName"
     );
-
 
 if(resultName){
 
@@ -76,15 +83,14 @@ if(resultName){
 }
 
 
-/* =========================
+/* =========================================
    แสดงคะแนน
-========================= */
+========================================= */
 
 var scoreElement =
     document.getElementById(
         "score"
     );
-
 
 if(scoreElement){
 
@@ -94,30 +100,28 @@ if(scoreElement){
 }
 
 
-/* =========================
+/* =========================================
    แสดงเวลา
-========================= */
+========================================= */
 
-var min =
+var minutes =
     Math.floor(time / 60);
 
-
-var sec =
+var seconds =
     time % 60;
 
 
-if(min < 10){
+if(minutes < 10){
 
-    min =
-        "0" + min;
+    minutes =
+        "0" + minutes;
 
 }
 
+if(seconds < 10){
 
-if(sec < 10){
-
-    sec =
-        "0" + sec;
+    seconds =
+        "0" + seconds;
 
 }
 
@@ -127,19 +131,19 @@ var resultTime =
         "resultTime"
     );
 
-
 if(resultTime){
 
     resultTime.innerHTML =
-        min + ":" + sec;
+        minutes +
+        ":" +
+        seconds;
 
 }
 
 
-/* =========================
+/* =========================================
    ข้อความสรุปคะแนน
-   สำหรับ 10 ข้อ
-========================= */
+========================================= */
 
 var message = "";
 
@@ -150,21 +154,18 @@ if(score >= 9){
         "🏆 ยอดเยี่ยมมาก!";
 
 }
-
 else if(score >= 7){
 
     message =
         "🎉 ดีมาก!";
 
 }
-
 else if(score >= 5){
 
     message =
         "👍 ผ่านเกณฑ์";
 
 }
-
 else{
 
     message =
@@ -178,7 +179,6 @@ var messageElement =
         "message"
     );
 
-
 if(messageElement){
 
     messageElement.innerHTML =
@@ -187,76 +187,98 @@ if(messageElement){
 }
 
 
-/* =========================
-   บันทึกคะแนน Firebase
-========================= */
+/* =========================================
+   ตรวจสอบ Firebase
+========================================= */
 
+if(typeof db === "undefined"){
 
-/*
-   ป้องกันการบันทึกซ้ำ
-   ถ้ารีเฟรชหน้า Result
-*/
-
-if(
-    localStorage.getItem(
-        "savedScore"
-    ) !== "true"
-){
-
-
-    console.log(
-        "กำลังบันทึกคะแนน..."
+    console.error(
+        "ไม่พบ Firebase Database"
     );
 
-
-    console.log(
-        "ชื่อ:",
-        playerName
+    alert(
+        "❌ ไม่สามารถเชื่อมต่อ Firebase ได้"
     );
 
-
-    console.log(
-        "คะแนน:",
-        score
-    );
+}
+else{
 
 
-    console.log(
-        "เวลา:",
-        time
-    );
+    /* =====================================
+       1. อัปเดต participants
+       
+       สำคัญมาก:
+       ใช้ participantId เดิม
+       ไม่สร้างคนใหม่
+    ===================================== */
 
+    if(participantId){
 
-    console.log(
-        "answersLog:",
-        answersLog
-    );
+        db.collection("participants")
+        .doc(participantId)
+        .update({
 
+            name:
+                playerName,
 
-    /*
-       ตรวจสอบ Firebase
-    */
+            status:
+                "finished",
 
-    if(
-        typeof db === "undefined"
-    ){
+            score:
+                score,
 
-        console.error(
-            "ไม่พบ Firebase Database"
-        );
+            time:
+                time,
 
-        alert(
-            "ไม่สามารถเชื่อมต่อ Firebase ได้"
-        );
+            finishedAt:
+                firebase.firestore
+                .FieldValue
+                .serverTimestamp()
+
+        })
+
+        .then(function(){
+
+            console.log(
+                "อัปเดต participants สำเร็จ"
+            );
+
+        })
+
+        .catch(function(error){
+
+            console.error(
+                "Participants Error:",
+                error
+            );
+
+        });
 
     }
 
-    else{
+
+    /* =====================================
+       2. บันทึกคะแนนลง players
+       
+       ป้องกันบันทึกซ้ำด้วย savedScore
+    ===================================== */
+
+    var savedScore =
+        localStorage.getItem(
+            "savedScore"
+        );
 
 
-        db.collection(
-            "players"
-        ).add({
+    if(savedScore !== "true"){
+
+        console.log(
+            "กำลังบันทึกคะแนนลง players..."
+        );
+
+
+        db.collection("players")
+        .add({
 
             name:
                 playerName,
@@ -270,6 +292,9 @@ if(
             answersLog:
                 answersLog,
 
+            participantId:
+                participantId || null,
+
             createdAt:
                 firebase.firestore
                 .FieldValue
@@ -277,13 +302,11 @@ if(
 
         })
 
-
         .then(function(docRef){
 
             console.log(
                 "บันทึกคะแนนสำเร็จ"
             );
-
 
             console.log(
                 "Player ID:",
@@ -291,10 +314,9 @@ if(
             );
 
 
-            /*
+            /* =========================
                จำไว้ว่าบันทึกแล้ว
-               ป้องกันการบันทึกซ้ำ
-            */
+            ========================= */
 
             localStorage.setItem(
                 "savedScore",
@@ -303,29 +325,36 @@ if(
 
         })
 
-
         .catch(function(error){
 
             console.error(
-                "Firebase Error:",
+                "Players Firebase Error:",
                 error
             );
 
 
             alert(
-                "ไม่สามารถบันทึกคะแนนได้ กรุณาตรวจสอบอินเทอร์เน็ต"
+                "❌ ไม่สามารถบันทึกคะแนนได้\n\n" +
+                error.message
             );
 
         });
+
+    }
+    else{
+
+        console.log(
+            "คะแนนถูกบันทึกไว้แล้ว ไม่บันทึกซ้ำ"
+        );
 
     }
 
 }
 
 
-/* =========================
+/* =========================================
    ป้องกัน HTML
-========================= */
+========================================= */
 
 function escapeHTML(text){
 
