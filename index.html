@@ -13,6 +13,7 @@ content="#087ea4">
 
 <title>Chromosome Quiz</title>
 
+
 <link rel="stylesheet"
 type="text/css"
 href="css/style.css">
@@ -54,11 +55,13 @@ href="css/style.css">
     <div class="card">
 
 
-        <!-- สถานะ -->
+        <!-- =========================
+             สถานะเกม
+        ========================== -->
 
         <p id="status">
 
-            👋 กรุณากรอกชื่อเพื่อเข้าร่วมห้อง
+            ⏳ กำลังตรวจสอบสถานะห้อง...
 
         </p>
 
@@ -81,7 +84,9 @@ href="css/style.css">
         autocomplete="off">
 
 
-        <!-- ปุ่ม -->
+        <!-- =========================
+             ปุ่มเข้าร่วม / เริ่มเกม
+        ========================== -->
 
         <button
         id="joinBtn"
@@ -95,7 +100,9 @@ href="css/style.css">
         <br>
 
 
-        <!-- ดูอันดับ -->
+        <!-- =========================
+             ดูอันดับ
+        ========================== -->
 
         <a href="ranking.html"
         class="ranking-button">
@@ -115,9 +122,9 @@ href="css/style.css">
 <script>
 
 
-/* =====================================
+/* =========================================
    ตัวแปร
-===================================== */
+========================================= */
 
 var participantId =
     localStorage.getItem("participantId");
@@ -130,221 +137,312 @@ var playerName =
 var gameStarted = false;
 
 
+/* =========================================
+   Elements
+========================================= */
 
-/* =====================================
-   ถ้ามีข้อมูลผู้เล่นเดิม
-===================================== */
+var nameInput =
+    document.getElementById("name");
+
+var joinButton =
+    document.getElementById("joinBtn");
+
+var statusElement =
+    document.getElementById("status");
+
+
+/* =========================================
+   แสดงชื่อเดิม ถ้ามี
+========================================= */
 
 if(playerName){
 
-    document.getElementById(
-        "name"
-    ).value = playerName;
+    nameInput.value =
+        playerName;
 
 }
 
 
-
-/* =====================================
+/* =========================================
    ตรวจสอบสถานะเกม Real-time
-===================================== */
+========================================= */
 
 db.collection("settings")
 .doc("game")
-.onSnapshot(function(doc){
+.onSnapshot(
 
-    if(!doc.exists){
+    function(doc){
 
-        gameStarted = false;
+        /*
+           ถ้ายังไม่มี settings/game
+        */
+
+        if(!doc.exists){
+
+            gameStarted = false;
+
+            updateButton();
+
+            statusElement.innerHTML =
+                "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
+
+            return;
+
+        }
+
+
+        var data =
+            doc.data();
+
+
+        /*
+           อ่านสถานะ started
+        */
+
+        gameStarted =
+            data.started === true;
+
+
+        /*
+           อัปเดตปุ่ม
+        */
 
         updateButton();
 
-        document.getElementById(
-            "status"
-        ).innerHTML =
 
-        "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
+        /*
+           แสดงข้อความ
+        */
 
-        return;
+        if(gameStarted){
 
-    }
+            statusElement.innerHTML =
+                "🚀 การแข่งขันเริ่มแล้ว!";
 
-
-    var data =
-        doc.data();
-
-
-    gameStarted =
-        data.started === true;
-
-
-    updateButton();
-
-
-    if(gameStarted){
-
-        document.getElementById(
-            "status"
-        ).innerHTML =
-
-        "🚀 หัวหน้าห้องเริ่มการแข่งขันแล้ว";
-
-
-    }
-    else{
-
-
-        if(participantId){
-
-            document.getElementById(
-                "status"
-            ).innerHTML =
-
-            "🟡 เข้าร่วมห้องแล้ว — รอหัวหน้าห้องเริ่ม";
 
         }
-
         else{
 
-            document.getElementById(
-                "status"
-            ).innerHTML =
+            if(participantId){
 
-            "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
+                statusElement.innerHTML =
+                    "🟡 เข้าร่วมห้องแล้ว — รอหัวหน้าห้องเริ่ม";
+
+
+            }
+            else{
+
+                statusElement.innerHTML =
+                    "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
+
+            }
 
         }
 
+    },
+
+
+    function(error){
+
+        console.error(
+            "Firebase Game Error:",
+            error
+        );
+
+
+        statusElement.innerHTML =
+            "❌ ไม่สามารถเชื่อมต่อ Firebase";
+
+
     }
 
-
-}, function(error){
-
-    console.log(
-        "Firebase Error:",
-        error
-    );
+);
 
 
-    document.getElementById(
-        "status"
-    ).innerHTML =
-
-    "❌ ไม่สามารถเชื่อมต่อ Firebase";
-
-});
-
-
-
-/* =====================================
-   เปลี่ยนข้อความปุ่ม
-===================================== */
+/* =========================================
+   เปลี่ยนปุ่มตามสถานะ
+========================================= */
 
 function updateButton(){
 
-    var button =
-        document.getElementById("joinBtn");
-
-
-    if(participantId && gameStarted){
-
-        button.innerHTML =
-            "🚀 เริ่มเกม";
-
-        button.disabled = false;
-
-    }
-
-    else if(participantId && !gameStarted){
-
-        button.innerHTML =
-            "🟡 รอเริ่มการแข่งขัน";
-
-        button.disabled = true;
-
-    }
-
-    else{
-
-        button.innerHTML =
-            "👤 เข้าร่วมห้อง";
-
-        button.disabled = false;
-
-    }
-
-}
-
-
-
-/* =====================================
-   เข้าร่วมห้อง / เริ่มเกม
-===================================== */
-
-function joinRoom(){
-
-
-    var name =
-        document.getElementById(
-            "name"
-        ).value.trim();
-
-
-    /* -----------------------------
-       ตรวจชื่อ
-    ----------------------------- */
-
-    if(name == ""){
-
-        alert(
-            "กรุณากรอกชื่อก่อนเข้าร่วม"
-        );
-
-        return;
-
-    }
-
-
-    /* -----------------------------
-       ถ้าเข้าห้องแล้ว
-       และเกมเริ่มแล้ว
-       ให้เข้าเกม
-    ----------------------------- */
+    /*
+       มีผู้เล่นอยู่แล้ว
+       + เกมเริ่มแล้ว
+       = เข้าเกม
+    */
 
     if(
         participantId &&
         gameStarted
     ){
 
-        localStorage.setItem(
-            "playerName",
-            name
+        joinButton.innerHTML =
+            "🚀 เริ่มเกม";
+
+        joinButton.disabled =
+            false;
+
+        return;
+
+    }
+
+
+    /*
+       มีผู้เล่นอยู่แล้ว
+       + เกมยังไม่เริ่ม
+       = รอ
+    */
+
+    if(
+        participantId &&
+        !gameStarted
+    ){
+
+        joinButton.innerHTML =
+            "🟡 รอเริ่มการแข่งขัน";
+
+        joinButton.disabled =
+            true;
+
+        return;
+
+    }
+
+
+    /*
+       ยังไม่มี participant
+       + เกมเริ่มแล้ว
+       = คนที่เพิ่งเข้ามา
+    */
+
+    if(
+        !participantId &&
+        gameStarted
+    ){
+
+        joinButton.innerHTML =
+            "🚀 เข้าร่วมและเริ่มเกม";
+
+        joinButton.disabled =
+            false;
+
+        return;
+
+    }
+
+
+    /*
+       ยังไม่มี participant
+       + เกมยังไม่เริ่ม
+    */
+
+    joinButton.innerHTML =
+        "👤 เข้าร่วมห้อง";
+
+    joinButton.disabled =
+        false;
+
+}
+
+
+/* =========================================
+   เข้าร่วมห้อง / เริ่มเกม
+========================================= */
+
+function joinRoom(){
+
+    var name =
+        nameInput.value.trim();
+
+
+    /* =====================================
+       ตรวจชื่อ
+    ===================================== */
+
+    if(name === ""){
+
+        alert(
+            "กรุณากรอกชื่อก่อนเข้าร่วม"
         );
+
+        nameInput.focus();
+
+        return;
+
+    }
+
+
+    /*
+       เก็บชื่อไว้ก่อน
+    */
+
+    localStorage.setItem(
+        "playerName",
+        name
+    );
+
+
+    /* =====================================
+       กรณีมี participant อยู่แล้ว
+       และเกมเริ่มแล้ว
+    ===================================== */
+
+    if(
+        participantId &&
+        gameStarted
+    ){
+
+        joinButton.disabled =
+            true;
+
+
+        joinButton.innerHTML =
+            "⏳ กำลังเข้าเกม...";
 
 
         db.collection("participants")
         .doc(participantId)
-        .update({
+        .set({
 
-            name:name,
+            name:
+                name,
 
-            status:"playing"
+            status:
+                "playing",
 
+            startedAt:
+                firebase.firestore
+                .FieldValue
+                .serverTimestamp()
+
+        },{
+            merge:true
         })
+
         .then(function(){
 
             window.location.href =
                 "quiz.html";
 
         })
+
         .catch(function(error){
 
-            console.log(
-                "Update Error:",
+            console.error(
+                "Update Participant Error:",
                 error
             );
 
+
+            joinButton.disabled =
+                false;
+
+            updateButton();
+
+
             alert(
-                "ไม่สามารถเริ่มเกมได้"
+                "❌ ไม่สามารถเริ่มเกมได้\n\n" +
+                error.message
             );
 
         });
@@ -355,31 +453,85 @@ function joinRoom(){
     }
 
 
+    /* =====================================
+       กรณีมี participant แล้ว
+       แต่เกมยังไม่เริ่ม
+    ===================================== */
 
-    /* -----------------------------
+    if(
+        participantId &&
+        !gameStarted
+    ){
+
+        alert(
+            "⏳ กรุณารอหัวหน้าห้องเริ่มการแข่งขัน"
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================
+       ยังไม่มี participant
+       
        สร้างผู้เล่นใหม่
-    ----------------------------- */
+       
+       สำคัญ:
+       ถ้าเกมเริ่มอยู่แล้ว
+       ให้ status = playing
+       และเข้าเกมทันที
+    ===================================== */
+
+    var newStatus =
+        gameStarted
+        ? "playing"
+        : "waiting";
+
+
+    joinButton.disabled =
+        true;
+
+
+    joinButton.innerHTML =
+        gameStarted
+        ? "⏳ กำลังเข้าเกม..."
+        : "⏳ กำลังเข้าร่วมห้อง...";
+
 
     db.collection("participants")
     .add({
 
-        name:name,
+        name:
+            name,
 
-        status:"waiting",
+        status:
+            newStatus,
 
         joinedAt:
-        firebase.firestore.FieldValue
-        .serverTimestamp()
+            firebase.firestore
+            .FieldValue
+            .serverTimestamp(),
+
+        startedAt:
+            gameStarted
+            ? firebase.firestore
+              .FieldValue
+              .serverTimestamp()
+            : null
 
     })
+
+
     .then(function(docRef){
 
+        /*
+           เก็บ participant ID
+        */
 
         participantId =
             docRef.id;
 
-
-        /* เก็บ ID */
 
         localStorage.setItem(
             "participantId",
@@ -387,43 +539,58 @@ function joinRoom(){
         );
 
 
-        /* เก็บชื่อ */
-
         localStorage.setItem(
             "playerName",
             name
         );
 
 
-        /* เปลี่ยนหน้าจอ */
+        /* =================================
+           ถ้าเกมเริ่มแล้ว
+           เข้า quiz ทันที
+        ================================= */
 
-        document.getElementById(
-            "status"
-        ).innerHTML =
+        if(gameStarted){
 
-        "🟡 เข้าร่วมห้องเรียบร้อยแล้ว";
+            window.location.href =
+                "quiz.html";
 
+            return;
 
-        document.getElementById(
-            "joinBtn"
-        ).innerHTML =
-
-        "🟡 รอเริ่มการแข่งขัน";
+        }
 
 
-        document.getElementById(
-            "joinBtn"
-        ).disabled = true;
+        /* =================================
+           ถ้าเกมยังไม่เริ่ม
+        ================================= */
 
+        statusElement.innerHTML =
+            "🟡 เข้าร่วมห้องเรียบร้อยแล้ว — รอหัวหน้าห้องเริ่ม";
+
+
+        joinButton.innerHTML =
+            "🟡 รอเริ่มการแข่งขัน";
+
+
+        joinButton.disabled =
+            true;
 
     })
+
+
     .catch(function(error){
 
-
-        console.log(
-            "Firebase Error:",
+        console.error(
+            "Join Room Error:",
             error
         );
+
+
+        joinButton.disabled =
+            false;
+
+
+        updateButton();
 
 
         alert(
@@ -436,29 +603,30 @@ function joinRoom(){
 }
 
 
-
-/* =====================================
-   ถ้ามี participant เดิม
-   ตรวจข้อมูลจาก Firebase
-===================================== */
+/* =========================================
+   ตรวจ participant เดิม
+========================================= */
 
 if(participantId){
 
     db.collection("participants")
     .doc(participantId)
     .get()
+
     .then(function(doc){
 
-        if(!doc.exists){
+        /*
+           ถ้า participant หาย
+        */
 
-            /* ถ้าเอกสารหาย
-               ให้เริ่มใหม่ */
+        if(!doc.exists){
 
             localStorage.removeItem(
                 "participantId"
             );
 
-            participantId = null;
+            participantId =
+                null;
 
             updateButton();
 
@@ -471,50 +639,112 @@ if(participantId){
             doc.data();
 
 
+        /*
+           โหลดชื่อจาก Firebase
+        */
+
         if(data.name){
 
-            document.getElementById(
-                "name"
-            ).value =
+            nameInput.value =
                 data.name;
 
-        }
-
-
-        if(data.status == "finished"){
-
-            document.getElementById(
-                "status"
-            ).innerHTML =
-
-            "✅ คุณทำแบบทดสอบเสร็จแล้ว";
-
-
-            document.getElementById(
-                "joinBtn"
-            ).innerHTML =
-
-            "✅ ทำแบบทดสอบแล้ว";
-
-
-            document.getElementById(
-                "joinBtn"
-            ).disabled = true;
+            localStorage.setItem(
+                "playerName",
+                data.name
+            );
 
         }
 
+
+        /*
+           ถ้าทำเสร็จแล้ว
+        */
+
+        if(
+            data.status ===
+            "finished"
+        ){
+
+            statusElement.innerHTML =
+                "✅ คุณทำแบบทดสอบเสร็จแล้ว";
+
+
+            joinButton.innerHTML =
+                "✅ ทำแบบทดสอบแล้ว";
+
+
+            joinButton.disabled =
+                true;
+
+            return;
+
+        }
+
+
+        /*
+           ถ้ายังเล่นอยู่
+        */
+
+        if(
+            data.status ===
+            "playing"
+        ){
+
+            /*
+               ถ้าเกมยังเริ่มอยู่
+               ให้สามารถกลับเข้าเกมได้
+            */
+
+            if(gameStarted){
+
+                joinButton.innerHTML =
+                    "🚀 กลับเข้าเกม";
+
+                joinButton.disabled =
+                    false;
+
+            }
+
+        }
 
     })
+
+
     .catch(function(error){
 
-        console.log(
-            "Participant Error:",
+        console.error(
+            "Participant Load Error:",
             error
         );
 
     });
 
 }
+
+
+/* =========================================
+   Enter เพื่อเข้าห้อง
+========================================= */
+
+nameInput.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            joinRoom();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   เริ่มต้น
+========================================= */
+
+updateButton();
 
 
 </script>
