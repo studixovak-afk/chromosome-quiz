@@ -5,7 +5,7 @@
 
 
 /* =========================================
-   ตรวจสอบว่ามี questions.js
+   ตรวจสอบ questions.js
 ========================================= */
 
 if(
@@ -44,7 +44,7 @@ var participantId =
 
 
 /* =========================================
-   ตรวจชื่อผู้เล่น
+   ตรวจชื่อ
 ========================================= */
 
 if(!playerName){
@@ -148,7 +148,7 @@ var progressBar =
 
 
 /* =========================================
-   แสดงชื่อ
+   แสดงชื่อผู้เล่น
 ========================================= */
 
 if(playerNameElement){
@@ -282,7 +282,7 @@ function showQuestion(){
 
 
     /* =========================
-       Progress
+       Progress Bar
     ========================= */
 
     if(progressBar){
@@ -377,8 +377,24 @@ function createAnswerButton(
         "button";
 
 
+    /*
+       ใช้ทั้ง 2 class
+       เพื่อรองรับ CSS เดิมและ CSS ใหม่
+    */
+
     button.className =
-        "answer-button";
+        "answer-btn answer-button";
+
+
+    /*
+       เก็บคำตอบจริงไว้ใน data-answer
+       ทำให้ตรวจคำตอบได้แม่นยำ
+    */
+
+    button.setAttribute(
+        "data-answer",
+        answer
+    );
 
 
     button.innerHTML =
@@ -435,7 +451,7 @@ function selectAnswer(
 
 
     /* =========================
-       เก็บคะแนน
+       เพิ่มคะแนน
     ========================= */
 
     if(correct){
@@ -446,7 +462,7 @@ function selectAnswer(
 
 
     /* =========================
-       เก็บประวัติคำตอบ
+       เก็บประวัติ
     ========================= */
 
     answersLog.push({
@@ -467,7 +483,7 @@ function selectAnswer(
 
 
     /* =========================
-       ปิดปุ่มทั้งหมด
+       ปุ่มทั้งหมด
     ========================= */
 
     var buttons =
@@ -489,10 +505,19 @@ function selectAnswer(
 
 
     /* =========================
-       แสดงถูก / ผิด
+       แสดงผลคำตอบ
     ========================= */
 
     if(correct){
+
+        /*
+           ตอบถูก
+        */
+
+        button.classList.add(
+            "correct"
+        );
+
 
         button.innerHTML =
             "✅ " +
@@ -504,6 +529,15 @@ function selectAnswer(
 
     else{
 
+        /*
+           ตอบผิด
+        */
+
+        button.classList.add(
+            "wrong"
+        );
+
+
         button.innerHTML =
             "❌ " +
             escapeHTML(
@@ -511,7 +545,10 @@ function selectAnswer(
             );
 
 
-        /* หาคำตอบที่ถูก */
+        /*
+           หาปุ่มคำตอบที่ถูก
+           จาก data-answer
+        */
 
         for(
             var j = 0;
@@ -519,17 +556,28 @@ function selectAnswer(
             j++
         ){
 
+            var buttonAnswer =
+                buttons[j].getAttribute(
+                    "data-answer"
+                );
+
+
             if(
-                buttons[j].innerText
-                .trim() ===
+                buttonAnswer ===
                 q.correct
             ){
+
+                buttons[j].classList.add(
+                    "correct"
+                );
+
 
                 buttons[j].innerHTML =
                     "✅ " +
                     escapeHTML(
                         q.correct
                     );
+
 
                 break;
 
@@ -549,6 +597,7 @@ function selectAnswer(
         function(){
 
             currentQuestion++;
+
 
             if(
                 currentQuestion <
@@ -593,6 +642,18 @@ function finishQuiz(){
 
 
     /* =========================
+       Progress เต็ม
+    ========================= */
+
+    if(progressBar){
+
+        progressBar.style.width =
+            "100%";
+
+    }
+
+
+    /* =========================
        บันทึก LocalStorage
     ========================= */
 
@@ -616,7 +677,10 @@ function finishQuiz(){
     );
 
 
-    /* ต้องบันทึกใหม่ทุกครั้งที่เล่น */
+    /*
+       ให้ result.js
+       บันทึกคะแนนใหม่
+    */
 
     localStorage.removeItem(
         "savedScore"
@@ -624,8 +688,8 @@ function finishQuiz(){
 
 
     /* =========================
-       อัปเดตสถานะผู้เล่น
-       เป็น finished
+       อัปเดต Firebase
+       participants
     ========================= */
 
     if(
@@ -659,10 +723,7 @@ function finishQuiz(){
                 .serverTimestamp()
 
         },{
-
-            merge:
-                true
-
+            merge:true
         })
         .catch(
             function(error){
@@ -689,7 +750,7 @@ function finishQuiz(){
 
 
 /* =========================================
-   ป้องกัน HTML
+   ป้องกัน HTML Injection
 ========================================= */
 
 function escapeHTML(
