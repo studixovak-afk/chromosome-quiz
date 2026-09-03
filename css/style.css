@@ -1,1108 +1,143 @@
-*{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
-}
-
-
-html{
-    min-height:100%;
-    background:#061a2d;
-}
-
-
-body{
-
-    margin:0;
-
-    min-height:100vh;
-    min-height:100dvh;
-
-    font-family:
-        Arial,
-        Tahoma,
-        sans-serif;
-
-    background:
-        linear-gradient(
-            135deg,
-            #061a2d 0%,
-            #0b3954 50%,
-            #087ea4 100%
-        );
-
-    color:#fff;
-
-    -webkit-text-size-adjust:100%;
-
-    -webkit-font-smoothing:antialiased;
-
-    overscroll-behavior:none;
-}
-
-
 /* =========================
-   CONTAINER
+   ปุ่มคำตอบ
 ========================= */
 
-.container{
-
-    width:94%;
-
-    max-width:700px;
-
-    margin:0 auto;
-
-    padding:
-        30px 0
-        50px;
-
-    text-align:center;
-}
-
-
-/* =========================
-   LOGO
-========================= */
-
-.logo{
-
-    font-size:65px;
-
-    line-height:1;
-
-    margin-bottom:15px;
-
-}
-
-
-/* =========================
-   HEADING
-========================= */
-
-h1{
-
-    font-size:32px;
-
-    line-height:1.25;
-
-    margin:
-        10px 0
-        12px;
-
-}
-
-
-.subtitle{
-
-    font-size:17px;
-
-    line-height:1.5;
-
-    color:#d7eaff;
-
-    margin:
-        0 0 25px;
-}
-
-
-/* =========================
-   CARD
-========================= */
-
-.card{
+.answer-btn{
 
     width:100%;
 
-    background:#fff;
+    margin:12px 0;
 
-    color:#222;
+    padding:18px 20px;
 
-    margin:
-        25px auto;
+    border:none;
 
-    padding:
-        28px 20px;
+    border-radius:18px;
 
-    border-radius:24px;
+    background:#ffffff;
 
-    box-shadow:
-        0 15px 40px
-        rgba(0,0,0,.30);
-}
+    color:#1f2937;
 
-
-.card h2{
-
-    margin-top:0;
-
-    line-height:1.4;
-}
-
-
-/* =========================
-   INPUT
-========================= */
-
-input{
-
-    width:100%;
-
-    min-height:54px;
-
-    padding:
-        14px 16px;
-
-    margin:
-        12px 0 16px;
-
-    border:
-        2px solid #ddd;
-
-    border-radius:12px;
-
-    background:#fff;
-
-    color:#222;
-
-    font-size:17px;
-
-    font-family:inherit;
-
-    outline:none;
-
-    -webkit-appearance:none;
-
-    appearance:none;
-}
-
-
-input:focus{
-
-    border-color:#087ea4;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(8,126,164,.12);
-}
-
-
-/* =========================
-   BUTTON
-   เน้น Touchscreen
-========================= */
-
-button{
-
-    width:100%;
-
-    min-height:54px;
-
-    border:0;
-
-    border-radius:12px;
-
-    padding:
-        14px 18px;
-
-    background:#087ea4;
-
-    color:#fff;
-
-    font-size:17px;
-
-    font-family:inherit;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    outline:none;
-
-    -webkit-appearance:none;
-
-    appearance:none;
-
-    -webkit-tap-highlight-color:transparent;
-
-    touch-action:manipulation;
-
-    user-select:none;
-
-    -webkit-user-select:none;
-
-    transition:
-        transform .12s ease,
-        background-color .12s ease;
-}
-
-
-/*
-   ตอนแตะปุ่ม
-   ไม่ใช้ hover
-*/
-
-button:active{
-
-    transform:scale(.98);
-
-}
-
-
-/* ปุ่มถูกปิด */
-
-button:disabled{
-
-    background:#aaa;
-
-    color:#fff;
-
-    opacity:1;
-
-    cursor:not-allowed;
-
-    transform:none;
-}
-
-
-/* =========================
-   RANKING BUTTON
-========================= */
-
-.ranking-button{
-
-    display:block;
-
-    width:100%;
-
-    min-height:52px;
-
-    margin-top:14px;
-
-    padding:
-        14px 18px;
-
-    border-radius:12px;
-
-    background:#eee;
-
-    color:#222;
-
-    text-decoration:none;
-
-    font-size:17px;
-
-    font-weight:600;
-
-    -webkit-tap-highlight-color:transparent;
-
-    touch-action:manipulation;
-
-    user-select:none;
-
-    -webkit-user-select:none;
-
-    transition:
-        transform .12s ease,
-        background-color .12s ease;
-}
-
-
-.ranking-button:active{
-
-    transform:scale(.98);
-
-    background:#ddd;
-}
-
-
-/* =========================
-   STATUS
-========================= */
-
-.status{
-
-    padding:14px;
-
-    margin-bottom:20px;
-
-    border-radius:12px;
-
-    background:#e9faff;
-
-    color:#087ea4;
-
-    font-size:16px;
-
-    line-height:1.5;
-}
-
-
-/* =========================
-   QUIZ
-========================= */
-
-.quiz-container{
-
-    width:94%;
-
-    max-width:700px;
-
-    margin:0 auto;
-
-    padding:
-        20px 0
-        45px;
-}
-
-
-/* =========================
-   QUIZ TOP
-========================= */
-
-.quiz-top{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:10px;
-
-    margin-bottom:18px;
-
-    font-size:15px;
-}
-
-
-/* =========================
-   TIMER
-========================= */
-
-.timer{
-
-    background:#fff;
-
-    color:#222;
-
-    padding:
-        9px 13px;
-
-    border-radius:20px;
-
-    white-space:nowrap;
-
-    font-weight:600;
-
-    box-shadow:
-        0 4px 12px
-        rgba(0,0,0,.15);
-}
-
-
-/* =========================
-   PROGRESS
-========================= */
-
-.progress{
-
-    width:100%;
-
-    height:11px;
-
-    background:rgba(255,255,255,.35);
-
-    border-radius:20px;
-
-    overflow:hidden;
-
-    margin-bottom:20px;
-}
-
-
-#progressBar{
-
-    width:0%;
-
-    height:100%;
-
-    background:#19d3ae;
-
-    border-radius:20px;
-
-    transition:
-        width .3s ease;
-}
-
-
-/* =========================
-   QUESTION NUMBER
-========================= */
-
-.question-number{
-
-    text-align:center;
-
-    margin:
-        18px 0
-        14px;
-
-    font-size:17px;
-
-    font-weight:600;
-}
-
-
-/* =========================
-   QUESTION BOX
-========================= */
-
-.question-box{
-
-    background:#fff;
-
-    color:#222;
-
-    padding:
-        24px 18px;
-
-    border-radius:22px;
-
-    box-shadow:
-        0 15px 40px
-        rgba(0,0,0,.30);
-}
-
-
-.question-box h2{
-
-    font-size:21px;
-
-    line-height:1.55;
-
-    margin:
-        0 0 20px;
+    font-size:20px;
 
     font-weight:700;
-}
-
-
-/* =========================
-   ANSWERS
-========================= */
-
-.answer{
-
-    display:block;
-
-    width:100%;
-
-    min-height:56px;
-
-    margin:9px 0;
-
-    padding:
-        14px 16px;
-
-    text-align:left;
-
-    background:#f0f3f5;
-
-    color:#222;
-
-    border:
-        2px solid transparent;
-
-    border-radius:12px;
-
-    font-size:16px;
-
-    line-height:1.4;
-
-    font-weight:500;
-
-    outline:none;
-
-    -webkit-appearance:none;
-
-    appearance:none;
-
-    -webkit-tap-highlight-color:transparent;
-
-    touch-action:manipulation;
-
-    user-select:none;
-
-    -webkit-user-select:none;
-
-    box-shadow:none;
-
-    transition:
-        transform .1s ease,
-        background-color .12s ease;
-}
-
-
-/*
-   เวลากดคำตอบ
-   ไม่มีแสง ไม่มีสีฟ้า Safari
-*/
-
-.answer:active{
-
-    transform:scale(.985);
-
-}
-
-
-/* =========================
-   ANSWER CORRECT
-========================= */
-
-.answer.correct{
-
-    background:#20b26b;
-
-    color:#fff;
-
-    border-color:#20b26b;
-
-}
-
-
-/* =========================
-   ANSWER WRONG
-========================= */
-
-.answer.wrong{
-
-    background:#e74c3c;
-
-    color:#fff;
-
-    border-color:#e74c3c;
-
-}
-
-
-/* =========================
-   ANSWER DISABLED
-========================= */
-
-.answer:disabled{
-
-    opacity:1;
-
-    cursor:not-allowed;
-
-}
-
-
-/* =========================
-   RESULT
-========================= */
-
-.big-icon{
-
-    font-size:65px;
-
-    line-height:1;
-
-    margin-bottom:10px;
-}
-
-
-.score{
-
-    font-size:58px;
-
-    font-weight:bold;
-
-    color:#087ea4;
-
-    margin:
-        18px 0;
-}
-
-
-.score small{
-
-    font-size:18px;
-
-    color:#555;
-
-}
-
-
-/* =========================
-   RANKING
-========================= */
-
-.ranking-card{
-
-    max-width:700px;
-
-    overflow:hidden;
-}
-
-
-table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-    margin-top:20px;
-
-    table-layout:fixed;
-}
-
-
-th{
-
-    background:#087ea4;
-
-    color:#fff;
-
-    padding:12px 5px;
-
-    font-size:14px;
-}
-
-
-td{
-
-    padding:12px 5px;
-
-    border-bottom:
-        1px solid #ddd;
-
-    color:#222;
-
-    font-size:14px;
-
-    word-break:break-word;
-}
-
-
-tr:nth-child(even){
-
-    background:#f4f7f8;
-}
-
-
-/* =========================
-   ONLINE STATUS
-========================= */
-
-#online{
-
-    margin:14px 0;
-
-    color:#168b55;
-
-    font-size:15px;
-}
-
-
-/* =========================
-   HOST
-========================= */
-
-hr{
-
-    border:0;
-
-    border-top:
-        1px solid #ddd;
-
-    margin:
-        22px 0;
-}
-
-
-/* =========================
-   IPHONE / MOBILE
-========================= */
-
-@media screen and (max-width:600px){
-
-    .container{
-
-        width:94%;
-
-        padding:
-            25px 0
-            40px;
-    }
-
-
-    .logo{
-
-        font-size:55px;
-
-    }
-
-
-    h1{
-
-        font-size:29px;
-
-    }
-
-
-    .subtitle{
-
-        font-size:16px;
-
-    }
-
-
-    .card{
-
-        padding:
-            24px 17px;
-
-        margin-top:22px;
-
-        border-radius:20px;
-
-    }
-
-
-    .quiz-container{
-
-        width:94%;
-
-        padding-top:18px;
-
-    }
-
-
-    .quiz-top{
-
-        font-size:14px;
-
-    }
-
-
-    .timer{
-
-        padding:
-            8px 11px;
-
-        font-size:14px;
-
-    }
-
-
-    .question-box{
-
-        padding:
-            21px 15px;
-
-        border-radius:20px;
-
-    }
-
-
-    .question-box h2{
-
-        font-size:20px;
-
-        line-height:1.5;
-
-    }
-
-
-    .answer{
-
-        min-height:54px;
-
-        padding:
-            14px;
-
-        font-size:16px;
-
-        border-radius:11px;
-
-    }
-
-
-    .score{
-
-        font-size:50px;
-
-    }
-
-
-    th,
-    td{
-
-        padding:
-            9px 4px;
-
-        font-size:12px;
-
-    }
-
-}
-
-
-/* =========================
-   IPAD
-========================= */
-
-@media screen and
-(min-width:601px) and
-(max-width:1024px){
-
-    .container{
-
-        width:88%;
-
-        max-width:850px;
-
-        padding-top:45px;
-
-    }
-
-
-    .logo{
-
-        font-size:75px;
-
-    }
-
-
-    h1{
-
-        font-size:40px;
-
-    }
-
-
-    .subtitle{
-
-        font-size:20px;
-
-    }
-
-
-    .card{
-
-        max-width:650px;
-
-        padding:
-            38px 35px;
-
-    }
-
-
-    .quiz-container{
-
-        width:88%;
-
-        max-width:850px;
-
-        padding-top:30px;
-
-    }
-
-
-    .question-box{
-
-        padding:
-            35px 30px;
-
-    }
-
-
-    .question-box h2{
-
-        font-size:24px;
-
-    }
-
-
-    .answer{
-
-        min-height:62px;
-
-        padding:
-            16px 18px;
-
-        font-size:19px;
-
-    }
-
-
-    .score{
-
-        font-size:62px;
-
-    }
-
-
-    th,
-    td{
-
-        padding:
-            13px 7px;
-
-        font-size:15px;
-
-    }
-
-}
-
-
-/* =========================
-   ป้องกัน Safari
-   จากการทำปุ่มเป็นสี/เงาแปลก
-========================= */
-
-button,
-.answer,
-.ranking-button,
-input{
-
-    -webkit-tap-highlight-color:rgba(0,0,0,0);
-
-    -webkit-touch-callout:none;
-}
-
-
-/* =========================
-   SAFE AREA
-   สำหรับ iPhone ที่มี Dynamic Island
-   และ Home Indicator
-========================= */
-
-@supports (padding:max(0px)){
-
-    body{
-
-        padding-top:
-            env(safe-area-inset-top);
-
-        padding-bottom:
-            env(safe-area-inset-bottom);
-
-    }
-
-}
-
-/* =========================
-   PLAYER NAME BUTTON
-========================= */
-
-.player-name-button{
-
-    background:none;
-
-    color:#087ea4;
-
-    padding:8px;
-
-    font-size:16px;
-
-    font-weight:bold;
-
-    border:0;
 
     cursor:pointer;
 
-    width:auto;
+    transition:all .25s ease;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.08);
 
 }
 
 
-.player-name-button:hover{
+.answer-btn:hover{
 
-    background:#e9faff;
+    transform:translateY(-3px);
 
-    transform:none;
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.15);
+
+}
+
+
+.answer-btn:active{
+
+    transform:scale(.98);
 
 }
 
 
 /* =========================
-   ANSWER DETAIL
+   สีแต่ละตัวเลือก
 ========================= */
 
-.answer-detail-box{
+.answer-btn:nth-child(1){
 
-    background:#f4f7f8;
+    background:#dbeafe;
 
-    color:#222;
+    border-left:8px solid #3b82f6;
 
-    padding:18px;
+}
 
-    margin:15px 0;
+.answer-btn:nth-child(2){
 
-    border-radius:15px;
+    background:#dcfce7;
 
-    text-align:left;
+    border-left:8px solid #22c55e;
 
-    border-left:6px solid #087ea4;
+}
+
+.answer-btn:nth-child(3){
+
+    background:#fef3c7;
+
+    border-left:8px solid #f59e0b;
+
+}
+
+.answer-btn:nth-child(4){
+
+    background:#fee2e2;
+
+    border-left:8px solid #ef4444;
 
 }
 
 
-.answer-detail-box.correct{
+/* =========================
+   ตอบถูก
+========================= */
 
-    border-left-color:#20b26b;
+.answer-btn.correct{
 
-}
+    background:#22c55e !important;
 
+    color:white !important;
 
-.answer-detail-box.wrong{
-
-    border-left-color:#e74c3c;
-
-}
-
-
-.answer-detail-box h3{
-
-    margin-top:0;
+    border-left:8px solid #15803d;
 
 }
 
 
-.answer-detail-box p{
+/* =========================
+   ตอบผิด
+========================= */
 
-    line-height:1.6;
+.answer-btn.wrong{
+
+    background:#ef4444 !important;
+
+    color:white !important;
+
+    border-left:8px solid #b91c1c;
 
 }
 
 
-/* มือถือ */
+/* =========================
+   ปุ่มที่ไม่ได้เลือก
+========================= */
 
-@media screen and (max-width:600px){
+.answer-btn.disabled{
 
-    .player-name-button{
+    opacity:.5;
 
-        font-size:15px;
-
-        padding:8px 4px;
-
-    }
+}
 
 
-    .answer-detail-box{
+/* =========================
+   มือถือ
+========================= */
 
-        padding:15px;
+@media(max-width:768px){
 
-        margin:12px 0;
-
-    }
-
-
-    .answer-detail-box h3{
+    .answer-btn{
 
         font-size:18px;
+
+        padding:16px;
 
     }
 
