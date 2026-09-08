@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 
 <head>
 
@@ -11,13 +11,11 @@ content="width=device-width, initial-scale=1.0">
 <meta name="theme-color"
 content="#087ea4">
 
-<title>Chromosome Quiz</title>
-
+<title>Quiz Game</title>
 
 <link rel="stylesheet"
 type="text/css"
 href="css/style.css">
-
 
 <!-- Firebase -->
 
@@ -29,47 +27,37 @@ href="css/style.css">
 
 </head>
 
-
 <body>
-
 
 <div class="quiz-container">
 
+    <!-- ส่วนบน -->
 
-    <!-- =========================
-         ส่วนด้านบน
-    ========================== -->
+    <div class="quiz-header">
 
-    <div class="quiz-top">
+        <div class="player-card">
 
-
-        <div>
-
-            ผู้เล่น:
-
-            <strong id="playerName"></strong>
+            👤 ผู้เล่น:
+            <strong id="playerName">
+                Loading...
+            </strong>
 
         </div>
 
-
-        <div class="timer">
+        <div class="timer-card">
 
             ⏱️
-
             <span id="time">
                 00:00
             </span>
 
         </div>
 
-
     </div>
 
 
 
-    <!-- =========================
-         Progress Bar
-    ========================== -->
+    <!-- Progress -->
 
     <div class="progress">
 
@@ -79,13 +67,11 @@ href="css/style.css">
 
 
 
-    <!-- =========================
-         หมายเลขข้อ
-    ========================== -->
+    <!-- หมายเลขข้อ -->
 
     <div
-    class="question-number"
-    id="questionNumber">
+    id="questionNumber"
+    class="question-number">
 
         ข้อ 1 / 15
 
@@ -93,47 +79,41 @@ href="css/style.css">
 
 
 
-    <!-- =========================
-         กล่องคำถาม
-    ========================== -->
+    <!-- กล่องคำถาม -->
 
     <div class="question-box">
 
-
         <h2 id="question">
 
-            ⏳ กำลังรอหัวหน้าห้องเริ่มการแข่งขัน...
+            กำลังโหลดคำถาม...
 
         </h2>
 
+    </div>
 
-        <div id="answers">
 
-            <p style="text-align:center;">
 
-                เมื่อหัวหน้าห้องกด
-                <strong>เริ่มการแข่งขัน</strong>
-                เกมจะเริ่มโดยอัตโนมัติ
+    <!-- ตัวเลือก -->
 
-            </p>
-
-        </div>
-
+    <div
+    id="answers"
+    class="answers-container">
 
     </div>
+
 
 
 </div>
 
 
 
-<!-- =========================
-     JavaScript เกม
-========================== -->
+<!-- โหลดคลังคำถาม -->
 
 <script src="js/questions.js"></script>
-<script src="js/quiz.js"></script>
 
+<!-- ระบบเกม -->
+
+<script src="js/quiz.js"></script>
 
 </body>
 
