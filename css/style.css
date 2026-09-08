@@ -1,144 +1,598 @@
-/* =========================
-   ปุ่มคำตอบ
-========================= */
+/* ===================================
+   GLOBAL
+=================================== */
 
-.answer-btn{
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    min-height:100vh;
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #061a2d,
+            #0b3c5d
+        );
+
+    color:#222;
+}
+
+
+/* ===================================
+   CONTAINER
+=================================== */
+
+.container{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+    padding:30px 20px;
+}
+
+
+/* ===================================
+   CARD
+=================================== */
+
+.card{
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:30px;
+
+    margin:20px auto;
+
+    box-shadow:
+        0 15px 40px rgba(
+            0,
+            0,
+            0,
+            0.15
+        );
+
+    animation:
+        fadeIn .4s ease;
+}
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:
+            translateY(
+                15px
+            );
+    }
+
+    to{
+        opacity:1;
+        transform:
+            translateY(
+                0
+            );
+    }
+
+}
+
+
+/* ===================================
+   LOGO
+=================================== */
+
+.logo{
+    font-size:80px;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.big-icon{
+    text-align:center;
+    font-size:70px;
+    margin-bottom:15px;
+}
+
+
+/* ===================================
+   TEXT
+=================================== */
+
+h1{
+    text-align:center;
+    margin-bottom:10px;
+    color:#0b3c5d;
+}
+
+h2{
+    margin-bottom:15px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#ddd;
+    margin-bottom:20px;
+}
+
+p{
+    line-height:1.6;
+}
+
+
+/* ===================================
+   INPUT
+=================================== */
+
+input{
 
     width:100%;
 
-    margin:12px 0;
+    padding:15px;
 
-    padding:18px 20px;
+    border-radius:14px;
+
+    border:2px solid #ddd;
+
+    font-size:16px;
+
+    margin-top:10px;
+    margin-bottom:15px;
+
+    transition:.2s;
+}
+
+input:focus{
+
+    border-color:#00bcd4;
+
+    outline:none;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            0,
+            188,
+            212,
+            .15
+        );
+
+}
+
+
+/* ===================================
+   BUTTON
+=================================== */
+
+button{
+
+    width:100%;
 
     border:none;
 
-    border-radius:18px;
+    cursor:pointer;
 
-    background:#ffffff;
+    padding:16px;
 
-    color:#1f2937;
+    border-radius:16px;
 
-    font-size:20px;
+    font-size:18px;
 
     font-weight:700;
 
-    cursor:pointer;
+    transition:.2s;
 
-    transition:all .25s ease;
+    margin-top:10px;
+}
+
+button:hover{
+
+    transform:
+        translateY(-2px);
+
+}
+
+button:active{
+
+    transform:
+        scale(.98);
+
+}
+
+
+/* ===================================
+   PRIMARY BUTTON
+=================================== */
+
+#joinBtn,
+#startBtn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #00c853,
+            #00e676
+        );
+
+    color:white;
+}
+
+
+/* ===================================
+   STOP BUTTON
+=================================== */
+
+#stopBtn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff5252,
+            #ff1744
+        );
+
+    color:white;
+}
+
+
+/* ===================================
+   QUIZ PAGE
+=================================== */
+
+.quiz-container{
+
+    max-width:900px;
+
+    margin:auto;
+
+    padding:20px;
+}
+
+.quiz-top{
+
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    align-items:center;
+
+    color:white;
+
+    margin-bottom:15px;
+}
+
+.timer{
+
+    font-weight:bold;
+    font-size:20px;
+}
+
+
+/* ===================================
+   PROGRESS BAR
+=================================== */
+
+.progress{
+
+    width:100%;
+
+    height:14px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .2
+        );
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+    margin-bottom:15px;
+}
+
+#progressBar{
+
+    height:100%;
+
+    width:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00e676,
+            #00c853
+        );
+
+    transition:.3s;
+}
+
+
+/* ===================================
+   QUESTION
+=================================== */
+
+.question-box{
+
+    background:white;
+
+    border-radius:30px;
+
+    padding:30px;
 
     box-shadow:
-        0 4px 12px rgba(0,0,0,.08);
+        0 15px 35px rgba(
+            0,
+            0,
+            0,
+            .15
+        );
+}
 
+.question-number{
+
+    text-align:center;
+
+    color:white;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    margin-bottom:15px;
+}
+
+#question{
+
+    font-size:34px;
+
+    margin-bottom:25px;
+
+    text-align:center;
 }
 
 
-.answer-btn:hover{
+/* ===================================
+   ANSWER BUTTONS
+=================================== */
 
-    transform:translateY(-3px);
+.answer-btn,
+.answer-button{
 
-    box-shadow:
-        0 8px 20px rgba(0,0,0,.15);
+    width:100%;
 
+    color:white;
+
+    border:none;
+
+    padding:22px;
+
+    margin:12px 0;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    border-radius:20px;
+
+    transition:.2s;
 }
 
 
-.answer-btn:active{
+/* สีแต่ละปุ่ม */
 
-    transform:scale(.98);
+.answer-btn:nth-child(1),
+.answer-button:nth-child(1){
 
+    background:#e91e63;
+}
+
+.answer-btn:nth-child(2),
+.answer-button:nth-child(2){
+
+    background:#2196f3;
+}
+
+.answer-btn:nth-child(3),
+.answer-button:nth-child(3){
+
+    background:#ff9800;
+}
+
+.answer-btn:nth-child(4),
+.answer-button:nth-child(4){
+
+    background:#4caf50;
 }
 
 
-/* =========================
-   สีแต่ละตัวเลือก
-========================= */
+.answer-btn:hover,
+.answer-button:hover{
 
-.answer-btn:nth-child(1){
-
-    background:#dbeafe;
-
-    border-left:8px solid #3b82f6;
-
-}
-
-.answer-btn:nth-child(2){
-
-    background:#dcfce7;
-
-    border-left:8px solid #22c55e;
-
-}
-
-.answer-btn:nth-child(3){
-
-    background:#fef3c7;
-
-    border-left:8px solid #f59e0b;
-
-}
-
-.answer-btn:nth-child(4){
-
-    background:#fee2e2;
-
-    border-left:8px solid #ef4444;
-
+    transform:
+        scale(1.02);
 }
 
 
-/* =========================
-   ตอบถูก
-========================= */
+/* ===================================
+   CORRECT / WRONG
+=================================== */
 
-.answer-btn.correct{
+.correct{
 
-    background:#22c55e !important;
+    background:
+        #00c853 !important;
 
     color:white !important;
-
-    border-left:8px solid #15803d;
-
 }
 
+.wrong{
 
-/* =========================
-   ตอบผิด
-========================= */
-
-.answer-btn.wrong{
-
-    background:#ef4444 !important;
+    background:
+        #ff1744 !important;
 
     color:white !important;
-
-    border-left:8px solid #b91c1c;
-
 }
 
 
-/* =========================
-   ปุ่มที่ไม่ได้เลือก
-========================= */
+/* ===================================
+   RESULT PAGE
+=================================== */
 
-.answer-btn.disabled{
+.result-card{
 
-    opacity:.5;
+    max-width:700px;
+    text-align:center;
+}
 
+#score{
+
+    font-size:72px;
+    font-weight:bold;
+    color:#0b7fab;
+}
+
+#message{
+
+    margin-top:15px;
+    font-size:24px;
+    font-weight:bold;
 }
 
 
-/* =========================
-   มือถือ
-========================= */
+/* ===================================
+   RANKING
+=================================== */
+
+.ranking-card{
+
+    max-width:900px;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+}
+
+th{
+
+    background:#0b3c5d;
+
+    color:white;
+
+    padding:14px;
+}
+
+td{
+
+    padding:14px;
+
+    text-align:center;
+
+    border-bottom:
+        1px solid #eee;
+}
+
+tr:hover{
+
+    background:#f5f5f5;
+}
+
+
+/* ===================================
+   LINKS
+=================================== */
+
+.ranking-button{
+
+    display:block;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    margin-top:15px;
+
+    padding:15px;
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2196f3,
+            #03a9f4
+        );
+
+    color:white;
+
+    font-weight:bold;
+
+    transition:.2s;
+}
+
+.ranking-button:hover{
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* ===================================
+   STATUS
+=================================== */
+
+#status,
+#online,
+#connectionStatus{
+
+    text-align:center;
+
+    margin-top:10px;
+
+    margin-bottom:15px;
+
+    font-weight:bold;
+}
+
+
+/* ===================================
+   MOBILE
+=================================== */
 
 @media(max-width:768px){
 
-    .answer-btn{
+    #question{
+
+        font-size:24px;
+    }
+
+    .answer-btn,
+    .answer-button{
 
         font-size:18px;
+        padding:18px;
+    }
 
-        padding:16px;
+    .quiz-top{
 
+        flex-direction:column;
+        gap:10px;
     }
 
 }
