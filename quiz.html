@@ -3,117 +3,172 @@
 
 <head>
 
-<meta charset="utf-8">
+    <meta charset="utf-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<meta name="theme-color"
-content="#087ea4">
+    <meta
+        name="theme-color"
+        content="#087ea4">
 
-<title>Quiz Game</title>
+    <title>Quiz Game</title>
 
-<link rel="stylesheet"
-type="text/css"
-href="css/style.css">
 
-<!-- Firebase -->
+    <!-- =========================
+         CSS
+    ========================== -->
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <link
+        rel="stylesheet"
+        type="text/css"
+        href="css/style.css">
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-<script src="js/firebase.js"></script>
+    <!-- =========================
+         Firebase
+    ========================== -->
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script src="js/firebase.js"></script>
 
 </head>
 
+
 <body>
 
-<div class="quiz-container">
 
-    <!-- ส่วนบน -->
+    <!-- =========================
+         QUIZ CONTAINER
+    ========================== -->
 
-    <div class="quiz-header">
+    <div class="quiz-container">
 
-        <div class="player-card">
 
-            👤 ผู้เล่น:
-            <strong id="playerName">
-                Loading...
-            </strong>
+        <!-- =========================
+             ส่วนหัว
+        ========================== -->
+
+        <div class="quiz-top">
+
+
+            <!-- ชื่อผู้เล่น -->
+
+            <div class="player-info">
+
+                👤 ผู้เล่น:
+
+                <strong id="playerName">
+                    กำลังโหลด...
+                </strong>
+
+            </div>
+
+
+            <!-- เวลา -->
+
+            <div class="timer">
+
+                ⏱️
+
+                <span id="time">
+                    00:00
+                </span>
+
+            </div>
+
 
         </div>
 
-        <div class="timer-card">
 
-            ⏱️
-            <span id="time">
-                00:00
-            </span>
+
+        <!-- =========================
+             Progress Bar
+        ========================== -->
+
+        <div class="progress">
+
+            <div
+                id="progressBar">
+            </div>
 
         </div>
 
+
+
+        <!-- =========================
+             หมายเลขข้อ
+        ========================== -->
+
+        <div
+            class="question-number"
+            id="questionNumber">
+
+            ข้อ 1 / 15
+
+        </div>
+
+
+
+        <!-- =========================
+             กล่องคำถาม
+        ========================== -->
+
+        <div class="question-box">
+
+
+            <!-- คำถาม -->
+
+            <h2 id="question">
+
+                ⏳ กำลังโหลดคำถาม...
+
+            </h2>
+
+
+            <!-- =========================
+                 ตัวเลือกคำตอบ
+            ========================== -->
+
+            <div id="answers">
+
+                <p
+                    style="
+                        text-align:center;
+                        opacity:0.7;
+                    ">
+
+                    ⏳ กำลังเตรียมคำถาม...
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
     </div>
 
 
 
-    <!-- Progress -->
+    <!-- =========================
+         โหลดคลังคำถามก่อน
+    ========================== -->
 
-    <div class="progress">
-
-        <div id="progressBar"></div>
-
-    </div>
+    <script src="js/questions.js"></script>
 
 
+    <!-- =========================
+         ระบบเกม
+    ========================== -->
 
-    <!-- หมายเลขข้อ -->
+    <script src="js/quiz.js"></script>
 
-    <div
-    id="questionNumber"
-    class="question-number">
-
-        ข้อ 1 / 15
-
-    </div>
-
-
-
-    <!-- กล่องคำถาม -->
-
-    <div class="question-box">
-
-        <h2 id="question">
-
-            กำลังโหลดคำถาม...
-
-        </h2>
-
-    </div>
-
-
-
-    <!-- ตัวเลือก -->
-
-    <div
-    id="answers"
-    class="answers-container">
-
-    </div>
-
-
-
-</div>
-
-
-
-<!-- โหลดคลังคำถาม -->
-
-<script src="js/questions.js"></script>
-
-<!-- ระบบเกม -->
-
-<script src="js/quiz.js"></script>
 
 </body>
 
