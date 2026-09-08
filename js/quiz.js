@@ -1,18 +1,85 @@
 /* =========================================
    CHROMOSOME QUIZ
    ระบบเล่นเกม
+   สุ่ม 15 ข้อจากคลังคำถาม
 ========================================= */
 
 
 /* =========================================
-   ตรวจสอบ questions.js
+   ข้อมูลผู้เล่น
+========================================= */
+
+var playerName =
+    localStorage.getItem("playerName");
+
+var participantId =
+    localStorage.getItem("participantId");
+
+
+/* =========================================
+   ตรวจสอบผู้เล่น
+========================================= */
+
+if(!playerName){
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================================
+   ตรวจสอบคลังคำถาม
+========================================= */
+
+/*
+   รองรับกรณี questions.js ใช้
+
+   var questions = [...]
+
+   หรือ
+
+   const questions = [...]
+
+   หรือ
+
+   window.questions = [...]
+*/
+
+var questionBank = null;
+
+
+if(
+    typeof questions !== "undefined" &&
+    Array.isArray(questions)
+){
+
+    questionBank = questions;
+
+}
+
+else if(
+    typeof window.questions !== "undefined" &&
+    Array.isArray(window.questions)
+){
+
+    questionBank = window.questions;
+
+}
+
+
+/* =========================================
+   ถ้าไม่พบคลังคำถาม
 ========================================= */
 
 if(
-    typeof questions === "undefined" ||
-    !Array.isArray(questions) ||
-    questions.length === 0
+    !questionBank ||
+    questionBank.length === 0
 ){
+
+    console.error(
+        "ไม่พบคลังคำถาม"
+    );
 
     alert(
         "❌ ไม่พบคลังคำถาม\n\n" +
@@ -21,36 +88,54 @@ if(
     );
 
     throw new Error(
-        "questions.js not found"
+        "Question bank not found"
     );
 
 }
 
 
 /* =========================================
-   ข้อมูลผู้เล่น
+   ตรวจรูปแบบคำถาม
 ========================================= */
 
-var playerName =
-    localStorage.getItem(
-        "playerName"
+var validQuestions = [];
+
+
+for(
+    var qIndex = 0;
+    qIndex < questionBank.length;
+    qIndex++
+){
+
+    var q =
+        questionBank[qIndex];
+
+
+    if(
+        q &&
+        typeof q.question === "string" &&
+        Array.isArray(q.options) &&
+        q.options.length >= 2 &&
+        typeof q.correct === "string"
+    ){
+
+        validQuestions.push(q);
+
+    }
+
+}
+
+
+if(validQuestions.length === 0){
+
+    alert(
+        "❌ คลังคำถามมีข้อมูลไม่ถูกต้อง\n\n" +
+        "แต่ละข้อควรมี question, options และ correct"
     );
 
-
-var participantId =
-    localStorage.getItem(
-        "participantId"
+    throw new Error(
+        "Invalid question format"
     );
-
-
-/* =========================================
-   ตรวจชื่อ
-========================================= */
-
-if(!playerName){
-
-    window.location.href =
-        "index.html";
 
 }
 
@@ -75,23 +160,61 @@ var answersLog = [];
 
 
 /* =========================================
+   สุ่มแบบ Fisher-Yates
+========================================= */
+
+function shuffleArray(array){
+
+    var result =
+        array.slice();
+
+
+    for(
+        var i = result.length - 1;
+        i > 0;
+        i--
+    ){
+
+        var j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+
+        var temp =
+            result[i];
+
+
+        result[i] =
+            result[j];
+
+
+        result[j] =
+            temp;
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =========================================
    สุ่มคำถาม
 ========================================= */
 
+/*
+   แต่ละคนที่เปิดเกม
+   จะสุ่มได้ชุดคำถามของตัวเอง
+*/
+
 var quizQuestions =
-    questions.slice();
+    shuffleArray(
+        validQuestions
+    );
 
-
-quizQuestions.sort(
-    function(){
-
-        return Math.random() - 0.5;
-
-    }
-);
-
-
-/* เอา 15 ข้อ */
 
 quizQuestions =
     quizQuestions.slice(
@@ -105,6 +228,31 @@ quizQuestions =
 
 totalQuestions =
     quizQuestions.length;
+
+
+/* =========================================
+   Debug
+========================================= */
+
+console.log(
+    "📚 จำนวนคำถามทั้งหมด:",
+    validQuestions.length
+);
+
+console.log(
+    "🎯 จำนวนคำถามที่ใช้:",
+    totalQuestions
+);
+
+console.log(
+    "👤 ผู้เล่น:",
+    playerName
+);
+
+console.log(
+    "📝 ชุดคำถามของผู้เล่น:",
+    quizQuestions
+);
 
 
 /* =========================================
@@ -153,10 +301,8 @@ var progressBar =
 
 if(playerNameElement){
 
-    playerNameElement.innerHTML =
-        escapeHTML(
-            playerName
-        );
+    playerNameElement.textContent =
+        playerName;
 
 }
 
@@ -225,16 +371,16 @@ function updateTimer(){
     var minuteText =
         minutes < 10
         ? "0" + minutes
-        : minutes;
+        : String(minutes);
 
 
     var secondText =
         seconds < 10
         ? "0" + seconds
-        : seconds;
+        : String(seconds);
 
 
-    timeElement.innerHTML =
+    timeElement.textContent =
         minuteText +
         ":" +
         secondText;
@@ -272,7 +418,7 @@ function showQuestion(){
 
     if(questionNumberElement){
 
-        questionNumberElement.innerHTML =
+        questionNumberElement.textContent =
             "ข้อ " +
             (currentQuestion + 1) +
             " / " +
@@ -282,7 +428,7 @@ function showQuestion(){
 
 
     /* =========================
-       Progress Bar
+       Progress
     ========================= */
 
     if(progressBar){
@@ -306,10 +452,8 @@ function showQuestion(){
 
     if(questionElement){
 
-        questionElement.innerHTML =
-            escapeHTML(
-                q.question
-            );
+        questionElement.textContent =
+            q.question;
 
     }
 
@@ -330,18 +474,9 @@ function showQuestion(){
 
 
     var options =
-        q.options.slice();
-
-
-    /* สุ่มตัวเลือก */
-
-    options.sort(
-        function(){
-
-            return Math.random() - 0.5;
-
-        }
-    );
+        shuffleArray(
+            q.options
+        );
 
 
     for(
@@ -377,18 +512,13 @@ function createAnswerButton(
         "button";
 
 
-    /*
-       ใช้ทั้ง 2 class
-       เพื่อรองรับ CSS เดิมและ CSS ใหม่
-    */
-
     button.className =
         "answer-btn answer-button";
 
 
     /*
-       เก็บคำตอบจริงไว้ใน data-answer
-       ทำให้ตรวจคำตอบได้แม่นยำ
+       เก็บคำตอบจริง
+       ป้องกันปัญหา HTML
     */
 
     button.setAttribute(
@@ -397,10 +527,8 @@ function createAnswerButton(
     );
 
 
-    button.innerHTML =
-        escapeHTML(
-            answer
-        );
+    button.textContent =
+        answer;
 
 
     button.onclick =
@@ -462,7 +590,7 @@ function selectAnswer(
 
 
     /* =========================
-       เก็บประวัติ
+       บันทึกประวัติ
     ========================= */
 
     answersLog.push({
@@ -483,7 +611,7 @@ function selectAnswer(
 
 
     /* =========================
-       ปุ่มทั้งหมด
+       ปิดปุ่มทั้งหมด
     ========================= */
 
     var buttons =
@@ -505,49 +633,34 @@ function selectAnswer(
 
 
     /* =========================
-       แสดงผลคำตอบ
+       แสดงคำตอบ
     ========================= */
 
     if(correct){
-
-        /*
-           ตอบถูก
-        */
 
         button.classList.add(
             "correct"
         );
 
 
-        button.innerHTML =
-            "✅ " +
-            escapeHTML(
-                answer
-            );
+        button.textContent =
+            "✅ " + answer;
 
     }
 
     else{
-
-        /*
-           ตอบผิด
-        */
 
         button.classList.add(
             "wrong"
         );
 
 
-        button.innerHTML =
-            "❌ " +
-            escapeHTML(
-                answer
-            );
+        button.textContent =
+            "❌ " + answer;
 
 
         /*
-           หาปุ่มคำตอบที่ถูก
-           จาก data-answer
+           หาคำตอบที่ถูก
         */
 
         for(
@@ -572,11 +685,9 @@ function selectAnswer(
                 );
 
 
-                buttons[j].innerHTML =
+                buttons[j].textContent =
                     "✅ " +
-                    escapeHTML(
-                        q.correct
-                    );
+                    q.correct;
 
 
                 break;
@@ -687,9 +798,23 @@ function finishQuiz(){
     );
 
 
+    console.log(
+        "🏁 จบเกม"
+    );
+
+    console.log(
+        "คะแนน:",
+        score
+    );
+
+    console.log(
+        "เวลา:",
+        time
+    );
+
+
     /* =========================
-       อัปเดต Firebase
-       participants
+       อัปเดต participants
     ========================= */
 
     if(
@@ -717,6 +842,9 @@ function finishQuiz(){
             time:
                 time,
 
+            answersLog:
+                answersLog,
+
             finishedAt:
                 firebase.firestore
                 .FieldValue
@@ -724,27 +852,63 @@ function finishQuiz(){
 
         },{
             merge:true
+
         })
-        .catch(
-            function(error){
+        .then(
+
+            function(){
 
                 console.log(
+                    "✅ อัปเดตข้อมูลผู้เล่นสำเร็จ"
+                );
+
+
+                /*
+                   รอ Firebase บันทึกเสร็จ
+                   แล้วค่อยไป result
+                */
+
+                window.location.href =
+                    "result.html";
+
+            }
+
+        )
+        .catch(
+
+            function(error){
+
+                console.error(
                     "Participant update error:",
                     error
                 );
 
+
+                /*
+                   ถึง Firebase มีปัญหา
+                   ก็ยังให้ผู้เล่นดูผลได้
+                */
+
+                window.location.href =
+                    "result.html";
+
             }
+
         );
 
     }
 
+    else{
 
-    /* =========================
-       ไปหน้าสรุปผล
-    ========================= */
+        /*
+           ถ้าไม่มี participantId
+           ก็ยังไปหน้าผลลัพธ์
+        */
 
-    window.location.href =
-        "result.html";
+        window.location.href =
+            "result.html";
+
+    }
 
 }
 
