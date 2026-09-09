@@ -114,7 +114,7 @@ if(!playerName){
    ตั้งค่าเกม
 ========================================= */
 
-var totalQuestions = 15;
+var totalQuestions = 20;
 
 var currentQuestion = 0;
 
