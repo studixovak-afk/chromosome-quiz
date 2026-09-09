@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 
 <head>
 
@@ -9,10 +9,9 @@
 content="width=device-width, initial-scale=1.0">
 
 <meta name="theme-color"
-content="#087ea4">
+content="#6c5ce7">
 
-<title>Chromosome Quiz</title>
-
+<title>Trivia Battle 🎮</title>
 
 <link rel="stylesheet"
 type="text/css"
@@ -27,6 +26,520 @@ href="css/style.css">
 
 <script src="js/firebase.js"></script>
 
+
+<style>
+
+/* =========================================
+   TRIVIA HOME
+========================================= */
+
+body{
+    margin:0;
+    min-height:100vh;
+
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            #a29bfe 0%,
+            #6c5ce7 35%,
+            #4834d4 70%,
+            #2d1b69 100%
+        );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow-x:hidden;
+}
+
+
+/* =========================================
+   พื้นหลังตกแต่ง
+========================================= */
+
+body::before{
+    content:"";
+
+    position:fixed;
+
+    width:260px;
+    height:260px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,0.08);
+
+    top:-80px;
+    left:-80px;
+
+    pointer-events:none;
+}
+
+
+body::after{
+    content:"";
+
+    position:fixed;
+
+    width:350px;
+    height:350px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,0.06);
+
+    bottom:-150px;
+    right:-120px;
+
+    pointer-events:none;
+}
+
+
+/* =========================================
+   Container
+========================================= */
+
+.container{
+    width:100%;
+    max-width:520px;
+
+    padding:25px 18px;
+
+    box-sizing:border-box;
+
+    position:relative;
+    z-index:2;
+}
+
+
+/* =========================================
+   Logo
+========================================= */
+
+.logo{
+    width:105px;
+    height:105px;
+
+    margin:0 auto 18px;
+
+    border-radius:30px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:55px;
+
+    background:
+        rgba(255,255,255,0.18);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.25);
+
+    box-shadow:
+        0 15px 35px
+        rgba(0,0,0,0.20);
+
+    backdrop-filter:blur(10px);
+
+    animation:
+        floatLogo 3s ease-in-out infinite;
+}
+
+
+@keyframes floatLogo{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+
+}
+
+
+/* =========================================
+   Title
+========================================= */
+
+h1{
+
+    text-align:center;
+
+    color:white;
+
+    font-size:42px;
+
+    margin:
+        0 0 8px;
+
+    font-weight:800;
+
+    letter-spacing:-1px;
+
+    text-shadow:
+        0 4px 12px
+        rgba(0,0,0,0.20);
+
+}
+
+
+.subtitle{
+
+    text-align:center;
+
+    color:
+        rgba(255,255,255,0.85);
+
+    font-size:16px;
+
+    margin:
+        0 0 25px;
+
+}
+
+
+/* =========================================
+   Card
+========================================= */
+
+.card{
+
+    background:
+        rgba(255,255,255,0.96);
+
+    border-radius:26px;
+
+    padding:30px 25px;
+
+    box-shadow:
+        0 25px 60px
+        rgba(20,10,70,0.30);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.7);
+
+}
+
+
+/* =========================================
+   Status
+========================================= */
+
+#status{
+
+    padding:
+        13px 15px;
+
+    border-radius:14px;
+
+    background:#f3f1ff;
+
+    color:#5b4bc4;
+
+    font-weight:600;
+
+    font-size:14px;
+
+    text-align:center;
+
+    margin-top:0;
+
+}
+
+
+/* =========================================
+   Heading
+========================================= */
+
+.card h2{
+
+    text-align:center;
+
+    font-size:25px;
+
+    color:#2d3436;
+
+    margin:
+        22px 0 5px;
+
+}
+
+
+.card p:not(#status){
+
+    text-align:center;
+
+    color:#636e72;
+
+}
+
+
+/* =========================================
+   Input
+========================================= */
+
+#name{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:
+        16px 18px;
+
+    border:
+        2px solid
+        #e8e5ff;
+
+    border-radius:15px;
+
+    outline:none;
+
+    font-size:16px;
+
+    background:#faf9ff;
+
+    transition:
+        0.2s ease;
+
+}
+
+
+#name:focus{
+
+    border-color:#6c5ce7;
+
+    background:white;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(108,92,231,0.12);
+
+}
+
+
+/* =========================================
+   Main Button
+========================================= */
+
+#joinBtn{
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:
+        16px 20px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6c5ce7,
+            #8e7cff
+        );
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 10px 22px
+        rgba(108,92,231,0.30);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        opacity 0.15s ease;
+
+}
+
+
+#joinBtn:hover{
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 14px 28px
+        rgba(108,92,231,0.38);
+
+}
+
+
+#joinBtn:active{
+
+    transform:
+        translateY(1px);
+
+}
+
+
+#joinBtn:disabled{
+
+    opacity:0.65;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+    box-shadow:none;
+
+}
+
+
+/* =========================================
+   Ranking Button
+========================================= */
+
+.ranking-button{
+
+    display:block;
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    margin-top:14px;
+
+    padding:
+        14px 18px;
+
+    border-radius:15px;
+
+    background:#f1efff;
+
+    color:#5b4bc4;
+
+    text-decoration:none;
+
+    text-align:center;
+
+    font-weight:700;
+
+    transition:
+        0.2s ease;
+
+}
+
+
+.ranking-button:hover{
+
+    background:#e5e1ff;
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =========================================
+   Mobile
+========================================= */
+
+@media(max-width:500px){
+
+    .container{
+        padding:
+            20px 14px;
+    }
+
+
+    .logo{
+
+        width:85px;
+        height:85px;
+
+        font-size:45px;
+
+        border-radius:25px;
+
+    }
+
+
+    h1{
+
+        font-size:34px;
+
+    }
+
+
+    .subtitle{
+
+        font-size:14px;
+
+    }
+
+
+    .card{
+
+        padding:
+            25px 18px;
+
+        border-radius:22px;
+
+    }
+
+}
+
+
+/* =========================================
+   Animation
+========================================= */
+
+.card{
+
+    animation:
+        cardAppear 0.5s ease;
+
+}
+
+
+@keyframes cardAppear{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(15px)
+            scale(0.98);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+</style>
+
 </head>
 
 
@@ -36,28 +549,38 @@ href="css/style.css">
 <div class="container">
 
 
+    <!-- =========================
+         LOGO
+    ========================== -->
+
     <div class="logo">
-        🧬
+        🧠
     </div>
 
 
+    <!-- =========================
+         TITLE
+    ========================== -->
+
     <h1>
-        Chromosome Quiz
+        Trivia Battle 🎮
     </h1>
 
 
     <p class="subtitle">
-        เกมตอบคำถามความรู้เรื่องโครโมโซม
+        เกมตอบคำถามสุดปั่น<br>
+        วัดความรู้ ใครจะได้คะแนนสูงสุด? 🏆
     </p>
 
 
+    <!-- =========================
+         CARD
+    ========================== -->
 
     <div class="card">
 
 
-        <!-- =========================
-             สถานะเกม
-        ========================== -->
+        <!-- สถานะ -->
 
         <p id="status">
 
@@ -67,44 +590,40 @@ href="css/style.css">
 
 
         <h2>
-            🎮 เข้าร่วมห้อง
+            🎮 เข้าร่วมเกม
         </h2>
 
 
         <p>
-            กรอกชื่อของคุณ
+            ใส่ชื่อของคุณเพื่อเข้าสู่สนามแข่งขัน
         </p>
 
+
+        <!-- ชื่อ -->
 
         <input
         type="text"
         id="name"
-        placeholder="กรอกชื่อของคุณ"
+        placeholder="✏️ พิมพ์ชื่อของคุณ..."
         maxlength="30"
         autocomplete="off">
 
 
-        <!-- =========================
-             ปุ่มเข้าร่วม / เริ่มเกม
-        ========================== -->
+        <!-- ปุ่ม -->
 
         <button
         id="joinBtn"
         onclick="joinRoom()">
 
-            👤 เข้าร่วมห้อง
+            👤 เข้าร่วมเกม
 
         </button>
 
 
-        <br>
+        <!-- อันดับ -->
 
-
-        <!-- =========================
-             ดูอันดับ
-        ========================== -->
-
-        <a href="ranking.html"
+        <a
+        href="ranking.html"
         class="ranking-button">
 
             🏆 ดูอันดับคะแนน
@@ -118,9 +637,7 @@ href="css/style.css">
 </div>
 
 
-
 <script>
-
 
 /* =========================================
    ตัวแปร
@@ -134,7 +651,8 @@ var playerName =
     localStorage.getItem("playerName");
 
 
-var gameStarted = false;
+var gameStarted =
+    false;
 
 
 /* =========================================
@@ -144,15 +662,17 @@ var gameStarted = false;
 var nameInput =
     document.getElementById("name");
 
+
 var joinButton =
     document.getElementById("joinBtn");
+
 
 var statusElement =
     document.getElementById("status");
 
 
 /* =========================================
-   แสดงชื่อเดิม ถ้ามี
+   โหลดชื่อเดิม
 ========================================= */
 
 if(playerName){
@@ -164,7 +684,7 @@ if(playerName){
 
 
 /* =========================================
-   ตรวจสอบสถานะเกม Real-time
+   Firebase Game Status
 ========================================= */
 
 db.collection("settings")
@@ -173,18 +693,15 @@ db.collection("settings")
 
     function(doc){
 
-        /*
-           ถ้ายังไม่มี settings/game
-        */
-
         if(!doc.exists){
 
-            gameStarted = false;
+            gameStarted =
+                false;
 
             updateButton();
 
             statusElement.innerHTML =
-                "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
+                "⏳ รอเจ้าของห้องเปิดเกม...";
 
             return;
 
@@ -195,52 +712,39 @@ db.collection("settings")
             doc.data();
 
 
-        /*
-           อ่านสถานะ started
-        */
-
         gameStarted =
             data.started === true;
 
 
-        /*
-           อัปเดตปุ่ม
-        */
-
         updateButton();
 
-
-        /*
-           แสดงข้อความ
-        */
 
         if(gameStarted){
 
             statusElement.innerHTML =
-                "🚀 การแข่งขันเริ่มแล้ว!";
-
+                "🚀 เกมเปิดแล้ว! เข้าร่วมได้เลย";
 
         }
+
         else{
 
             if(participantId){
 
                 statusElement.innerHTML =
-                    "🟡 เข้าร่วมห้องแล้ว — รอหัวหน้าห้องเริ่ม";
-
+                    "🟡 เข้าห้องแล้ว • รอเริ่มเกม";
 
             }
+
             else{
 
                 statusElement.innerHTML =
-                    "⏳ รอหัวหน้าห้องเริ่มการแข่งขัน...";
+                    "⏳ รอเจ้าของห้องเปิดเกม...";
 
             }
 
         }
 
     },
-
 
     function(error){
 
@@ -253,23 +757,17 @@ db.collection("settings")
         statusElement.innerHTML =
             "❌ ไม่สามารถเชื่อมต่อ Firebase";
 
-
     }
 
 );
 
 
 /* =========================================
-   เปลี่ยนปุ่มตามสถานะ
+   ปรับปุ่ม
 ========================================= */
 
 function updateButton(){
 
-    /*
-       มีผู้เล่นอยู่แล้ว
-       + เกมเริ่มแล้ว
-       = เข้าเกม
-    */
 
     if(
         participantId &&
@@ -277,7 +775,7 @@ function updateButton(){
     ){
 
         joinButton.innerHTML =
-            "🚀 เริ่มเกม";
+            "🚀 เริ่มเล่นเกม";
 
         joinButton.disabled =
             false;
@@ -287,19 +785,13 @@ function updateButton(){
     }
 
 
-    /*
-       มีผู้เล่นอยู่แล้ว
-       + เกมยังไม่เริ่ม
-       = รอ
-    */
-
     if(
         participantId &&
         !gameStarted
     ){
 
         joinButton.innerHTML =
-            "🟡 รอเริ่มการแข่งขัน";
+            "🟡 รอเจ้าของห้องเริ่ม";
 
         joinButton.disabled =
             true;
@@ -309,19 +801,13 @@ function updateButton(){
     }
 
 
-    /*
-       ยังไม่มี participant
-       + เกมเริ่มแล้ว
-       = คนที่เพิ่งเข้ามา
-    */
-
     if(
         !participantId &&
         gameStarted
     ){
 
         joinButton.innerHTML =
-            "🚀 เข้าร่วมและเริ่มเกม";
+            "🚀 เข้าร่วมและเล่นเลย!";
 
         joinButton.disabled =
             false;
@@ -331,13 +817,8 @@ function updateButton(){
     }
 
 
-    /*
-       ยังไม่มี participant
-       + เกมยังไม่เริ่ม
-    */
-
     joinButton.innerHTML =
-        "👤 เข้าร่วมห้อง";
+        "👤 เข้าร่วมเกม";
 
     joinButton.disabled =
         false;
@@ -346,23 +827,20 @@ function updateButton(){
 
 
 /* =========================================
-   เข้าร่วมห้อง / เริ่มเกม
+   เข้าร่วม / เริ่มเกม
 ========================================= */
 
 function joinRoom(){
+
 
     var name =
         nameInput.value.trim();
 
 
-    /* =====================================
-       ตรวจชื่อ
-    ===================================== */
-
     if(name === ""){
 
         alert(
-            "กรุณากรอกชื่อก่อนเข้าร่วม"
+            "กรุณากรอกชื่อก่อนเข้าร่วมครับ 😊"
         );
 
         nameInput.focus();
@@ -372,10 +850,6 @@ function joinRoom(){
     }
 
 
-    /*
-       เก็บชื่อไว้ก่อน
-    */
-
     localStorage.setItem(
         "playerName",
         name
@@ -383,8 +857,7 @@ function joinRoom(){
 
 
     /* =====================================
-       กรณีมี participant อยู่แล้ว
-       และเกมเริ่มแล้ว
+       ผู้เล่นเดิม + เกมเริ่มแล้ว
     ===================================== */
 
     if(
@@ -395,7 +868,6 @@ function joinRoom(){
         joinButton.disabled =
             true;
 
-
         joinButton.innerHTML =
             "⏳ กำลังเข้าเกม...";
 
@@ -404,11 +876,9 @@ function joinRoom(){
         .doc(participantId)
         .set({
 
-            name:
-                name,
+            name:name,
 
-            status:
-                "playing",
+            status:"playing",
 
             startedAt:
                 firebase.firestore
@@ -429,19 +899,13 @@ function joinRoom(){
         .catch(function(error){
 
             console.error(
-                "Update Participant Error:",
                 error
             );
 
-
-            joinButton.disabled =
-                false;
-
             updateButton();
 
-
             alert(
-                "❌ ไม่สามารถเริ่มเกมได้\n\n" +
+                "❌ ไม่สามารถเข้าเกมได้\n\n" +
                 error.message
             );
 
@@ -454,8 +918,7 @@ function joinRoom(){
 
 
     /* =====================================
-       กรณีมี participant แล้ว
-       แต่เกมยังไม่เริ่ม
+       ผู้เล่นเดิม + เกมยังไม่เริ่ม
     ===================================== */
 
     if(
@@ -464,7 +927,7 @@ function joinRoom(){
     ){
 
         alert(
-            "⏳ กรุณารอหัวหน้าห้องเริ่มการแข่งขัน"
+            "⏳ รอเจ้าของห้องเปิดเกมก่อนนะครับ"
         );
 
         return;
@@ -473,14 +936,7 @@ function joinRoom(){
 
 
     /* =====================================
-       ยังไม่มี participant
-       
-       สร้างผู้เล่นใหม่
-       
-       สำคัญ:
-       ถ้าเกมเริ่มอยู่แล้ว
-       ให้ status = playing
-       และเข้าเกมทันที
+       ผู้เล่นใหม่
     ===================================== */
 
     var newStatus =
@@ -496,17 +952,15 @@ function joinRoom(){
     joinButton.innerHTML =
         gameStarted
         ? "⏳ กำลังเข้าเกม..."
-        : "⏳ กำลังเข้าร่วมห้อง...";
+        : "⏳ กำลังเข้าร่วม...";
 
 
     db.collection("participants")
     .add({
 
-        name:
-            name,
+        name:name,
 
-        status:
-            newStatus,
+        status:newStatus,
 
         joinedAt:
             firebase.firestore
@@ -525,10 +979,6 @@ function joinRoom(){
 
     .then(function(docRef){
 
-        /*
-           เก็บ participant ID
-        */
-
         participantId =
             docRef.id;
 
@@ -545,10 +995,7 @@ function joinRoom(){
         );
 
 
-        /* =================================
-           ถ้าเกมเริ่มแล้ว
-           เข้า quiz ทันที
-        ================================= */
+        /* เกมเปิดอยู่ */
 
         if(gameStarted){
 
@@ -560,16 +1007,14 @@ function joinRoom(){
         }
 
 
-        /* =================================
-           ถ้าเกมยังไม่เริ่ม
-        ================================= */
+        /* รอเกม */
 
         statusElement.innerHTML =
-            "🟡 เข้าร่วมห้องเรียบร้อยแล้ว — รอหัวหน้าห้องเริ่ม";
+            "🟡 เข้าห้องแล้ว! รอเจ้าของห้องเริ่ม";
 
 
         joinButton.innerHTML =
-            "🟡 รอเริ่มการแข่งขัน";
+            "🟡 รอเริ่มเกม";
 
 
         joinButton.disabled =
@@ -586,15 +1031,11 @@ function joinRoom(){
         );
 
 
-        joinButton.disabled =
-            false;
-
-
         updateButton();
 
 
         alert(
-            "❌ ไม่สามารถเข้าร่วมห้องได้\n\n" +
+            "❌ ไม่สามารถเข้าร่วมเกมได้\n\n" +
             error.message
         );
 
@@ -604,7 +1045,7 @@ function joinRoom(){
 
 
 /* =========================================
-   ตรวจ participant เดิม
+   ตรวจผู้เล่นเดิม
 ========================================= */
 
 if(participantId){
@@ -614,10 +1055,6 @@ if(participantId){
     .get()
 
     .then(function(doc){
-
-        /*
-           ถ้า participant หาย
-        */
 
         if(!doc.exists){
 
@@ -639,10 +1076,6 @@ if(participantId){
             doc.data();
 
 
-        /*
-           โหลดชื่อจาก Firebase
-        */
-
         if(data.name){
 
             nameInput.value =
@@ -656,44 +1089,32 @@ if(participantId){
         }
 
 
-        /*
-           ถ้าทำเสร็จแล้ว
-        */
-
         if(
             data.status ===
             "finished"
         ){
 
             statusElement.innerHTML =
-                "✅ คุณทำแบบทดสอบเสร็จแล้ว";
+                "✅ คุณเล่นจบแล้ว";
 
 
             joinButton.innerHTML =
-                "✅ ทำแบบทดสอบแล้ว";
+                "🏆 เล่นจบแล้ว";
 
 
             joinButton.disabled =
                 true;
+
 
             return;
 
         }
 
 
-        /*
-           ถ้ายังเล่นอยู่
-        */
-
         if(
             data.status ===
             "playing"
         ){
-
-            /*
-               ถ้าเกมยังเริ่มอยู่
-               ให้สามารถกลับเข้าเกมได้
-            */
 
             if(gameStarted){
 
@@ -709,7 +1130,6 @@ if(participantId){
 
     })
 
-
     .catch(function(error){
 
         console.error(
@@ -723,7 +1143,7 @@ if(participantId){
 
 
 /* =========================================
-   Enter เพื่อเข้าห้อง
+   กด Enter
 ========================================= */
 
 nameInput.addEventListener(
@@ -745,7 +1165,6 @@ nameInput.addEventListener(
 ========================================= */
 
 updateButton();
-
 
 </script>
 
